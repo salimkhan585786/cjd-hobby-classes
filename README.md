@@ -1,4 +1,4 @@
-# CanvasCraft Art Academy SaaS
+# CJD HOBBY CLASSES Art Academy SaaS
 
 A modern Vite + React application for a drawing and art classes business. The app includes a public marketing website, student dashboard, admin dashboard, art order workflow, inquiry capture, and Firebase-backed auth/data flows.
 

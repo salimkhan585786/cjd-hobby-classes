@@ -3,6 +3,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   updateProfile,
 } from 'firebase/auth';
 import { auth } from './firebaseConfig';
@@ -53,3 +54,4 @@ export const registerWithEmail = async ({ email, password, name, role = 'student
 export const logout = () => signOut(auth);
 export const observeAuth = (callback) => onAuthStateChanged(auth, callback);
 export const getUserProfile = (uid) => getDocument('users', uid);
+export const requestPasswordReset = (email) => sendPasswordResetEmail(auth, email);

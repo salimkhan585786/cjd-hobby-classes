@@ -35,12 +35,6 @@ function DashboardLayout({ role }) {
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-4 py-3 text-sm text-slate-200 transition hover:bg-white/10"
-                >
-                  <Bell size={16} /> Notifications
-                </button>
-                <button
-                  type="button"
                   onClick={handleLogout}
                   className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-4 py-3 text-sm text-white transition hover:bg-violet-400"
                 >

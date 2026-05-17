@@ -5,7 +5,7 @@ import { useToast } from '../hooks/useToast';
 import { addInquiry } from '../services/dataService';
 import { sendInquiryEmail } from '../services/emailService';
 
-const whatsappNumber = '919876512000';
+const whatsappNumber = '919167289892';
 
 function Contact() {
   const [searchParams] = useSearchParams();
@@ -20,7 +20,7 @@ function Contact() {
   const { showToast } = useToast();
 
   const whatsappLink = useMemo(() => {
-    const text = encodeURIComponent(`Hello CanvasCraft, I would like help with ${topic || 'an art inquiry'}.`);
+    const text = encodeURIComponent(`Hello CJD HOBBY CLASSES, I would like help with ${topic || 'an art inquiry'}.`);
     return `https://wa.me/${whatsappNumber}?text=${text}`;
   }, [topic]);
 
@@ -89,14 +89,14 @@ function Contact() {
                 <Phone size={18} />
                 <span>Call us</span>
               </div>
-              <p className="mt-4 text-white">+91 98765 12000</p>
+              <p className="mt-4 text-white">+91 91672 89892</p>
             </div>
             <div className="glass-card rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 shadow-soft">
               <div className="flex items-center gap-3 text-violet-300">
                 <Mail size={18} />
                 <span>Email</span>
               </div>
-              <p className="mt-4 text-white">hello@canvascraft.art</p>
+              <p className="mt-4 text-white">hello@cjdhobbyclasses.art</p>
             </div>
           </div>
         </div>
@@ -202,7 +202,7 @@ function Contact() {
           <div className="mt-6 space-y-4 text-slate-300">
             <div className="flex items-center gap-3 text-violet-300">
               <MapPin size={18} />
-              <span>Mumbai studio and live online academy</span>
+              <span>Mumbai offline art academy with Hemali D. Mehta</span>
             </div>
             <p className="text-sm leading-7">Use the map link to preview directions, neighborhood access, and studio timing details.</p>
             <a
@@ -220,13 +220,13 @@ function Contact() {
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Social links</p>
           <div className="mt-6 grid gap-4 text-slate-300">
             <a href="https://instagram.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
-              <Instagram size={18} /> <span>@canvascraft.studio</span>
+              <Instagram size={18} /> <span>@CJD_HOBBY_CLASSES.studio</span>
             </a>
-            <a href="mailto:hello@canvascraft.art" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
-              <Mail size={18} /> <span>hello@canvascraft.art</span>
+            <a href="mailto:hello@cjdhobbyclasses.art" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
+              <Mail size={18} /> <span>hello@cjdhobbyclasses.art</span>
             </a>
-            <a href="tel:+919876512000" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
-              <Phone size={18} /> <span>+91 98765 12000</span>
+            <a href="tel:+919167289892" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
+              <Phone size={18} /> <span>+91 91672 89892</span>
             </a>
           </div>
         </div>

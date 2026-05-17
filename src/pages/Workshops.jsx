@@ -1,12 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import WorkshopCard from '../components/WorkshopCard';
-import { useWorkshops } from '../hooks/useData';
+import { useAuth } from '../hooks/useAuth';
+import { useStudentProfile, useWorkshops } from '../hooks/useData';
+import { useToast } from '../hooks/useToast';
+import { registerStudentForWorkshop } from '../services/dataService';
 import { calculateCountdown, formatDate } from '../utils/helpers';
 
 function Workshops() {
   const { workshops, loading } = useWorkshops();
+  const { user, role } = useAuth();
+  const { student } = useStudentProfile();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
   const upcomingWorkshop = useMemo(
     () =>
       [...workshops]
@@ -17,6 +25,7 @@ function Workshops() {
   const [countdown, setCountdown] = useState(() =>
     upcomingWorkshop ? calculateCountdown(upcomingWorkshop.date) : calculateCountdown(Date.now())
   );
+  const [processingWorkshop, setProcessingWorkshop] = useState('');
 
   useEffect(() => {
     if (!upcomingWorkshop) return undefined;
@@ -30,18 +39,55 @@ function Workshops() {
     return () => clearInterval(timer);
   }, [upcomingWorkshop]);
 
+  const handleWorkshopAction = async (workshop) => {
+    if (!user) {
+      navigate('/register');
+      return;
+    }
+
+    if (role !== 'student') {
+      navigate('/admin');
+      return;
+    }
+
+    try {
+      setProcessingWorkshop(workshop.id);
+      await registerStudentForWorkshop({
+        uid: user.uid,
+        email: user.email,
+        name: user.displayName,
+        workshop,
+      });
+      showToast({
+        type: 'success',
+        title: 'Workshop reserved',
+        message: `${workshop.title} has been added to your student dashboard.`,
+      });
+      navigate('/student');
+    } catch (error) {
+      console.error(error);
+      showToast({
+        type: 'error',
+        title: 'Registration failed',
+        message: error.message || 'This workshop could not be reserved.',
+      });
+    } finally {
+      setProcessingWorkshop('');
+    }
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-14">
       <div className="mb-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-4">
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Upcoming events</p>
-          <h1 className="text-5xl font-semibold text-white">Live workshops for every creative learner.</h1>
+          <h1 className="text-5xl font-semibold text-white">Offline workshops for every creative learner.</h1>
           <p className="max-w-xl text-slate-400">
-            From portrait labs to digital concept sessions, these limited events help students practice with expert guidance and community energy.
+            From portrait labs to studio craft sessions, these limited events help students practice with expert guidance and community energy.
           </p>
         </div>
         <div className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-8 shadow-soft">
-          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Next live registration</p>
+          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Next studio registration</p>
           <h2 className="mt-4 text-4xl font-semibold text-white">{upcomingWorkshop?.title || 'Workshop update coming soon'}</h2>
           <p className="mt-4 text-slate-400">
             {upcomingWorkshop
@@ -74,9 +120,28 @@ function Workshops() {
         <EmptyState title="No workshops scheduled yet" description="Check back soon or contact the academy to request a private group workshop." />
       ) : (
         <div className="grid gap-8 lg:grid-cols-3">
-          {workshops.map((workshop) => (
-            <WorkshopCard key={workshop.id} workshop={workshop} />
-          ))}
+          {workshops.map((workshop) => {
+            const alreadyRegistered = student?.workshopRegistrations?.includes(workshop.title);
+            const actionLabel = !user
+              ? 'Join now'
+              : role !== 'student'
+                ? 'Admin view'
+                : alreadyRegistered
+                  ? 'Registered'
+                  : Number(workshop.seats || 0) <= 0
+                    ? 'Full'
+                    : 'Register';
+
+            return (
+              <WorkshopCard
+                key={workshop.id}
+                workshop={workshop}
+                onAction={handleWorkshopAction}
+                actionLabel={actionLabel}
+                actionDisabled={Boolean(processingWorkshop) || alreadyRegistered || Number(workshop.seats || 0) <= 0}
+              />
+            );
+          })}
         </div>
       )}
     </div>

@@ -2,15 +2,21 @@ import EmptyState from '../components/EmptyState';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import StatusPill from '../components/StatusPill';
 import { useAuth } from '../hooks/useAuth';
-import { useStudentProgress, useStudents } from '../hooks/useData';
+import { useStudentProfile, useStudentProgress, useStudents } from '../hooks/useData';
 
 function StudentProgressView() {
   const { progress, loading } = useStudentProgress();
+  const { student, loading: studentLoading } = useStudentProfile();
 
-  if (loading) {
+  if (loading || studentLoading) {
     return (
       <div className="space-y-6">
         <LoadingSkeleton className="h-32" />
+        <div className="grid gap-6 md:grid-cols-3">
+          <LoadingSkeleton className="h-32" />
+          <LoadingSkeleton className="h-32" />
+          <LoadingSkeleton className="h-32" />
+        </div>
         <div className="grid gap-6 xl:grid-cols-2">
           <LoadingSkeleton className="h-72" />
           <LoadingSkeleton className="h-72" />
@@ -33,8 +39,24 @@ function StudentProgressView() {
         </div>
       </div>
 
+      <div className="grid gap-6 md:grid-cols-3">
+        {[
+          { label: 'Overall progress', value: `${student.progressPercent || 0}%` },
+          { label: 'Attendance', value: `${student.attendanceRate || 0}%` },
+          { label: 'Certificates', value: student.certificates || 0 },
+        ].map((item) => (
+          <div key={item.label} className="glass-card rounded-[2rem] border border-white/10 bg-slate-950/90 p-6 shadow-soft">
+            <p className="text-sm uppercase tracking-[0.18em] text-violet-300">{item.label}</p>
+            <p className="mt-4 text-3xl font-semibold text-white">{item.value}</p>
+          </div>
+        ))}
+      </div>
+
       {progress.length === 0 ? (
-        <EmptyState title="No progress yet" description="Your mentor milestones will appear here after the first review cycle." />
+        <EmptyState
+          title="No milestone records yet"
+          description="Your overall progress summary is up to date. Detailed mentor milestones will appear here after the next review entry."
+        />
       ) : (
         <div className="grid gap-6 xl:grid-cols-2">
           <div className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-8 shadow-soft">

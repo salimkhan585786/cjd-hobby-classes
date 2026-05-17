@@ -1,22 +1,21 @@
-import { BookOpen, ClipboardList, LayoutDashboard, ShoppingBag, Sparkles, Users, Wallet } from 'lucide-react';
+import { BellRing, BookOpen, ClipboardList, LayoutDashboard, ShoppingBag, Sparkles, Users, Wallet } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { classNames } from '../utils/helpers';
 
 const itemsByRole = {
   student: [
     { label: 'Overview', to: '/student', icon: LayoutDashboard },
-    { label: 'Class Plan', to: '/student#classes', icon: BookOpen },
     { label: 'Orders', to: '/student/orders', icon: ShoppingBag },
     { label: 'Progress', to: '/student/progress', icon: Sparkles },
-    { label: 'Fees', to: '/student#fees', icon: Wallet },
+    { label: 'Notifications', to: '/student/notifications', icon: BellRing },
   ],
   admin: [
     { label: 'Overview', to: '/admin', icon: LayoutDashboard },
-    { label: 'Catalog', to: '/admin#catalog', icon: BookOpen },
-    { label: 'Students', to: '/admin#students', icon: Users },
+    { label: 'Catalog', to: '/admin/catalog', icon: BookOpen },
+    { label: 'Students', to: '/admin/students', icon: Users },
     { label: 'Orders', to: '/admin/orders', icon: ShoppingBag },
-    { label: 'Inquiries', to: '/admin#inquiries', icon: ClipboardList },
-    { label: 'Finance', to: '/admin#finance', icon: Wallet },
+    { label: 'Inquiries', to: '/admin/inquiries', icon: ClipboardList },
+    { label: 'Finance', to: '/admin/finance', icon: Wallet },
   ],
 };
 
@@ -41,9 +40,7 @@ function DashboardSidebar({ role = 'student' }) {
         <nav className="space-y-2">
           {items.map((item) => {
             const Icon = item.icon;
-            const isActive = item.to.includes('#')
-              ? `${location.pathname}${location.hash}` === item.to
-              : location.pathname === item.to;
+            const isActive = location.pathname === item.to;
 
             return (
               <Link

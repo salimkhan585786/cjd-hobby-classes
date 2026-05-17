@@ -1,6 +1,6 @@
 import { collection, addDoc, getDoc, getDocs, query, where, updateDoc, deleteDoc, doc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from './firebaseConfig';
+import { db } from './firebaseConfig';
+import { uploadFile as uploadCloudinaryFile } from '../services/mediaUploadService';
 
 export const getCollection = async (name) => {
   const snapshot = await getDocs(collection(db, name));
@@ -42,7 +42,5 @@ export const deleteDocument = async (name, id) => {
 };
 
 export const uploadFile = async (path, file) => {
-  const storageRef = ref(storage, path);
-  const snapshot = await uploadBytes(storageRef, file);
-  return getDownloadURL(snapshot.ref);
+  return uploadCloudinaryFile(path, file);
 };

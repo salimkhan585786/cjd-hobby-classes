@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import EmptyState from '../components/EmptyState';
 import GalleryCard from '../components/GalleryCard';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import MediaPreview from '../components/MediaPreview';
 import { useGallery } from '../hooks/useData';
 
 function Gallery() {
@@ -9,6 +10,21 @@ function Gallery() {
   const [selected, setSelected] = useState(null);
   const categories = useMemo(() => ['All', ...new Set(gallery.map((item) => item.category))], [gallery]);
   const [filter, setFilter] = useState('All');
+
+  useEffect(() => {
+    if (!selected) {
+      return undefined;
+    }
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setSelected(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selected]);
 
   const filtered = useMemo(
     () => (filter === 'All' ? gallery : gallery.filter((item) => item.category === filter)),
@@ -67,34 +83,62 @@ function Gallery() {
       )}
 
       {selected ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-6">
-          <div className="relative max-h-[90vh] max-w-4xl overflow-auto rounded-[2.5rem] border border-white/10 bg-slate-950/95 shadow-soft">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-6"
+          onClick={() => setSelected(null)}
+        >
+          <div
+            className="relative grid max-h-[90vh] w-full max-w-6xl overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-950/95 shadow-soft lg:grid-cols-[minmax(0,1.35fr)_420px]"
+            onClick={(event) => event.stopPropagation()}
+          >
             <button
               type="button"
               onClick={() => setSelected(null)}
-              className="absolute right-5 top-5 rounded-full bg-slate-900/80 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800"
+              className="absolute right-5 top-5 z-10 rounded-full bg-slate-900/85 px-4 py-2 text-sm text-slate-200 hover:bg-slate-800"
             >
               Close
             </button>
-            <img src={selected.image} alt={selected.title} className="h-[420px] w-full object-cover" />
-            <div className="grid gap-6 p-8 md:grid-cols-[1fr_0.8fr]">
-              <div className="space-y-3">
+            <div className="flex min-h-[320px] items-center justify-center bg-black p-4 sm:p-6">
+              <MediaPreview
+                src={selected.image}
+                alt={selected.title}
+                title={selected.title}
+                className="h-full max-h-[78vh] w-full rounded-[1.75rem]"
+                mediaFit="contain"
+                mediaClassName="h-full w-full"
+                controls
+              />
+            </div>
+            <div className="flex max-h-[90vh] flex-col overflow-y-auto border-t border-white/10 bg-slate-950/98 lg:border-l lg:border-t-0">
+              <div className="border-b border-white/10 p-6 pr-24">
                 <p className="text-sm uppercase tracking-[0.24em] text-violet-300">{selected.category}</p>
-                <h2 className="text-3xl font-semibold text-white">{selected.title}</h2>
-                <p className="text-slate-300">{selected.details}</p>
+                <h2 className="mt-3 text-2xl font-semibold text-white">{selected.title}</h2>
+                <p className="mt-3 text-sm text-slate-400">by {selected.artist || selected.mentor || 'Unknown artist'}</p>
               </div>
-              <div className="space-y-4 rounded-[2rem] bg-slate-900/80 p-6">
+              <div className="flex-1 space-y-6 p-6">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Artist</p>
-                  <p className="mt-1 text-white">{selected.artist}</p>
+                  <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Description</p>
+                  <p className="mt-2 leading-7 text-slate-300">{selected.details || 'No description added yet.'}</p>
                 </div>
-                <div>
-                  <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Medium</p>
-                  <p className="mt-1 text-white">{selected.medium}</p>
+                <div className="rounded-[1.5rem] bg-slate-900/80 p-5">
+                  <div>
+                    <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Artist</p>
+                    <p className="mt-1 text-white">{selected.artist}</p>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Medium</p>
+                    <p className="mt-1 text-white">{selected.medium}</p>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Mentor</p>
+                    <p className="mt-1 text-white">{selected.mentor}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Mentor</p>
-                  <p className="mt-1 text-white">{selected.mentor}</p>
+                <div className="rounded-[1.5rem] border border-white/10 p-5">
+                  <p className="text-sm uppercase tracking-[0.18em] text-slate-400">Gallery note</p>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">
+                    This layout keeps the full artwork visible on the left while the metadata stays readable on the right, similar to a desktop gallery viewer.
+                  </p>
                 </div>
               </div>
             </div>

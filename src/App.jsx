@@ -6,9 +6,14 @@ import { ToastProvider } from './hooks/useToast';
 import DashboardLayout from './layouts/DashboardLayout';
 import PublicLayout from './layouts/PublicLayout';
 import About from './pages/About';
+import AdminCatalog from './pages/AdminCatalog';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminFinance from './pages/AdminFinance';
+import AdminInquiries from './pages/AdminInquiries';
+import AdminStudents from './pages/AdminStudents';
 import ArtOrder from './pages/ArtOrder';
 import Contact from './pages/Contact';
+import CourseDetails from './pages/CourseDetails';
 import Courses from './pages/Courses';
 import Gallery from './pages/Gallery';
 import Home from './pages/Home';
@@ -17,6 +22,7 @@ import NotFound from './pages/NotFound';
 import Progress from './pages/Progress';
 import Register from './pages/Register';
 import StudentDashboard from './pages/StudentDashboard';
+import StudentNotifications from './pages/StudentNotifications';
 import Workshops from './pages/Workshops';
 
 function App() {
@@ -38,6 +44,7 @@ function App() {
                 <Route index element={<Home />} />
                 <Route path="about" element={<About />} />
                 <Route path="courses" element={<Courses />} />
+                <Route path="courses/:courseSlug" element={<CourseDetails />} />
                 <Route path="gallery" element={<Gallery />} />
                 <Route path="workshops" element={<Workshops />} />
                 <Route path="contact" element={<Contact />} />
@@ -57,6 +64,7 @@ function App() {
                 <Route index element={<StudentDashboard />} />
                 <Route path="orders" element={<ArtOrder />} />
                 <Route path="progress" element={<Progress />} />
+                <Route path="notifications" element={<StudentNotifications />} />
               </Route>
 
               <Route
@@ -68,6 +76,10 @@ function App() {
                 }
               >
                 <Route index element={<AdminDashboard />} />
+                <Route path="catalog" element={<AdminCatalog />} />
+                <Route path="students" element={<AdminStudents />} />
+                <Route path="inquiries" element={<AdminInquiries />} />
+                <Route path="finance" element={<AdminFinance />} />
                 <Route path="orders" element={<ArtOrder />} />
                 <Route path="progress" element={<Progress />} />
               </Route>

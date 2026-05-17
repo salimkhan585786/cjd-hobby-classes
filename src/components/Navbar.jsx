@@ -44,7 +44,7 @@ function Navbar() {
             <Palette size={18} />
           </span>
           <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-violet-300">CanvasCraft</p>
+            <p className="text-xs uppercase tracking-[0.28em] text-violet-300">CJD HOBBY CLASSES</p>
             <p className="text-base text-slate-100">Art Academy</p>
           </div>
         </Link>

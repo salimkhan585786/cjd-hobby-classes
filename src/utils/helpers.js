@@ -54,3 +54,27 @@ export const getInitials = (name = '') =>
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() || '')
     .join('') || 'CC';
+
+export const slugify = (value = '') =>
+  String(value)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+export const getMediaKind = (value = '') => {
+  const url = String(value || '').trim().toLowerCase();
+
+  if (!url) return 'empty';
+  if (/instagram\.com\/(p|reel|tv)\//.test(url)) return 'instagram';
+  if (/\.(mp4|webm|ogg|mov)(\?|#|$)/.test(url)) return 'video';
+  return 'image';
+};
+
+export const getInstagramEmbedUrl = (value = '') => {
+  const match = String(value || '').match(/instagram\.com\/(p|reel|tv)\/([^/?#]+)/i);
+  if (!match) return '';
+
+  const [, type, code] = match;
+  return `https://www.instagram.com/${type}/${code}/embed/captioned/`;
+};

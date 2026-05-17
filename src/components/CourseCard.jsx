@@ -1,9 +1,18 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import MediaPreview from './MediaPreview';
 import { formatCurrency } from '../utils/helpers';
 
-function CourseCard({ course, actionLabel = 'Enroll', actionTo = '/register' }) {
+function CourseCard({
+  course,
+  actionLabel = 'Enroll',
+  actionTo = '/register',
+  onAction,
+  actionDisabled = false,
+}) {
+  const detailsTo = `/courses/${encodeURIComponent(course.id || course.title)}`;
+
   return (
     <motion.article
       whileHover={{ y: -6 }}
@@ -11,10 +20,12 @@ function CourseCard({ course, actionLabel = 'Enroll', actionTo = '/register' }) 
       className="glass-card group overflow-hidden rounded-[2rem] border border-white/10 shadow-soft"
     >
       <div className="relative h-64 overflow-hidden">
-        <img
+        <MediaPreview
           src={course.image}
           alt={course.title}
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          title={course.title}
+          className="h-full w-full"
+          mediaClassName="transition duration-500 group-hover:scale-105"
         />
       </div>
       <div className="space-y-4 p-6">
@@ -28,16 +39,29 @@ function CourseCard({ course, actionLabel = 'Enroll', actionTo = '/register' }) 
         </div>
         <div className="flex items-center justify-between text-sm text-slate-400">
           <span>{course.format}</span>
-          <span>Live mentor feedback</span>
+          <Link to={detailsTo} className="text-violet-300 transition hover:text-violet-200">
+            View details
+          </Link>
         </div>
         <div className="flex items-center justify-between pt-4">
-          <span className="text-xl font-semibold text-white">{formatCurrency(course.price)}</span>
-          <Link
-            to={actionTo}
-            className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-4 py-3 text-sm text-white transition hover:bg-violet-400"
-          >
-            {actionLabel} <ArrowRight size={16} />
-          </Link>
+          <span className="text-xl font-semibold text-white">{course.priceLabel || formatCurrency(course.price)}</span>
+          {onAction ? (
+            <button
+              type="button"
+              onClick={() => onAction(course)}
+              disabled={actionDisabled}
+              className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-4 py-3 text-sm text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-violet-700"
+            >
+              {actionLabel} <ArrowRight size={16} />
+            </button>
+          ) : (
+            <Link
+              to={actionTo}
+              className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-4 py-3 text-sm text-white transition hover:bg-violet-400"
+            >
+              {actionLabel} <ArrowRight size={16} />
+            </Link>
+          )}
         </div>
       </div>
     </motion.article>

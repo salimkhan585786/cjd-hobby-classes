@@ -1,0 +1,584 @@
+PROJECT AUDIT - CJD HOBBY CLASSES
+Generated from code review on 2026-05-15
+
+Update completed on 2026-05-16:
+- Password reset flow added
+- Student course enrollment flow added
+- Student workshop registration flow added
+- Pending order retry payment flow added
+- Admin student/fee/attendance/progress operations added
+- Gallery file upload support added
+- Instagram/image/video URL media support added for courses, workshops, and gallery
+- Course list and summer activity catalog refreshed from provided business data
+
+==================================================
+1. PROJECT SUMMARY
+==================================================
+
+Project type:
+- Vite + React + React Router + Tailwind application
+- Art academy website with public marketing pages, student dashboard, admin dashboard, contact/inquiry flow, and custom art order flow
+
+Main integrations found:
+- Firebase Auth: connected and used
+- Firebase Firestore: connected and used
+- Firebase Storage: connected and used for art order reference image upload
+- Firebase Analytics: initialized if browser support exists
+- Razorpay Checkout: frontend checkout is connected and used
+- EmailJS: optional integration, partially connected
+
+Important architecture note:
+- Many screens fall back to local dummy/demo data if Firestore is empty or fails
+- So several features are "UI complete with fallback data" rather than "fully backend-dependent"
+
+==================================================
+2. ROLES
+==================================================
+
+Public / guest:
+- Can access all public pages
+- Can submit contact inquiry
+- Can browse courses, gallery, workshops
+- Can open art order page
+- Cannot access /student or /admin
+
+Student:
+- Created through public registration
+- Protected route path: /student
+- Can access student dashboard, progress, and art order area
+- Role source: Firestore users/{uid}.role, fallback is email contains "admin" => admin else student
+
+Admin:
+- Not created from public registration
+- Must be assigned manually in Firestore users/{uid}.role = "admin"
+- Protected route path: /admin
+- Can access admin dashboard, manage catalog/workshops/gallery entries/inquiries/announcements/orders overview
+
+==================================================
+3. ROUTE MAP WITH FLOW
+==================================================
+
+PUBLIC LAYOUT ROUTES
+
+Path: /
+Page: Home
+Access: Public
+Purpose:
+- Main landing page
+- Shows featured gallery, courses, workshops, testimonials, FAQ
+Connected data:
+- Reads courses, workshops, gallery, testimonials, FAQs
+Backend status:
+- Connected to Firestore through hooks
+- Falls back to dummy data if Firestore empty/unavailable
+Main flow onward:
+- /register
+- /workshops
+- /order
+- /gallery
+- /courses
+- /contact
+
+Path: /about
+Page: About
+Access: Public
+Purpose:
+- Brand/about information page
+Backend status:
+- Likely static/presentational
+
+Path: /courses
+Page: Courses
+Access: Public
+Purpose:
+- Search and filter course catalog
+- CTA sends user to /register
+Connected data:
+- Reads courses collection
+Backend status:
+- Connected with Firestore + dummy fallback
+Missing:
+- No direct course detail route like /courses/:id
+- No real enrollment write flow from this page
+
+Path: /gallery
+Page: Gallery
+Access: Public
+Purpose:
+- Filter gallery by category
+- Open artwork details modal
+Connected data:
+- Reads gallery collection
+Backend status:
+- Connected with Firestore + dummy fallback
+
+Path: /workshops
+Page: Workshops
+Access: Public
+Purpose:
+- List workshops and countdown to next workshop
+- CTA goes to contact page
+Connected data:
+- Reads workshops collection
+Backend status:
+- Connected with Firestore + dummy fallback
+Missing:
+- No dedicated workshop booking/checkout/seat reservation write flow
+- "Register" is only a redirect to contact form
+
+Path: /contact
+Page: Contact
+Access: Public
+Purpose:
+- Contact/inquiry form
+- WhatsApp link
+- Map/social/contact info
+Connected data:
+- Writes inquiry to Firestore inquiries collection
+- Attempts EmailJS send
+Backend status:
+- Firestore write is connected
+- EmailJS is optional and only works if env keys exist
+Flow:
+- User submits form -> inquiry saved -> optional email send -> admin can later see it in /admin
+
+Path: /order
+Page: ArtOrder
+Access: Public or logged-in user
+Purpose:
+- Custom artwork request form
+- Pricing estimate
+- Razorpay checkout launch
+Connected data:
+- Uploads reference image to Firebase Storage
+- Creates order in Firestore orders collection
+- Opens Razorpay Checkout
+- On success updates Firestore order payment fields
+Backend status:
+- Connected on frontend
+Important limitation:
+- No backend Razorpay order creation
+- No server-side payment signature verification
+- This is not a secure production-grade payment confirmation flow yet
+
+Path: /login
+Page: Login
+Access: Public
+Purpose:
+- Firebase email/password login
+Connected data:
+- Firebase Auth sign-in
+- Reads user profile from Firestore through auth context
+Flow:
+- Student role -> redirect to /student
+- Admin role -> redirect to /admin
+
+Path: /register
+Page: Register
+Access: Public
+Purpose:
+- Create student account only
+Connected data:
+- Firebase Auth createUserWithEmailAndPassword
+- Firestore users/{uid}
+- Firestore students/{uid}
+Backend status:
+- Connected and working for student creation
+Missing:
+- No public admin registration
+
+Path: *
+Page: NotFound
+Access: Public
+Purpose:
+- Fallback route for unknown pages
+
+STUDENT PROTECTED ROUTES
+
+Path: /student
+Page: StudentDashboard
+Access: student only
+Purpose:
+- Student overview
+- Shows enrolled classes, fee summary, feedback, progress, workshop registrations, announcements, attendance
+Connected data:
+- students
+- courses
+- progress filtered by student email
+- attendance filtered by student email
+- fees filtered by student email
+- announcements
+- workshops
+Backend status:
+- Read-only connected with Firestore + fallback data
+
+Path: /student/orders
+Page: ArtOrder (student mode)
+Access: student only
+Purpose:
+- Submit custom art order
+- Track own recent orders
+Connected data:
+- orders filtered by student email
+- Firebase Storage upload
+- Firestore order create/update
+- Razorpay checkout
+Backend status:
+- Connected
+
+Path: /student/progress
+Page: Progress (student mode)
+Access: student only
+Purpose:
+- Detailed progress and milestone view
+Connected data:
+- progress filtered by student email
+Backend status:
+- Connected read-only with fallback data
+
+ADMIN PROTECTED ROUTES
+
+Path: /admin
+Page: AdminDashboard
+Access: admin only
+Purpose:
+- Admin overview and management console
+Sections inside same page:
+- Analytics cards
+- Seed Firebase sample data
+- Course manager
+- Workshop manager
+- Gallery entry uploader
+- Student roster
+- Inquiry inbox
+- Announcements
+- Fee tracking
+Connected data:
+- courses
+- workshops
+- students
+- gallery
+- inquiries
+- orders
+- fees
+- announcements
+Backend status:
+- Strongest backend-connected page in project
+- Mix of read + create + update + delete actions
+
+Path: /admin/orders
+Page: ArtOrder (admin mode)
+Access: admin only
+Purpose:
+- Order management list
+- Update order status
+Connected data:
+- Reads all orders
+- Updates Firestore order status/payment/delivery fields
+Backend status:
+- Connected
+
+Path: /admin/progress
+Page: Progress (admin mode)
+Access: admin only
+Purpose:
+- High-level student progress overview
+Connected data:
+- Reads students collection
+Backend status:
+- Connected read-only with fallback data
+
+HASH / IN-PAGE NAVIGATION USED IN DASHBOARD SIDEBAR
+
+Student links:
+- /student#classes
+- /student#fees
+
+Admin links:
+- /admin#catalog
+- /admin#students
+- /admin#inquiries
+- /admin#finance
+
+Note:
+- These are section anchors on the dashboard page, not separate routes
+
+==================================================
+4. FEATURE FLOW BY USER TYPE
+==================================================
+
+PUBLIC USER FLOW
+
+1. User lands on /
+2. Browses courses, gallery, workshops, about, contact
+3. If interested in classes:
+- goes to /register
+- creates student account
+- redirected to /student
+4. If interested in workshops:
+- clicks workshop register CTA
+- lands on /contact?topic=workshop
+- submits inquiry
+- admin later follows up manually
+5. If interested in custom art order:
+- goes to /order
+- fills form
+- optionally uploads image
+- order saved in Firestore
+- Razorpay checkout opens
+- on success order marked paid/in-progress
+
+STUDENT FLOW
+
+1. Student registers on /register or logs in at /login
+2. After login:
+- student redirected to /student
+3. Student can:
+- view enrolled classes
+- view attendance
+- view fee status
+- view progress
+- view workshop registrations
+- view announcements
+- place custom art order at /student/orders
+
+ADMIN FLOW
+
+1. Admin account must already exist in Firebase Auth
+2. Firestore users/{uid}.role must be set to admin
+3. Admin logs in at /login
+4. Redirect to /admin
+5. Admin can:
+- seed initial Firestore data
+- add/edit/delete courses
+- add/delete workshops
+- add gallery entries
+- review student roster
+- review inquiries and mark status
+- create announcements
+- view fee tracking
+- view all orders
+- update order lifecycle from /admin/orders
+
+==================================================
+5. FIREBASE CONNECTION STATUS
+==================================================
+
+Firebase Auth
+Status: DONE / CONNECTED
+Used in:
+- /login
+- /register
+- auth observer in AuthProvider
+- logout in Navbar and DashboardLayout
+
+What is implemented:
+- Email/password login
+- Email/password registration
+- Auth state listener
+- Role-based redirect after login
+
+What is incomplete / weak:
+- No password reset flow
+- No email verification flow
+- No profile edit flow
+- Admin role assignment is manual in Firestore
+- Fallback role detection by email containing "admin" is fragile
+
+Firestore
+Status: DONE / CONNECTED
+Collections referenced:
+- users
+- students
+- courses
+- workshops
+- gallery
+- inquiries
+- orders
+- attendance
+- fees
+- announcements
+- faqs
+- testimonials
+- progress
+
+What is implemented:
+- Collection reads
+- Query by student email
+- Document add
+- Document update
+- Document delete
+- Seed sample data from admin dashboard
+
+What is incomplete / weak:
+- No realtime listeners; reads are one-time fetches
+- No visible Firestore security-rule handling in project
+- Many screens silently fall back to dummy data, which can hide backend problems
+- Some admin forms use optimistic local updates and ignore failed writes beyond console/toast
+
+Firebase Storage
+Status: PARTIALLY DONE / CONNECTED
+Used in:
+- Art order reference image upload
+
+What is implemented:
+- File upload helper
+- Order form uploads selected image before order creation
+
+What is incomplete:
+- Admin gallery uploader does not upload files to Storage; it only accepts image URL text
+- No file validation/size checks visible
+- No delete/cleanup flow for uploaded order images
+
+Firebase Analytics
+Status: BASIC SETUP DONE
+Used in:
+- firebaseConfig initialization
+- main app boot path
+
+What is incomplete:
+- No custom analytics events found for conversions, registrations, orders, or inquiries
+
+==================================================
+6. RAZORPAY STATUS
+==================================================
+
+Razorpay Checkout
+Status: PARTIALLY DONE / FRONTEND CONNECTED
+
+What is implemented:
+- Loads Razorpay checkout script dynamically
+- Creates frontend checkout options
+- Opens checkout from art order page
+- On success writes paymentId, signature, paidAt, and order status into Firestore
+- On dismiss keeps order as pending
+
+What is missing / incomplete:
+- No backend order creation using Razorpay secret
+- No server-side signature verification
+- No webhook handling
+- No secure payment confirmation flow
+- No retry payment button for existing pending student orders
+- No refund/cancel flow
+
+Conclusion:
+- Good demo / prototype integration
+- Not yet production-safe payment architecture
+
+==================================================
+7. EMAILJS STATUS
+==================================================
+
+Status: PARTIALLY CONNECTED / OPTIONAL
+
+What is implemented:
+- Contact form tries to send inquiry email through EmailJS
+- Missing keys are handled gracefully
+
+What is incomplete:
+- Same service/template/public key setup used for both inquiry and reply helpers
+- sendReplyEmail helper exists but no admin UI flow found using it
+- Email delivery is not core to the app because inquiry still saves even without EmailJS
+
+==================================================
+8. WHAT IS FULLY OR MOSTLY DONE
+==================================================
+
+Done or mostly done:
+- Public route structure
+- Role-protected route structure
+- Login and student registration with Firebase Auth
+- Firestore-backed user/student profile creation
+- Public browsing pages for courses/gallery/workshops
+- Contact inquiry save to Firestore
+- Student dashboard overview
+- Admin dashboard overview
+- Course CRUD from admin dashboard
+- Workshop create/delete from admin dashboard
+- Inquiry status update from admin dashboard
+- Announcement create from admin dashboard
+- Fee overview display
+- Student progress display
+- Art order creation flow
+- Firebase Storage upload for order references
+- Razorpay checkout handoff
+- Admin order status update
+- Sample data seeding flow
+- Theme toggle
+
+==================================================
+9. WHAT IS PRESENT BUT READ-ONLY OR ONLY PARTLY COMPLETE
+==================================================
+
+Present but mostly read-only:
+- Student dashboard data views
+- Admin finance view
+- Admin progress view
+- Student progress page
+- Student attendance view
+- Student fee summary
+
+Present with fallback/demo behavior:
+- Home data sections
+- Courses catalog
+- Gallery
+- Workshops
+- Student profile/progress/orders/attendance/fees when backend data is missing
+- Admin overview lists when backend data is missing
+
+Present but only partially wired:
+- Workshop registration flow
+- Gallery upload workflow
+- Email reply workflow
+- Payment security flow
+
+==================================================
+10. REMAINING TRUE BLOCKERS / FUTURE ENHANCEMENTS
+==================================================
+
+Still requires separate backend or infrastructure work:
+- Secure Razorpay backend integration with server-side order creation and signature verification
+- Proper Firestore security rules review and deployment
+- Razorpay webhook handling
+- Refund/cancel flow tied to verified payment state
+
+Still optional future enhancements:
+- Realtime Firestore listeners instead of fetch-first hooks
+- Course detail pages
+- Workshop detail pages
+- Profile settings/edit account page
+- Better audit trail for admin actions
+- Analytics events for registrations, inquiries, workshop leads, and successful payments
+
+==================================================
+11. POSSIBLE DATA / PRODUCT GAPS FOUND
+==================================================
+
+Potential gaps:
+- README mentions light/dark theme toggle and that exists, but some other features described as full flows are still only partial
+- Dashboard sidebar uses hash links like /admin#catalog and /student#fees, so navigation depends on same-page sections only
+- Order flow records Razorpay response fields directly in Firestore without backend verification
+- Admin dashboard "gallery uploader" adds entry data but does not upload actual file unless a URL is manually provided
+- Workshop registration now updates student registrations and attempts to decrement seats
+- Student enrolled courses and workshop registrations now have direct in-app actions
+
+==================================================
+12. OVERALL STATUS
+==================================================
+
+Overall project state:
+- Strong frontend prototype
+- Good route and role structure
+- Firebase integration is real and active
+- Razorpay is integrated at demo/prototype level
+- Several business flows are visible and convincing in UI
+- A number of operational flows still need backend-hardening and full CRUD completion
+
+Best short summary:
+- Firebase Auth/Firestore/Storage: connected
+- Razorpay: improved frontend flow with retry support, but still incomplete for production security without backend verification
+- EmailJS: optional and partially used
+- Public site: mostly done
+- Student dashboard: mostly done for viewing
+- Admin dashboard: partly done for management, but some areas are still read-only or lightweight
+- Secure payments remain the primary unfinished platform concern; most core user/admin flows are now implemented in-app

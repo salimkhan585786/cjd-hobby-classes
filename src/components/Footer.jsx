@@ -16,7 +16,7 @@ function Footer() {
     <footer className="border-t border-white/10 bg-slate-950/95 py-14 text-slate-300">
       <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 lg:flex-row lg:justify-between">
         <div className="space-y-4">
-          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">CanvasCraft Art Academy</p>
+          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">CJD HOBBY Art Academy</p>
           <p className="max-w-md leading-7 text-slate-400">
             A premium drawing academy experience with class management, workshops, custom art orders, and student showcase support.
           </p>
@@ -24,7 +24,7 @@ function Footer() {
             <Phone size={18} /> <span>+91 98765 12000</span>
           </div>
           <div className="flex items-center gap-3 text-slate-400">
-            <Mail size={18} /> <span>hello@canvascraft.art</span>
+            <Mail size={18} /> <span>hello@cjdHobbyClasses.art</span>
           </div>
         </div>
 
@@ -44,10 +44,10 @@ function Footer() {
           <div className="space-y-4">
             <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-200">Connect</h3>
             <div className="flex items-center gap-3 text-slate-400">
-              <Instagram size={18} /> <span>@canvascraft.studio</span>
+              <Instagram size={18} /> <span>@CJD_HOBBY_CLASSES.studio</span>
             </div>
             <div className="flex items-center gap-3 text-slate-400">
-              <MapPin size={18} /> <span>Mumbai studio + online classes</span>
+              <MapPin size={18} /> <span>Mumbai offline studio classes</span>
             </div>
             <p className="text-sm leading-6 text-slate-500">
               Follow our gallery updates, workshop releases, and student milestones across every batch.

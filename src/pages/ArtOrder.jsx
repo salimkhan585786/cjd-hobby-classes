@@ -127,6 +127,51 @@ function OrderRequestForm() {
     setEmail(user?.email || '');
   }, [user]);
 
+  const openCheckoutForOrder = async (orderId, orderDetails) => {
+    const options = createRazorpayOptions({
+      amount: orderDetails.price,
+      email: orderDetails.studentEmail,
+      name: orderDetails.studentName,
+      phone: orderDetails.phone,
+      orderId,
+      notes: {
+        style: orderDetails.style,
+        size: orderDetails.size,
+      },
+      onSuccess: async (response) => {
+        const paidPatch = {
+          status: 'in-progress',
+          paymentStatus: 'paid',
+          deliveryStatus: 'artist assigned',
+          paymentId: response.razorpay_payment_id,
+          orderReference: response.razorpay_order_id || '',
+          paymentSignature: response.razorpay_signature,
+          paidAt: new Date().toISOString(),
+        };
+
+        setStatus('Payment successful! Confirming your order...');
+        await updateOrder(orderId, paidPatch);
+        setOrders((current) => current.map((item) => (item.id === orderId ? { ...item, ...paidPatch } : item)));
+        setStatus('Your art order is confirmed. We will contact you soon.');
+        showToast({
+          type: 'success',
+          title: 'Order confirmed',
+          message: 'Your payment was captured and the order is now in progress.',
+        });
+      },
+      onDismiss: () => {
+        setStatus('Payment canceled. Your order is saved as a pending request.');
+        showToast({
+          type: 'info',
+          title: 'Order saved as pending',
+          message: 'You can retry payment later from your order tracking list.',
+        });
+      },
+    });
+
+    await openRazorpayCheckout(options);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!name || !email || !description.trim()) {
@@ -166,53 +211,11 @@ function OrderRequestForm() {
       const localOrder = { ...order, id: orderId };
       setOrders([localOrder, ...orders.filter((item) => !String(item.id).startsWith('order-fallback'))]);
       setStatus('Opening payment checkout...');
-
-      const options = createRazorpayOptions({
-        amount: price,
-        email: order.studentEmail,
-        name: order.studentName,
-        phone: order.phone,
-        orderId,
-        notes: {
-          style,
-          size,
-        },
-        onSuccess: async (response) => {
-          const paidPatch = {
-            status: 'in-progress',
-            paymentStatus: 'paid',
-            deliveryStatus: 'artist assigned',
-            paymentId: response.razorpay_payment_id,
-            orderReference: response.razorpay_order_id || '',
-            paymentSignature: response.razorpay_signature,
-            paidAt: new Date().toISOString(),
-          };
-
-          setStatus('Payment successful! Confirming your order...');
-          await updateOrder(orderId, paidPatch);
-          setOrders((current) => current.map((item) => (item.id === orderId ? { ...item, ...paidPatch } : item)));
-          setStatus('Your art order is confirmed. We will contact you soon.');
-          showToast({
-            type: 'success',
-            title: 'Order confirmed',
-            message: 'Your payment was captured and the order is now in progress.',
-          });
-          setDescription('');
-          if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-          }
-        },
-        onDismiss: () => {
-          setStatus('Payment canceled. Your order is saved as a pending request.');
-          showToast({
-            type: 'info',
-            title: 'Order saved as pending',
-            message: 'You can retry payment later from the admin follow-up flow.',
-          });
-        },
-      });
-
-      await openRazorpayCheckout(options);
+      await openCheckoutForOrder(orderId, order);
+      setDescription('');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     } catch (error) {
       console.error(error);
       if (typeof error === 'object' && error?.code) {
@@ -224,6 +227,24 @@ function OrderRequestForm() {
         type: 'error',
         title: 'Order failed',
         message: 'The order was not fully completed. Please try again.',
+      });
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleRetryPayment = async (order) => {
+    try {
+      setProcessing(true);
+      setStatus('Reopening checkout for your pending order...');
+      await openCheckoutForOrder(order.id, order);
+    } catch (error) {
+      console.error(error);
+      setStatus('The pending payment could not be retried right now.');
+      showToast({
+        type: 'error',
+        title: 'Retry failed',
+        message: 'The payment window could not be reopened.',
       });
     } finally {
       setProcessing(false);
@@ -382,6 +403,16 @@ function OrderRequestForm() {
                     </div>
                     <StatusPill value={order.deliveryStatus || order.status} />
                   </div>
+                  {order.paymentStatus === 'pending' ? (
+                    <button
+                      type="button"
+                      onClick={() => handleRetryPayment(order)}
+                      disabled={processing}
+                      className="mt-4 rounded-full border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:text-slate-500"
+                    >
+                      Retry payment
+                    </button>
+                  ) : null}
                 </div>
               ))}
             </div>

@@ -1,11 +1,21 @@
 import { motion } from 'framer-motion';
 import { CalendarDays, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import MediaPreview from './MediaPreview';
 import { formatCurrency, formatDate } from '../utils/helpers';
 
-function WorkshopCard({ workshop, actionTo = '/contact?topic=workshop', actionLabel = 'Register' }) {
+function WorkshopCard({
+  workshop,
+  actionTo = '/contact?topic=workshop',
+  actionLabel = 'Register',
+  onAction,
+  actionDisabled = false,
+}) {
   return (
     <motion.article whileHover={{ y: -6 }} className="glass-card overflow-hidden rounded-[2rem] border border-white/10 p-6 shadow-soft">
+      <div className="mb-5 overflow-hidden rounded-[1.5rem]">
+        <MediaPreview src={workshop.image} alt={workshop.title} title={workshop.title} className="h-56 w-full" />
+      </div>
       <div className="flex items-center justify-between text-slate-300">
         <span className="inline-flex items-center gap-2 rounded-full bg-violet-500/10 px-3 py-2 text-sm text-violet-200">
           <CalendarDays size={16} /> {formatDate(workshop.date, { month: 'short', day: 'numeric' })}
@@ -25,9 +35,20 @@ function WorkshopCard({ workshop, actionTo = '/contact?topic=workshop', actionLa
         <div className="flex items-center gap-2 text-sm text-slate-300">
           <Users size={16} /> {workshop.seats} seats left
         </div>
-        <Link to={actionTo} className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">
-          {actionLabel}
-        </Link>
+        {onAction ? (
+          <button
+            type="button"
+            onClick={() => onAction(workshop)}
+            disabled={actionDisabled}
+            className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-violet-700"
+          >
+            {actionLabel}
+          </button>
+        ) : (
+          <Link to={actionTo} className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">
+            {actionLabel}
+          </Link>
+        )}
       </div>
     </motion.article>
   );

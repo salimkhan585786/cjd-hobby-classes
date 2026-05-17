@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import CourseCard from '../components/CourseCard';
 import FAQItem from '../components/FAQItem';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import MediaPreview from '../components/MediaPreview';
 import StatCounter from '../components/StatCounter';
 import WorkshopCard from '../components/WorkshopCard';
 import { useCourses, useFaqs, useGallery, useTestimonials, useWorkshops } from '../hooks/useData';
@@ -19,8 +20,8 @@ const valueProps = [
     description: 'Students finish each phase with review-ready work, growth notes, and meaningful milestones.',
   },
   {
-    title: 'Flexible online and studio batches',
-    description: 'Attend from home, join weekend labs, or blend both with modern class management tools.',
+    title: 'Offline studio batches only',
+    description: 'Join guided in-studio classes, weekend labs, and focused practice sessions inside the academy.',
   },
 ];
 
@@ -49,7 +50,7 @@ function Home() {
               Modern art classes for students who want skill, confidence, and a beautiful portfolio.
             </motion.h1>
             <p className="max-w-xl text-lg leading-8 text-slate-300">
-              CanvasCraft Art Academy blends premium design, thoughtful mentorship, and real progress tracking for drawing, painting, workshops, and custom portrait commissions.
+              CJD HOBBY CLASSES Art Academy blends premium design, thoughtful mentorship, and real progress tracking for drawing, painting, workshops, and custom portrait commissions.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
@@ -76,11 +77,16 @@ function Home() {
           <div className="relative">
             <div className="grid gap-5">
               <div className="glass-card flex min-h-[220px] items-end overflow-hidden rounded-[2.2rem] p-6 shadow-soft">
-                <img
-                  src={gallery[0]?.image}
-                  alt={gallery[0]?.title || 'Featured artwork'}
-                  className="absolute inset-0 h-full w-full object-cover opacity-45"
-                />
+                <div className="pointer-events-none absolute inset-0 opacity-55">
+                  <MediaPreview
+                    src={gallery[0]?.image}
+                    alt={gallery[0]?.title || 'Featured artwork'}
+                    title={gallery[0]?.title || 'Featured artwork'}
+                    className="h-full w-full"
+                    mediaClassName="object-cover"
+                    showLink={false}
+                  />
+                </div>
                 <div className="relative z-10 max-w-sm">
                   <p className="text-sm uppercase tracking-[0.24em] text-violet-200">Featured artwork</p>
                   <h2 className="mt-3 text-3xl font-semibold text-white">{gallery[0]?.title || 'Student showcase'}</h2>
@@ -129,7 +135,7 @@ function Home() {
             ? Array.from({ length: 3 }).map((_, index) => <LoadingSkeleton key={index} className="h-[360px]" />)
             : gallery.slice(0, 3).map((item) => (
                 <div key={item.id} className="glass-card overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 shadow-soft">
-                  <img src={item.image} alt={item.title} className="h-72 w-full object-cover" />
+                  <MediaPreview src={item.image} alt={item.title} title={item.title} className="h-72 w-full" />
                   <div className="space-y-2 p-5">
                     <p className="text-sm uppercase tracking-[0.24em] text-violet-300">{item.category}</p>
                     <h3 className="text-xl font-semibold text-white">{item.title}</h3>
@@ -216,7 +222,9 @@ function Home() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               {gallery.slice(0, 4).map((item) => (
-                <img key={item.id} src={item.image} alt={item.title} className="h-32 w-full rounded-3xl object-cover" />
+                <div key={item.id} className="overflow-hidden rounded-3xl">
+                  <MediaPreview src={item.image} alt={item.title} title={item.title} className="h-32 w-full" />
+                </div>
               ))}
             </div>
             <p className="text-slate-400">A premium visual feed of mentor critiques, workshop moments, and student showcase highlights.</p>

@@ -5,6 +5,8 @@ import {
   getAttendance,
   getAttendanceByStudent,
   getCourses,
+  getEnrollmentRequests,
+  getEnrollmentRequestsByStudent,
   getFaqs,
   getFees,
   getFeesByStudent,
@@ -12,10 +14,12 @@ import {
   getInquiries,
   getOrders,
   getOrdersByStudent,
+  getNotifications,
   getStudentProgress,
   getStudents,
   getTestimonials,
   getWorkshops,
+  getProgressRecords,
 } from '../services/dataService';
 import {
   announcements as dummyAnnouncements,
@@ -24,19 +28,19 @@ import {
   faqs as dummyFaqs,
   fees as dummyFees,
   galleryItems as dummyGallery,
-  getFallbackAttendance,
-  getFallbackFees,
   getFallbackOrders,
-  getFallbackProgress,
-  getFallbackStudent,
   inquiries as dummyInquiries,
   orders as dummyOrders,
+  progress as dummyProgress,
   students as dummyStudents,
   testimonials as dummyTestimonials,
   workshops as dummyWorkshops,
 } from '../services/dummyData';
 
-const useCollectionData = (getter, fallback) => {
+const EMPTY_LIST = [];
+
+const useCollectionData = (getter, fallback, options = {}) => {
+  const { useFallbackOnEmpty = true } = options;
   const [data, setData] = useState(fallback);
   const [loading, setLoading] = useState(true);
 
@@ -47,7 +51,7 @@ const useCollectionData = (getter, fallback) => {
       try {
         const results = await getter();
         if (!active) return;
-        setData(results.length > 0 ? results : fallback);
+        setData(results.length > 0 || !useFallbackOnEmpty ? results : fallback);
       } catch (error) {
         console.error('Error fetching collection:', error);
         if (active) setData(fallback);
@@ -61,12 +65,13 @@ const useCollectionData = (getter, fallback) => {
     return () => {
       active = false;
     };
-  }, [getter, fallback]);
+  }, [getter, fallback, useFallbackOnEmpty]);
 
   return { data, loading, setData };
 };
 
-const useStudentCollection = (getter, createFallback) => {
+const useStudentCollection = (getter, createFallback, options = {}) => {
+  const { useFallbackOnEmpty = true } = options;
   const { user } = useAuth();
   const [data, setData] = useState(createFallback(user));
   const [loading, setLoading] = useState(true);
@@ -84,7 +89,7 @@ const useStudentCollection = (getter, createFallback) => {
       try {
         const results = await getter(user.email);
         if (!active) return;
-        setData(results.length > 0 ? results : createFallback(user));
+        setData(results.length > 0 || !useFallbackOnEmpty ? results : createFallback(user));
       } catch (error) {
         console.error('Error fetching student collection:', error);
         if (active) setData(createFallback(user));
@@ -98,19 +103,33 @@ const useStudentCollection = (getter, createFallback) => {
     return () => {
       active = false;
     };
-  }, [getter, user]);
+  }, [getter, user, useFallbackOnEmpty]);
 
   return { data, loading, setData };
 };
 
 export const useCourses = () => {
   const { data, loading, setData } = useCollectionData(getCourses, dummyCourses);
-  return { courses: data, loading, setCourses: setData };
+  return {
+    courses: data.map((course) => ({
+      ...course,
+      format: 'Offline',
+    })),
+    loading,
+    setCourses: setData,
+  };
 };
 
 export const useWorkshops = () => {
   const { data, loading, setData } = useCollectionData(getWorkshops, dummyWorkshops);
-  return { workshops: data, loading, setWorkshops: setData };
+  return {
+    workshops: data.map((workshop) => ({
+      ...workshop,
+      mode: 'Offline',
+    })),
+    loading,
+    setWorkshops: setData,
+  };
 };
 
 export const useGallery = () => {
@@ -153,6 +172,11 @@ export const useAnnouncements = () => {
   return { announcements: data, loading, setAnnouncements: setData };
 };
 
+export const useProgressRecords = () => {
+  const { data, loading, setData } = useCollectionData(getProgressRecords, dummyProgress);
+  return { progressRecords: data, loading, setProgressRecords: setData };
+};
+
 export const useOrders = () => {
   const { data, loading, setData } = useCollectionData(getOrders, dummyOrders);
   return { orders: data, loading, setOrders: setData };
@@ -160,8 +184,22 @@ export const useOrders = () => {
 
 export const useStudentProfile = () => {
   const { user } = useAuth();
-  const fallback = getFallbackStudent(user?.email, user?.displayName);
-  const { students, loading } = useStudents();
+  const fallback = {
+    uid: user?.uid || '',
+    email: user?.email || '',
+    name: user?.displayName || 'Student',
+    role: 'student',
+    level: 'Beginner',
+    enrolledCourses: [],
+    workshopRegistrations: [],
+    assignmentsUploaded: 0,
+    certificates: 0,
+    feeStatus: 'Pending',
+    progressPercent: 0,
+    attendanceRate: 0,
+    joinedAt: '',
+  };
+  const { data: students, loading } = useCollectionData(getStudents, EMPTY_LIST, { useFallbackOnEmpty: false });
 
   return {
     student: students.find((item) => item.email === user?.email || item.uid === user?.uid) || fallback,
@@ -172,7 +210,8 @@ export const useStudentProfile = () => {
 export const useStudentProgress = () => {
   const { data, loading, setData } = useStudentCollection(
     getStudentProgress,
-    (user) => getFallbackProgress(user?.email)
+    () => EMPTY_LIST,
+    { useFallbackOnEmpty: false }
   );
   return { progress: data, loading, setProgress: setData };
 };
@@ -197,7 +236,8 @@ export const useStudentOrders = () => {
 export const useStudentAttendance = () => {
   const { data, loading, setData } = useStudentCollection(
     getAttendanceByStudent,
-    (user) => getFallbackAttendance(user?.email)
+    () => EMPTY_LIST,
+    { useFallbackOnEmpty: false }
   );
   return { attendance: data, loading, setAttendance: setData };
 };
@@ -205,7 +245,46 @@ export const useStudentAttendance = () => {
 export const useStudentFees = () => {
   const { data, loading, setData } = useStudentCollection(
     getFeesByStudent,
-    (user) => getFallbackFees(user?.email)
+    () => EMPTY_LIST,
+    { useFallbackOnEmpty: false }
   );
   return { fees: data, loading, setFees: setData };
+};
+
+export const useEnrollmentRequests = () => {
+  const { data, loading, setData } = useCollectionData(getEnrollmentRequests, EMPTY_LIST, { useFallbackOnEmpty: false });
+  return { enrollmentRequests: data, loading, setEnrollmentRequests: setData };
+};
+
+export const useStudentEnrollmentRequests = () => {
+  const { data, loading, setData } = useStudentCollection(
+    getEnrollmentRequestsByStudent,
+    () => EMPTY_LIST,
+    { useFallbackOnEmpty: false }
+  );
+  return { enrollmentRequests: data, loading, setEnrollmentRequests: setData };
+};
+
+export const useNotifications = () => {
+  const { data, loading, setData } = useCollectionData(getNotifications, EMPTY_LIST, {
+    useFallbackOnEmpty: false,
+  });
+  return { notifications: data, loading, setNotifications: setData };
+};
+
+export const useStudentNotifications = () => {
+  const { user } = useAuth();
+  const { notifications, loading, setNotifications } = useNotifications();
+
+  return {
+    notifications: notifications.filter(
+      (item) =>
+        item.studentEmail === user?.email ||
+        item.studentUid === user?.uid ||
+        item.audience === 'Students' ||
+        item.audience === 'All Students'
+    ),
+    loading,
+    setNotifications,
+  };
 };

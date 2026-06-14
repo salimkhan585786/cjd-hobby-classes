@@ -154,7 +154,7 @@ function AdminInquiries() {
                       />
                       <div className="flex gap-2">
                         <button type="button" onClick={() => handleInquiryStatus(inquiry.id, 'contacted')} className="rounded-full border border-white/10 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/5">Contacted</button>
-                        <button type="button" onClick={() => handleReplyEmail(inquiry)} className="rounded-full border border-violet-400/30 px-3 py-2 text-xs text-violet-200 transition hover:bg-violet-500/10">Send reply</button>
+                        <button type="button" onClick={() => handleReplyEmail(inquiry)} className="rounded-full border border-violet-400 px-3 py-2 text-xs text-violet-200 transition hover:bg-violet-500">Send reply</button>
                         <button type="button" onClick={() => handleInquiryStatus(inquiry.id, 'closed')} className="rounded-full bg-violet-500 px-3 py-2 text-xs text-white transition hover:bg-violet-400">Close</button>
                       </div>
                     </div>

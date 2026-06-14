@@ -1,5 +1,6 @@
 import { Instagram, Mail, MapPin, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo1.png';
 
 const links = [
   { label: 'Home', to: '/' },
@@ -16,7 +17,10 @@ function Footer() {
     <footer className="border-t border-white/10 bg-slate-950/95 py-14 text-slate-300">
       <div className="mx-auto flex max-w-7xl flex-col gap-10 px-6 lg:flex-row lg:justify-between">
         <div className="space-y-4">
-          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">CJD HOBBY Art Academy</p>
+          <Link to="/" className="flex items-center gap-2" aria-label="CJD Hobby Classes Home">
+            <img src={logo} alt="CJD Hobby Classes" className="h-10 w-auto rounded-full" />
+            <span className="text-sm uppercase tracking-[0.24em] text-violet-300">CJD HOBBY Art Academy</span>
+          </Link>
           <p className="max-w-md leading-7 text-slate-400">
             A premium drawing academy experience with class management, workshops, custom art orders, and student showcase support.
           </p>

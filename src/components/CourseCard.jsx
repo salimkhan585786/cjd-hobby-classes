@@ -10,14 +10,25 @@ function CourseCard({
   actionTo = '/register',
   onAction,
   actionDisabled = false,
+  variant = 'violet',
 }) {
   const detailsTo = `/courses/${encodeURIComponent(course.id || course.title)}`;
 
+  const variantClasses = {
+    violet: 'gradient-card-violet hover:glass-card-glow',
+    fuchsia: 'gradient-card-fuchsia hover:glass-card-glow',
+    cyan: 'gradient-card-cyan hover:glass-card-glow',
+    pink: 'gradient-card-pink hover:glass-card-glow',
+    default: 'gradient-card hover:glass-card-glow',
+  };
+
+  const cardClass = variantClasses[variant] || variantClasses.default;
+
   return (
     <motion.article
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.25 }}
-      className="glass-card group overflow-hidden rounded-[2rem] border border-white/10 shadow-soft"
+      whileHover={{ y: -8, scale: 1.01 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      className={`${cardClass} group overflow-hidden rounded-[2rem] border shadow-soft transition-all duration-300`}
     >
       <div className="relative h-64 overflow-hidden">
         <MediaPreview
@@ -25,8 +36,9 @@ function CourseCard({
           alt={course.title}
           title={course.title}
           className="h-full w-full"
-          mediaClassName="transition duration-500 group-hover:scale-105"
+          mediaClassName="transition duration-700 group-hover:scale-110"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
       <div className="space-y-4 p-6">
         <div className="flex items-center justify-between text-sm uppercase tracking-[0.24em] text-violet-300">
@@ -40,7 +52,7 @@ function CourseCard({
         <div className="flex items-center justify-between text-sm text-slate-400">
           <span>{course.format}</span>
           <Link to={detailsTo} className="text-violet-300 transition hover:text-violet-200">
-            View details
+            View details <ArrowRight size={14} />
           </Link>
         </div>
         <div className="flex items-center justify-between pt-4">

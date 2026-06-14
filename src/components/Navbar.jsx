@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
-import { Menu, Moon, Palette, Sun, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Menu, X } from 'lucide-react';
+import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import logo from '../assets/logo1.png';
 
 const navItems = [
   { label: 'Home', to: '/' },
@@ -15,18 +16,8 @@ const navItems = [
 
 function Navbar() {
   const [open, setOpen] = useState(false);
-  const [theme, setTheme] = useState(() => localStorage.getItem('canvascraft-theme') || 'dark');
   const { user, logout, role } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('canvascraft-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
-  };
 
   const handleLogout = async () => {
     await logout();
@@ -40,9 +31,7 @@ function Navbar() {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
         <Link to="/" className="flex items-center gap-3 text-lg font-semibold text-white">
-          <span className="inline-flex h-11 w-11 items-center justify-center rounded-3xl bg-violet-500/15 text-violet-200 shadow-glow">
-            <Palette size={18} />
-          </span>
+          <img src={logo} alt="CJD Hobby Classes" className="h-11 w-auto rounded-full" />
           <div>
             <p className="text-xs uppercase tracking-[0.28em] text-violet-300">CJD HOBBY CLASSES</p>
             <p className="text-base text-slate-100">Art Academy</p>
@@ -66,13 +55,6 @@ function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="rounded-full border border-white/10 bg-slate-900/70 p-3 text-slate-200 transition hover:border-violet-400/30"
-          >
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
           <Link
             to="/order"
             className="rounded-full border border-white/10 bg-slate-900/70 px-4 py-2.5 text-sm text-slate-100 transition hover:bg-white/10"
@@ -114,13 +96,6 @@ function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="rounded-full border border-white/10 bg-slate-900/70 p-3 text-slate-200 transition hover:border-violet-400/30"
-          >
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
           <button
             type="button"
             onClick={() => setOpen((current) => !current)}

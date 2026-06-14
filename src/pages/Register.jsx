@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerWithEmail } from '../firebase/authService';
 import { useToast } from '../hooks/useToast';
+import logo from '../assets/logo1.png';
 
 function Register() {
   const [name, setName] = useState('');
@@ -46,8 +47,11 @@ function Register() {
   return (
     <div className="mx-auto max-w-xl px-6 py-20 sm:px-10">
       <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-10 shadow-soft">
-        <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Register</p>
-        <h1 className="mt-4 text-4xl font-semibold text-white">Start your art academy membership.</h1>
+        <div className="flex items-center justify-center mb-6">
+          <img src={logo} alt="CJD Hobby Classes" className="h-16 w-auto rounded-full" />
+        </div>
+        <p className="text-sm uppercase tracking-[0.24em] text-violet-300 text-center">Register</p>
+        <h1 className="mt-4 text-4xl font-semibold text-white text-center">Start your art academy membership.</h1>
         <p className="mt-4 text-slate-400">
           Create a student account to enroll in classes, book workshops, order portraits, and track progress.
         </p>

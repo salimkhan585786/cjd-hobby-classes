@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmail, requestPasswordReset } from '../firebase/authService';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../hooks/useToast';
+import logo from '../assets/logo1.png';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -80,8 +81,11 @@ function Login() {
   return (
     <div className="mx-auto max-w-xl px-6 py-20 sm:px-10">
       <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-10 shadow-soft">
-        <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Sign in</p>
-        <h1 className="mt-4 text-4xl font-semibold text-white">Welcome back to CJD HOBBY CLASSES.</h1>
+        <div className="flex items-center justify-center mb-6">
+          <img src={logo} alt="CJD Hobby Classes" className="h-16 w-auto rounded-full" />
+        </div>
+        <p className="text-sm uppercase tracking-[0.24em] text-violet-300 text-center">Sign in</p>
+        <h1 className="mt-4 text-4xl font-semibold text-white text-center">Welcome back to CJD HOBBY CLASSES.</h1>
         <p className="mt-4 text-slate-400">Access your classes, art orders, attendance, and progress dashboard from one place.</p>
         <form onSubmit={handleSubmit} className="mt-10 space-y-6">
           <div>

@@ -417,7 +417,7 @@ function AdminFinance() {
                         <button
                           type="button"
                           onClick={() => handleRequestAction(request, 'record-payment')}
-                          className="rounded-full border border-violet-400/30 px-5 py-3 text-sm text-violet-200 transition hover:bg-violet-500/10"
+                          className="rounded-full border border-violet-400 px-5 py-3 text-sm text-violet-200 transition hover:bg-violet-500"
                         >
                           Record payment
                         </button>

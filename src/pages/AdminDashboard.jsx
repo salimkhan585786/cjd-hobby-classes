@@ -125,7 +125,7 @@ function AdminDashboard() {
                 <Link
                   key={item.to}
                   to={item.to}
-                  className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-5 transition hover:border-violet-400/30 hover:bg-slate-900"
+                  className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-5 transition hover:border-violet-400 hover:bg-slate-900"
                 >
                   <div className="flex items-center gap-3 text-violet-300">
                     <Icon size={20} />

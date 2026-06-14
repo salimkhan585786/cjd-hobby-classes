@@ -307,7 +307,8 @@ function OrderRequestForm() {
               <Camera size={20} />
               <span>Reference upload</span>
             </div>
-            <input ref={fileInputRef} type="file" accept="image/*" className="mt-4 w-full rounded-3xl border border-white/10 bg-slate-950/80 px-4 py-4 text-slate-100" />
+            <label htmlFor="reference-file" className="sr-only">Upload reference image</label>
+            <input ref={fileInputRef} id="reference-file" type="file" accept="image/*" className="mt-4 w-full rounded-3xl border border-white/10 bg-slate-950/80 px-4 py-4 text-slate-100" />
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-[2rem] bg-slate-900/80 p-6">

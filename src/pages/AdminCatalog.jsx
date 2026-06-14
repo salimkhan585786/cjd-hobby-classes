@@ -361,21 +361,48 @@ function AdminCatalog() {
         <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Course manager</p>
           <form onSubmit={handleSaveCourse} className="mt-6 grid gap-4">
-            <input value={courseForm.title} onChange={(event) => setCourseForm((current) => ({ ...current, title: event.target.value }))} placeholder="Course title" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-            <textarea value={courseForm.description} onChange={(event) => setCourseForm((current) => ({ ...current, description: event.target.value }))} placeholder="Short description" rows="3" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-            <div className="grid gap-4 md:grid-cols-2">
-              <input value={courseForm.duration} onChange={(event) => setCourseForm((current) => ({ ...current, duration: event.target.value }))} placeholder="Duration" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-              <input value={courseForm.price} onChange={(event) => setCourseForm((current) => ({ ...current, price: event.target.value }))} placeholder="Price" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-              <input value={courseForm.priceLabel} onChange={(event) => setCourseForm((current) => ({ ...current, priceLabel: event.target.value }))} placeholder="Optional custom price label" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            <div>
+              <label htmlFor="course-title" className="block text-sm text-slate-300">Course title</label>
+              <input id="course-title" value={courseForm.title} onChange={(event) => setCourseForm((current) => ({ ...current, title: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
+            <div>
+              <label htmlFor="course-description" className="block text-sm text-slate-300">Description</label>
+              <textarea id="course-description" value={courseForm.description} onChange={(event) => setCourseForm((current) => ({ ...current, description: event.target.value }))} rows="3" required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              <div>
+                <label htmlFor="course-duration" className="block text-sm text-slate-300">Duration</label>
+                <input id="course-duration" value={courseForm.duration} onChange={(event) => setCourseForm((current) => ({ ...current, duration: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              </div>
+              <div>
+                <label htmlFor="course-price" className="block text-sm text-slate-300">Price</label>
+                <input id="course-price" type="number" min="0" value={courseForm.price} onChange={(event) => setCourseForm((current) => ({ ...current, price: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              </div>
+              <div>
+                <label htmlFor="course-price-label" className="block text-sm text-slate-300">Custom price label <span className="text-slate-500">(optional)</span></label>
+                <input id="course-price-label" value={courseForm.priceLabel} onChange={(event) => setCourseForm((current) => ({ ...current, priceLabel: event.target.value }))} placeholder="e.g. Depends on canvas size" className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
-              <select value={courseForm.level} onChange={(event) => setCourseForm((current) => ({ ...current, level: event.target.value }))} className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100">
-                {['Beginner', 'Intermediate', 'Advanced', 'All levels', 'Kids'].map((option) => <option key={option} value={option}>{option}</option>)}
-              </select>
-              <input value="Offline" readOnly className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-400" />
+              <div>
+                <label htmlFor="course-level" className="block text-sm text-slate-300">Level</label>
+                <select id="course-level" value={courseForm.level} onChange={(event) => setCourseForm((current) => ({ ...current, level: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100">
+                  {['Beginner', 'Intermediate', 'Advanced', 'All levels', 'Kids'].map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="course-format" className="block text-sm text-slate-300">Format</label>
+                <input id="course-format" value="Offline" readOnly className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-400" />
+              </div>
             </div>
-            <input value={courseForm.image} onChange={(event) => setCourseForm((current) => ({ ...current, image: event.target.value }))} placeholder="Image, video, or Instagram URL" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-            <input type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onChange={(event) => setCourseFile(event.target.files?.[0] || null)} className="rounded-3xl border border-dashed border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            <div>
+              <label htmlFor="course-image-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image, video, or Instagram link)</span></label>
+              <input id="course-image-url" value={courseForm.image} onChange={(event) => setCourseForm((current) => ({ ...current, image: event.target.value }))} placeholder="https://..." className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
+            <div>
+              <label htmlFor="course-file" className="block text-sm text-slate-300">Upload media file</label>
+              <input id="course-file" type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onChange={(event) => setCourseFile(event.target.files?.[0] || null)} className="mt-2 w-full rounded-3xl border border-dashed border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
             <p className="text-sm text-slate-400">Upload `png`, `jpg`, `jpeg`, `webp`, or `gif`, or paste an image URL, video URL, or Instagram post/reel link.</p>
             <MediaPreview
               src={coursePreviewUrl || courseForm.image}
@@ -415,18 +442,42 @@ function AdminCatalog() {
         <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Workshop manager</p>
           <form onSubmit={handleAddWorkshop} className="mt-6 grid gap-4">
-            <input value={workshopForm.title} onChange={(event) => setWorkshopForm((current) => ({ ...current, title: event.target.value }))} placeholder="Workshop title" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-            <textarea value={workshopForm.description} onChange={(event) => setWorkshopForm((current) => ({ ...current, description: event.target.value }))} placeholder="Workshop description" rows="3" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-            <div className="grid gap-4 md:grid-cols-2">
-              <input type="datetime-local" value={workshopForm.date} onChange={(event) => setWorkshopForm((current) => ({ ...current, date: event.target.value }))} className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-              <input value="Offline" readOnly className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-400" />
+            <div>
+              <label htmlFor="workshop-title" className="block text-sm text-slate-300">Workshop title</label>
+              <input id="workshop-title" value={workshopForm.title} onChange={(event) => setWorkshopForm((current) => ({ ...current, title: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
+            <div>
+              <label htmlFor="workshop-description" className="block text-sm text-slate-300">Description</label>
+              <textarea id="workshop-description" value={workshopForm.description} onChange={(event) => setWorkshopForm((current) => ({ ...current, description: event.target.value }))} rows="3" required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
             <div className="grid gap-4 md:grid-cols-2">
-              <input value={workshopForm.seats} onChange={(event) => setWorkshopForm((current) => ({ ...current, seats: event.target.value }))} placeholder="Seats" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-              <input value={workshopForm.price} onChange={(event) => setWorkshopForm((current) => ({ ...current, price: event.target.value }))} placeholder="Price" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              <div>
+                <label htmlFor="workshop-date" className="block text-sm text-slate-300">Date and time</label>
+                <input id="workshop-date" type="datetime-local" value={workshopForm.date} onChange={(event) => setWorkshopForm((current) => ({ ...current, date: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              </div>
+              <div>
+                <label htmlFor="workshop-mode" className="block text-sm text-slate-300">Mode</label>
+                <input id="workshop-mode" value="Offline" readOnly className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-400" />
+              </div>
             </div>
-            <input value={workshopForm.image} onChange={(event) => setWorkshopForm((current) => ({ ...current, image: event.target.value }))} placeholder="Image, video, or Instagram URL" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-            <input type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onChange={(event) => setWorkshopFile(event.target.files?.[0] || null)} className="rounded-3xl border border-dashed border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label htmlFor="workshop-seats" className="block text-sm text-slate-300">Total seats</label>
+                <input id="workshop-seats" type="number" min="1" value={workshopForm.seats} onChange={(event) => setWorkshopForm((current) => ({ ...current, seats: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              </div>
+              <div>
+                <label htmlFor="workshop-price" className="block text-sm text-slate-300">Price</label>
+                <input id="workshop-price" type="number" min="0" value={workshopForm.price} onChange={(event) => setWorkshopForm((current) => ({ ...current, price: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="workshop-image-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image, video, or Instagram link)</span></label>
+              <input id="workshop-image-url" value={workshopForm.image} onChange={(event) => setWorkshopForm((current) => ({ ...current, image: event.target.value }))} placeholder="https://..." className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
+            <div>
+              <label htmlFor="workshop-file" className="block text-sm text-slate-300">Upload media file</label>
+              <input id="workshop-file" type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onChange={(event) => setWorkshopFile(event.target.files?.[0] || null)} className="mt-2 w-full rounded-3xl border border-dashed border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
             <p className="text-sm text-slate-400">Upload `png`, `jpg`, `jpeg`, `webp`, or `gif`, or paste an image URL, video URL, or Instagram post/reel link.</p>
             <MediaPreview
               src={workshopPreviewUrl || workshopForm.image}
@@ -464,39 +515,69 @@ function AdminCatalog() {
           </div>
           <form onSubmit={handleAddGallery} className="mt-6 grid gap-4">
             <div className="grid gap-4 md:grid-cols-2">
-              <input value={galleryForm.title} onChange={(event) => setGalleryForm((current) => ({ ...current, title: event.target.value }))} placeholder="Artwork title" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-              <input value={galleryForm.artist} onChange={(event) => setGalleryForm((current) => ({ ...current, artist: event.target.value }))} placeholder="Student name" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              <div>
+                <label htmlFor="gallery-title" className="block text-sm text-slate-300">Artwork title</label>
+                <input id="gallery-title" value={galleryForm.title} onChange={(event) => setGalleryForm((current) => ({ ...current, title: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              </div>
+              <div>
+                <label htmlFor="gallery-artist" className="block text-sm text-slate-300">Student name</label>
+                <input id="gallery-artist" value={galleryForm.artist} onChange={(event) => setGalleryForm((current) => ({ ...current, artist: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
-              <select
-                value={galleryForm.medium}
-                onChange={(event) => setGalleryForm((current) => ({ ...current, medium: event.target.value }))}
-                className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-              >
-                {GALLERY_MEDIUM_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
-              </select>
-              <input value={GALLERY_MENTOR} readOnly className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-400" />
+              <div>
+                <label htmlFor="gallery-medium" className="block text-sm text-slate-300">Medium</label>
+                <select
+                  id="gallery-medium"
+                  value={galleryForm.medium}
+                  onChange={(event) => setGalleryForm((current) => ({ ...current, medium: event.target.value }))}
+                  className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+                >
+                  {GALLERY_MEDIUM_OPTIONS.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="gallery-mentor" className="block text-sm text-slate-300">Mentor</label>
+                <input id="gallery-mentor" value={GALLERY_MENTOR} readOnly className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-400" />
+              </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
-              <select
-                value={galleryForm.category}
-                onChange={(event) => setGalleryForm((current) => ({ ...current, category: event.target.value, customCategory: event.target.value === OTHER_CATEGORY ? current.customCategory : '' }))}
-                className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-              >
-                {galleryCategoryOptions.map((option) => <option key={option} value={option}>{option}</option>)}
-              </select>
-              <input value={galleryForm.image} onChange={(event) => setGalleryForm((current) => ({ ...current, image: event.target.value }))} placeholder="Image, video, or Instagram URL" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              <div>
+                <label htmlFor="gallery-category" className="block text-sm text-slate-300">Category</label>
+                <select
+                  id="gallery-category"
+                  value={galleryForm.category}
+                  onChange={(event) => setGalleryForm((current) => ({ ...current, category: event.target.value, customCategory: event.target.value === OTHER_CATEGORY ? current.customCategory : '' }))}
+                  className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+                >
+                  {galleryCategoryOptions.map((option) => <option key={option} value={option}>{option}</option>)}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="gallery-image-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image, video, or Instagram link)</span></label>
+                <input id="gallery-image-url" value={galleryForm.image} onChange={(event) => setGalleryForm((current) => ({ ...current, image: event.target.value }))} placeholder="https://..." className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              </div>
             </div>
             {galleryForm.category === OTHER_CATEGORY ? (
-              <input
-                value={galleryForm.customCategory}
-                onChange={(event) => setGalleryForm((current) => ({ ...current, customCategory: event.target.value }))}
-                placeholder="Enter custom category name"
-                className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-              />
+              <div>
+                <label htmlFor="gallery-custom-category" className="block text-sm text-slate-300">Custom category name</label>
+                <input
+                  id="gallery-custom-category"
+                  value={galleryForm.customCategory}
+                  onChange={(event) => setGalleryForm((current) => ({ ...current, customCategory: event.target.value }))}
+                  required
+                  className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+                />
+              </div>
             ) : null}
-            <input type="file" accept="image/*,video/*" onChange={(event) => setGalleryFile(event.target.files?.[0] || null)} className="rounded-3xl border border-dashed border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-            <textarea value={galleryForm.details} onChange={(event) => setGalleryForm((current) => ({ ...current, details: event.target.value }))} placeholder="Artwork notes" rows="3" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            <div>
+              <label htmlFor="gallery-file" className="block text-sm text-slate-300">Upload media file</label>
+              <input id="gallery-file" type="file" accept="image/*,video/*" onChange={(event) => setGalleryFile(event.target.files?.[0] || null)} className="mt-2 w-full rounded-3xl border border-dashed border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
+            <div>
+              <label htmlFor="gallery-details" className="block text-sm text-slate-300">Artwork notes</label>
+              <textarea id="gallery-details" value={galleryForm.details} onChange={(event) => setGalleryForm((current) => ({ ...current, details: event.target.value }))} rows="3" className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
             <MediaPreview
               src={galleryPreviewUrl || galleryForm.image}
               alt={galleryForm.title || 'Gallery preview'}

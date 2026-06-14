@@ -455,16 +455,20 @@ function StudentDashboard() {
                     </div>
 
                     <div className="mt-5 grid gap-4 md:grid-cols-[180px_1fr]">
-                      <input
-                        type="number"
-                        min="1"
-                        max={outstanding || undefined}
-                        value={suggestedAmount}
-                        onChange={(event) => handlePaymentChange(request.id, event.target.value)}
-                        disabled={outstanding <= 0 || request.paymentStatus === 'Locked'}
-                        placeholder="Payment amount"
-                        className="rounded-3xl border border-white/10 bg-slate-950/80 px-4 py-4 text-slate-100"
-                      />
+                      <div>
+                        <label htmlFor={`payment-${request.id}`} className="block text-xs text-slate-400">Payment amount</label>
+                        <input
+                          id={`payment-${request.id}`}
+                          type="number"
+                          min="1"
+                          max={outstanding || undefined}
+                          value={suggestedAmount}
+                          onChange={(event) => handlePaymentChange(request.id, event.target.value)}
+                          disabled={outstanding <= 0 || request.paymentStatus === 'Locked'}
+                          placeholder="Enter amount"
+                          className="mt-1 w-full rounded-3xl border border-white/10 bg-slate-950/80 px-4 py-4 text-slate-100"
+                        />
+                      </div>
                       <button
                         type="button"
                         onClick={() => handlePayNow(request)}

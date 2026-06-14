@@ -3,7 +3,7 @@ import LoadingSkeleton from './LoadingSkeleton';
 import { useAuth } from '../hooks/useAuth';
 
 function ProtectedRoute({ role, children }) {
-  const { user, loading, role: userRole, emailVerified } = useAuth();
+  const { user, loading, role: userRole } = useAuth();
 
   if (loading) {
     return (
@@ -22,10 +22,6 @@ function ProtectedRoute({ role, children }) {
 
   if (!user) {
     return <Navigate to="/login" replace />;
-  }
-
-  if (role === 'student' && !emailVerified) {
-    return <Navigate to="/verify-email" replace />;
   }
 
   if (role && userRole !== role) {

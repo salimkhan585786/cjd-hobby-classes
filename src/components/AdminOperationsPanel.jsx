@@ -62,52 +62,78 @@ function StudentEditor({ student, onSave }) {
         </div>
       </div>
       <div className="mt-5 grid gap-4 md:grid-cols-3">
-        <select
-          value={form.level}
-          onChange={(event) => setForm((current) => ({ ...current, level: event.target.value }))}
-          className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-        >
-          {['Beginner', 'Intermediate', 'Advanced', 'Elementary', 'Kids'].map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <select
-          value={form.feeStatus}
-          onChange={(event) => setForm((current) => ({ ...current, feeStatus: event.target.value }))}
-          className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-        >
-          {['Pending', 'Partial', 'Paid'].map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <input
-          value={form.progressPercent}
-          onChange={(event) => setForm((current) => ({ ...current, progressPercent: event.target.value }))}
-          placeholder="Progress %"
-          className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-        />
-        <input
-          value={form.attendanceRate}
-          onChange={(event) => setForm((current) => ({ ...current, attendanceRate: event.target.value }))}
-          placeholder="Attendance %"
-          className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-        />
-        <input
-          value={form.assignmentsUploaded}
-          onChange={(event) => setForm((current) => ({ ...current, assignmentsUploaded: event.target.value }))}
-          placeholder="Assignments uploaded"
-          className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-        />
-        <input
-          value={form.certificates}
-          onChange={(event) => setForm((current) => ({ ...current, certificates: event.target.value }))}
-          placeholder="Certificates"
-          className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-        />
+        <div>
+          <label htmlFor={`student-level-${student.id}`} className="block text-xs text-slate-400">Level</label>
+          <select
+            id={`student-level-${student.id}`}
+            value={form.level}
+            onChange={(event) => setForm((current) => ({ ...current, level: event.target.value }))}
+            className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+          >
+            {['Beginner', 'Intermediate', 'Advanced', 'Elementary', 'Kids'].map((option) => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor={`student-fee-${student.id}`} className="block text-xs text-slate-400">Fee status</label>
+          <select
+            id={`student-fee-${student.id}`}
+            value={form.feeStatus}
+            onChange={(event) => setForm((current) => ({ ...current, feeStatus: event.target.value }))}
+            className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+          >
+            {['Pending', 'Partial', 'Paid'].map((option) => (
+              <option key={option} value={option}>{option}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor={`student-progress-${student.id}`} className="block text-xs text-slate-400">Progress %</label>
+          <input
+            id={`student-progress-${student.id}`}
+            type="number"
+            min="0"
+            max="100"
+            value={form.progressPercent}
+            onChange={(event) => setForm((current) => ({ ...current, progressPercent: event.target.value }))}
+            className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+          />
+        </div>
+        <div>
+          <label htmlFor={`student-attendance-${student.id}`} className="block text-xs text-slate-400">Attendance %</label>
+          <input
+            id={`student-attendance-${student.id}`}
+            type="number"
+            min="0"
+            max="100"
+            value={form.attendanceRate}
+            onChange={(event) => setForm((current) => ({ ...current, attendanceRate: event.target.value }))}
+            className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+          />
+        </div>
+        <div>
+          <label htmlFor={`student-assignments-${student.id}`} className="block text-xs text-slate-400">Assignments uploaded</label>
+          <input
+            id={`student-assignments-${student.id}`}
+            type="number"
+            min="0"
+            value={form.assignmentsUploaded}
+            onChange={(event) => setForm((current) => ({ ...current, assignmentsUploaded: event.target.value }))}
+            className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+          />
+        </div>
+        <div>
+          <label htmlFor={`student-certificates-${student.id}`} className="block text-xs text-slate-400">Certificates</label>
+          <input
+            id={`student-certificates-${student.id}`}
+            type="number"
+            min="0"
+            value={form.certificates}
+            onChange={(event) => setForm((current) => ({ ...current, certificates: event.target.value }))}
+            className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+          />
+        </div>
       </div>
       <button
         type="button"
@@ -443,30 +469,45 @@ function AdminOperationsPanel({ mode = 'all' }) {
                     </div>
 
                     <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-                      <input
-                        value={form.amount}
-                        onChange={(event) => updateRequestForm(request.id, 'amount', event.target.value)}
-                        placeholder="Total amount"
-                        className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-                      />
-                      <input
-                        value={form.paidAmount}
-                        onChange={(event) => updateRequestForm(request.id, 'paidAmount', event.target.value)}
-                        placeholder="Paid amount"
-                        className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-                      />
-                      <input
-                        type="date"
-                        value={form.dueDate}
-                        onChange={(event) => updateRequestForm(request.id, 'dueDate', event.target.value)}
-                        className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-                      />
-                      <input
-                        value={form.reminderDays}
-                        onChange={(event) => updateRequestForm(request.id, 'reminderDays', event.target.value)}
-                        placeholder="Reminder days"
-                        className="rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
-                      />
+                      <div>
+                        <label htmlFor={`req-amount-${request.id}`} className="block text-xs text-slate-400">Total amount</label>
+                        <input
+                          id={`req-amount-${request.id}`}
+                          value={form.amount}
+                          onChange={(event) => updateRequestForm(request.id, 'amount', event.target.value)}
+                          className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor={`req-paid-${request.id}`} className="block text-xs text-slate-400">Paid amount</label>
+                        <input
+                          id={`req-paid-${request.id}`}
+                          value={form.paidAmount}
+                          onChange={(event) => updateRequestForm(request.id, 'paidAmount', event.target.value)}
+                          className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor={`req-due-${request.id}`} className="block text-xs text-slate-400">Due date</label>
+                        <input
+                          id={`req-due-${request.id}`}
+                          type="date"
+                          value={form.dueDate}
+                          onChange={(event) => updateRequestForm(request.id, 'dueDate', event.target.value)}
+                          className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor={`req-reminder-${request.id}`} className="block text-xs text-slate-400">Reminder days</label>
+                        <input
+                          id={`req-reminder-${request.id}`}
+                          type="number"
+                          min="1"
+                          value={form.reminderDays}
+                          onChange={(event) => updateRequestForm(request.id, 'reminderDays', event.target.value)}
+                          className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-slate-100"
+                        />
+                      </div>
                       <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-slate-200">
                         <input
                           type="checkbox"
@@ -527,147 +568,220 @@ function AdminOperationsPanel({ mode = 'all' }) {
         <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Add fee record</p>
           <form onSubmit={handleFeeSave} className="mt-6 grid gap-4">
-            <select
-              value={feeForm.studentEmail}
-              onChange={(event) => setFeeForm((current) => ({ ...current, studentEmail: event.target.value }))}
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            >
-              <option value="">Select student email</option>
-              {studentEmails.map((email) => (
-                <option key={email} value={email}>
-                  {email}
-                </option>
-              ))}
-            </select>
-            <input
-              value={feeForm.plan}
-              onChange={(event) => setFeeForm((current) => ({ ...current, plan: event.target.value }))}
-              placeholder="Plan name"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <input
-              value={feeForm.amount}
-              onChange={(event) => setFeeForm((current) => ({ ...current, amount: event.target.value }))}
-              placeholder="Amount"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <input
-              value={feeForm.paid}
-              onChange={(event) => setFeeForm((current) => ({ ...current, paid: event.target.value }))}
-              placeholder="Paid"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <input
-              type="date"
-              value={feeForm.dueDate}
-              onChange={(event) => setFeeForm((current) => ({ ...current, dueDate: event.target.value }))}
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <select
-              value={feeForm.status}
-              onChange={(event) => setFeeForm((current) => ({ ...current, status: event.target.value }))}
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            >
-              {['Pending', 'Partial', 'Paid'].map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-            <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">
-              Save fee entry
-            </button>
+            <div>
+              <label htmlFor="fee-record-email" className="block text-sm text-slate-300">Student email</label>
+              <select
+                id="fee-record-email"
+                value={feeForm.studentEmail}
+                onChange={(event) => setFeeForm((current) => ({ ...current, studentEmail: event.target.value }))}
+                required
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              >
+                <option value="">Select student email</option>
+                {studentEmails.map((email) => (
+                  <option key={email} value={email}>{email}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="fee-record-plan" className="block text-sm text-slate-300">Plan name</label>
+              <input
+                id="fee-record-plan"
+                value={feeForm.plan}
+                onChange={(event) => setFeeForm((current) => ({ ...current, plan: event.target.value }))}
+                required
+                placeholder="e.g. Quarterly studio plan"
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label htmlFor="fee-record-amount" className="block text-sm text-slate-300">Total amount</label>
+                <input
+                  id="fee-record-amount"
+                  type="number"
+                  min="0"
+                  value={feeForm.amount}
+                  onChange={(event) => setFeeForm((current) => ({ ...current, amount: event.target.value }))}
+                  required
+                  className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+                />
+              </div>
+              <div>
+                <label htmlFor="fee-record-paid" className="block text-sm text-slate-300">Paid amount</label>
+                <input
+                  id="fee-record-paid"
+                  type="number"
+                  min="0"
+                  value={feeForm.paid}
+                  onChange={(event) => setFeeForm((current) => ({ ...current, paid: event.target.value }))}
+                  required
+                  className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="fee-record-due" className="block text-sm text-slate-300">Due date</label>
+              <input
+                id="fee-record-due"
+                type="date"
+                value={feeForm.dueDate}
+                onChange={(event) => setFeeForm((current) => ({ ...current, dueDate: event.target.value }))}
+                required
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <div>
+              <label htmlFor="fee-record-status" className="block text-sm text-slate-300">Status</label>
+              <select
+                id="fee-record-status"
+                value={feeForm.status}
+                onChange={(event) => setFeeForm((current) => ({ ...current, status: event.target.value }))}
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              >
+                {['Pending', 'Partial', 'Paid'].map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+            <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">Save fee entry</button>
           </form>
         </div>
 
         <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Add attendance</p>
           <form onSubmit={handleAttendanceSave} className="mt-6 grid gap-4">
-            <select
-              value={attendanceForm.studentEmail}
-              onChange={(event) => setAttendanceForm((current) => ({ ...current, studentEmail: event.target.value }))}
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            >
-              <option value="">Select student email</option>
-              {studentEmails.map((email) => (
-                <option key={email} value={email}>
-                  {email}
-                </option>
-              ))}
-            </select>
-            <input
-              value={attendanceForm.month}
-              onChange={(event) => setAttendanceForm((current) => ({ ...current, month: event.target.value }))}
-              placeholder="Month label"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <input
-              value={attendanceForm.attended}
-              onChange={(event) => setAttendanceForm((current) => ({ ...current, attended: event.target.value }))}
-              placeholder="Attended"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <input
-              value={attendanceForm.total}
-              onChange={(event) => setAttendanceForm((current) => ({ ...current, total: event.target.value }))}
-              placeholder="Total sessions"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">
-              Save attendance
-            </button>
+            <div>
+              <label htmlFor="att-student-email" className="block text-sm text-slate-300">Student email</label>
+              <select
+                id="att-student-email"
+                value={attendanceForm.studentEmail}
+                onChange={(event) => setAttendanceForm((current) => ({ ...current, studentEmail: event.target.value }))}
+                required
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              >
+                <option value="">Select student email</option>
+                {studentEmails.map((email) => (
+                  <option key={email} value={email}>{email}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="att-month" className="block text-sm text-slate-300">Month</label>
+              <input
+                id="att-month"
+                value={attendanceForm.month}
+                onChange={(event) => setAttendanceForm((current) => ({ ...current, month: event.target.value }))}
+                required
+                placeholder="e.g. Jun 2026"
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label htmlFor="att-attended" className="block text-sm text-slate-300">Attended sessions</label>
+                <input
+                  id="att-attended"
+                  type="number"
+                  min="0"
+                  value={attendanceForm.attended}
+                  onChange={(event) => setAttendanceForm((current) => ({ ...current, attended: event.target.value }))}
+                  required
+                  className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+                />
+              </div>
+              <div>
+                <label htmlFor="att-total" className="block text-sm text-slate-300">Total sessions</label>
+                <input
+                  id="att-total"
+                  type="number"
+                  min="1"
+                  value={attendanceForm.total}
+                  onChange={(event) => setAttendanceForm((current) => ({ ...current, total: event.target.value }))}
+                  required
+                  className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+                />
+              </div>
+            </div>
+            <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">Save attendance</button>
           </form>
         </div>
 
         <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Add progress milestone</p>
           <form onSubmit={handleProgressSave} className="mt-6 grid gap-4">
-            <select
-              value={progressForm.studentEmail}
-              onChange={(event) => setProgressForm((current) => ({ ...current, studentEmail: event.target.value }))}
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            >
-              <option value="">Select student email</option>
-              {studentEmails.map((email) => (
-                <option key={email} value={email}>
-                  {email}
-                </option>
-              ))}
-            </select>
-            <input
-              value={progressForm.category}
-              onChange={(event) => setProgressForm((current) => ({ ...current, category: event.target.value }))}
-              placeholder="Category"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <input
-              value={progressForm.milestone}
-              onChange={(event) => setProgressForm((current) => ({ ...current, milestone: event.target.value }))}
-              placeholder="Milestone"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <input
-              value={progressForm.nextStep}
-              onChange={(event) => setProgressForm((current) => ({ ...current, nextStep: event.target.value }))}
-              placeholder="Next step"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <input
-              value={progressForm.completion}
-              onChange={(event) => setProgressForm((current) => ({ ...current, completion: event.target.value }))}
-              placeholder="Completion %"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <textarea
-              value={progressForm.feedback}
-              onChange={(event) => setProgressForm((current) => ({ ...current, feedback: event.target.value }))}
-              placeholder="Mentor feedback"
-              rows="4"
-              className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-            />
-            <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">
-              Save progress
-            </button>
+            <div>
+              <label htmlFor="prog-student-email" className="block text-sm text-slate-300">Student email</label>
+              <select
+                id="prog-student-email"
+                value={progressForm.studentEmail}
+                onChange={(event) => setProgressForm((current) => ({ ...current, studentEmail: event.target.value }))}
+                required
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              >
+                <option value="">Select student email</option>
+                {studentEmails.map((email) => (
+                  <option key={email} value={email}>{email}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="prog-category" className="block text-sm text-slate-300">Course category</label>
+              <input
+                id="prog-category"
+                value={progressForm.category}
+                onChange={(event) => setProgressForm((current) => ({ ...current, category: event.target.value }))}
+                required
+                placeholder="e.g. Intermediate"
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <div>
+              <label htmlFor="prog-milestone" className="block text-sm text-slate-300">Milestone</label>
+              <input
+                id="prog-milestone"
+                value={progressForm.milestone}
+                onChange={(event) => setProgressForm((current) => ({ ...current, milestone: event.target.value }))}
+                required
+                placeholder="e.g. Portfolio review"
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <div>
+              <label htmlFor="prog-next-step" className="block text-sm text-slate-300">Next step</label>
+              <input
+                id="prog-next-step"
+                value={progressForm.nextStep}
+                onChange={(event) => setProgressForm((current) => ({ ...current, nextStep: event.target.value }))}
+                required
+                placeholder="e.g. Value contrast study"
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <div>
+              <label htmlFor="prog-completion" className="block text-sm text-slate-300">Completion %</label>
+              <input
+                id="prog-completion"
+                type="number"
+                min="0"
+                max="100"
+                value={progressForm.completion}
+                onChange={(event) => setProgressForm((current) => ({ ...current, completion: event.target.value }))}
+                required
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <div>
+              <label htmlFor="prog-feedback" className="block text-sm text-slate-300">Mentor feedback</label>
+              <textarea
+                id="prog-feedback"
+                value={progressForm.feedback}
+                onChange={(event) => setProgressForm((current) => ({ ...current, feedback: event.target.value }))}
+                rows="4"
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">Save progress</button>
           </form>
         </div>
       </section>

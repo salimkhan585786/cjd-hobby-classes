@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from 'framer-motion';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './hooks/useAuth';
@@ -23,8 +22,8 @@ import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import StudentDashboard from './pages/StudentDashboard';
 import StudentNotifications from './pages/StudentNotifications';
-import VerifyEmail from './pages/VerifyEmail';
 import Workshops from './pages/Workshops';
+import AdminFinance from './pages/AdminFinance';
 
 function App() {
   const location = useLocation();
@@ -32,15 +31,11 @@ function App() {
   return (
     <AuthProvider>
       <ToastProvider>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.35 }}
-          >
-            <Routes location={location}>
+        <div
+          key={location.pathname}
+          className="animate-fade-in"
+        >
+          <Routes>
               <Route path="/" element={<PublicLayout />}>
                 <Route index element={<Home />} />
                 <Route path="about" element={<About />} />
@@ -53,7 +48,6 @@ function App() {
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
                 <Route path="reset-password" element={<ResetPassword />} />
-                <Route path="verify-email" element={<VerifyEmail />} />
               </Route>
 
               <Route
@@ -82,14 +76,14 @@ function App() {
                 <Route path="catalog" element={<AdminCatalog />} />
                 <Route path="students" element={<AdminStudents />} />
                 <Route path="inquiries" element={<AdminInquiries />} />
+                <Route path="finance" element={<AdminFinance />} />
                 <Route path="orders" element={<ArtOrder />} />
                 <Route path="progress" element={<Progress />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </motion.div>
-        </AnimatePresence>
+        </div>
       </ToastProvider>
     </AuthProvider>
   );

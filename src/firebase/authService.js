@@ -6,7 +6,6 @@ import {
   sendPasswordResetEmail,
   confirmPasswordReset as firebaseConfirmPasswordReset,
   updateProfile,
-  sendEmailVerification,
 } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 import { getDocument, setDocument } from './firestoreService';
@@ -20,14 +19,12 @@ export const registerWithEmail = async ({ email, password, name, role = 'student
     await updateProfile(credential.user, { displayName: name });
   }
 
-  await sendEmailVerification(credential.user);
-
   const baseProfile = {
     uid: credential.user.uid,
     name: name || '',
     email,
     role,
-    emailVerified: false,
+    emailVerified: true,
     createdAt: new Date().toISOString(),
   };
 
@@ -54,12 +51,6 @@ export const registerWithEmail = async ({ email, password, name, role = 'student
   }
 
   return credential;
-};
-
-export const resendEmailVerification = async () => {
-  const user = auth.currentUser;
-  if (!user) throw new Error('No user signed in');
-  await sendEmailVerification(user);
 };
 
 export const logout = () => signOut(auth);

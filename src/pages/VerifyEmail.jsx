@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { applyActionCode } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
+import { useAuth } from '../hooks/useAuth';
+import { resendEmailVerification } from '../firebase/authService';
 import { useToast } from '../hooks/useToast';
 
 function VerifyEmail() {
@@ -10,19 +12,24 @@ function VerifyEmail() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const { showToast } = useToast();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     const oobCode = searchParams.get('oobCode');
     const mode = searchParams.get('mode');
 
     if (!oobCode) {
-      setStatus('error');
-      setMessage('Invalid or missing verification link.');
-      showToast({
-        type: 'error',
-        title: 'Invalid link',
-        message: 'The verification link is missing or malformed.',
-      });
+      if (!loading && user) {
+        sendVerification();
+      } else {
+        setStatus('error');
+        setMessage('Invalid or missing verification link.');
+        showToast({
+          type: 'error',
+          title: 'Invalid link',
+          message: 'The verification link is missing or malformed.',
+        });
+      }
       return;
     }
 
@@ -55,16 +62,34 @@ function VerifyEmail() {
     };
 
     verify();
-  }, [searchParams, showToast]);
+  }, [searchParams, showToast, user, loading]);
 
-  const handleResend = async () => {
+  const sendVerification = async () => {
     setStatus('verifying');
-    setMessage('Resending verification email...');
-    showToast({
-      type: 'info',
-      title: 'Check your inbox',
-      message: 'A new verification email has been sent.',
-    });
+    setMessage('Sending verification email...');
+    try {
+      await resendEmailVerification();
+      showToast({
+        type: 'success',
+        title: 'Email sent',
+        message: 'A new verification email has been sent to your inbox.',
+      });
+      setStatus('info');
+      setMessage('Verification email sent! Please check your inbox.');
+    } catch (err) {
+      console.error(err);
+      showToast({
+        type: 'error',
+        title: 'Failed to send',
+        message: err.message,
+      });
+      setStatus('error');
+      setMessage('Failed to send verification email. Please try again.');
+    }
+  };
+
+  const handleResend = () => {
+    sendVerification();
   };
 
   return (

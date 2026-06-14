@@ -138,7 +138,9 @@ function AdminInquiries() {
                     </div>
                     <div className="space-y-3">
                       <StatusPill value={inquiry.status} />
+                      <label htmlFor={`reply-${inquiry.id}`} className="block text-xs text-slate-400">Reply message</label>
                       <textarea
+                        id={`reply-${inquiry.id}`}
                         value={replyDrafts[inquiry.id] || ''}
                         onChange={(event) =>
                           setReplyDrafts((current) => ({
@@ -148,7 +150,7 @@ function AdminInquiries() {
                         }
                         placeholder="Write a quick reply"
                         rows="3"
-                        className="w-full rounded-3xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-slate-100"
+                        className="mt-1 w-full rounded-3xl border border-white/10 bg-slate-950/80 px-4 py-3 text-sm text-slate-100"
                       />
                       <div className="flex gap-2">
                         <button type="button" onClick={() => handleInquiryStatus(inquiry.id, 'contacted')} className="rounded-full border border-white/10 px-3 py-2 text-xs text-slate-200 transition hover:bg-white/5">Contacted</button>
@@ -169,11 +171,20 @@ function AdminInquiries() {
             <p className="text-sm uppercase tracking-[0.24em]">Announcements</p>
           </div>
           <form onSubmit={handleAnnouncement} className="mt-6 grid gap-4">
-            <input value={announcementForm.title} onChange={(event) => setAnnouncementForm((current) => ({ ...current, title: event.target.value }))} placeholder="Announcement title" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
-            <select value={announcementForm.audience} onChange={(event) => setAnnouncementForm((current) => ({ ...current, audience: event.target.value }))} className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100">
-              {['Students', 'Public', 'Parents'].map((option) => <option key={option} value={option}>{option}</option>)}
-            </select>
-            <textarea value={announcementForm.message} onChange={(event) => setAnnouncementForm((current) => ({ ...current, message: event.target.value }))} placeholder="Announcement message" rows="4" className="rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            <div>
+              <label htmlFor="announcement-title" className="block text-sm text-slate-300">Announcement title</label>
+              <input id="announcement-title" value={announcementForm.title} onChange={(event) => setAnnouncementForm((current) => ({ ...current, title: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
+            <div>
+              <label htmlFor="announcement-audience" className="block text-sm text-slate-300">Audience</label>
+              <select id="announcement-audience" value={announcementForm.audience} onChange={(event) => setAnnouncementForm((current) => ({ ...current, audience: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100">
+                {['Students', 'Public', 'Parents'].map((option) => <option key={option} value={option}>{option}</option>)}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="announcement-message" className="block text-sm text-slate-300">Announcement message</label>
+              <textarea id="announcement-message" value={announcementForm.message} onChange={(event) => setAnnouncementForm((current) => ({ ...current, message: event.target.value }))} rows="4" required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+            </div>
             <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">Save announcement</button>
           </form>
           <div className="mt-8 space-y-4">

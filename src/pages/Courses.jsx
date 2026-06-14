@@ -86,12 +86,16 @@ function Courses() {
       </div>
 
       <div className="mb-10 grid gap-4 rounded-[2rem] border border-white/10 bg-slate-950/90 p-6 shadow-soft lg:grid-cols-[1fr_auto]">
-        <input
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search by course or style"
-          className="w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
-        />
+        <div>
+          <label htmlFor="course-search" className="sr-only">Search courses</label>
+          <input
+            id="course-search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search by course or style"
+            className="w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+          />
+        </div>
         <div className="flex flex-wrap gap-3">
           {levels.map((option) => (
             <button

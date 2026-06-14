@@ -1,0 +1,158 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        request.auth.token.email in ['salimkhan585786@gmail.com']
+      );
+    }
+
+    function isStudent() {
+      return isAuthenticated() && !isAdmin();
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isOwnerOrAdmin(userId) {
+      return isOwner(userId) || isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if isOwnerOrAdmin(userId);
+      allow create: if isOwner(userId);
+      allow update: if isOwnerOrAdmin(userId);
+      allow delete: if isAdmin();
+    }
+
+    match /students/{studentId} {
+      allow read: if isOwnerOrAdmin(studentId);
+      allow create: if isOwner(studentId) || isAdmin();
+      allow update: if isOwnerOrAdmin(studentId);
+      allow delete: if isAdmin();
+    }
+
+    match /courses/{courseId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /workshops/{workshopId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /gallery/{itemId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /inquiries/{inquiryId} {
+      allow read: if isAdmin();
+      allow create: if true;
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      allow read: if isAuthenticated() && (
+        resource.data.studentId == request.auth.uid ||
+        resource.data.studentEmail == request.auth.token.email ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && (
+        resource.data.studentId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    match /attendance/{attendanceId} {
+      allow read: if isAuthenticated() && (
+        resource.data.studentEmail == request.auth.token.email ||
+        isAdmin()
+      );
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /fees/{feeId} {
+      allow read: if isAuthenticated() && (
+        resource.data.studentEmail == request.auth.token.email ||
+        resource.data.studentUid == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /announcements/{announcementId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /progress/{progressId} {
+      allow read: if isAuthenticated() && (
+        resource.data.studentEmail == request.auth.token.email ||
+        isAdmin()
+      );
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /enrollmentRequests/{requestId} {
+      allow read: if isAuthenticated() && (
+        resource.data.studentEmail == request.auth.token.email ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && (
+        resource.data.studentEmail == request.auth.token.email ||
+        resource.data.studentUid == request.auth.uid ||
+        resource.data.audience == 'All Students' ||
+        resource.data.audience == 'Students' ||
+        isAdmin()
+      );
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /faqs/{faqId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}

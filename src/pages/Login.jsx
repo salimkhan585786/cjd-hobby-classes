@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginWithEmail, requestPasswordReset } from '../firebase/authService';
+import { loginWithEmail, requestPasswordReset, resendEmailVerification } from '../firebase/authService';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from '../hooks/useToast';
 
@@ -10,6 +10,7 @@ function Login() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [resetting, setResetting] = useState(false);
+  const [resendingVerification, setResendingVerification] = useState(false);
   const navigate = useNavigate();
   const { user, role } = useAuth();
   const { showToast } = useToast();
@@ -34,11 +35,17 @@ function Login() {
         message: 'Your account has been signed in successfully.',
       });
     } catch (err) {
-      setError('Login failed. Please check your credentials and try again.');
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        setError('Login failed. Please check your credentials and try again.');
+      } else if (err.code === 'auth/user-disabled') {
+        setError('This account has been disabled. Please contact support.');
+      } else {
+        setError('Login failed. Please try again.');
+      }
       showToast({
         type: 'error',
         title: 'Sign in failed',
-        message: 'Please verify your email and password.',
+        message: err.message,
       });
     } finally {
       setSubmitting(false);
@@ -71,6 +78,32 @@ function Login() {
     }
   };
 
+  const handleResendVerification = async () => {
+    if (!email) {
+      setError('Enter your email first, then resend verification.');
+      return;
+    }
+
+    try {
+      setResendingVerification(true);
+      await resendEmailVerification();
+      showToast({
+        type: 'success',
+        title: 'Verification email sent',
+        message: 'Check your inbox and verify your email address.',
+      });
+    } catch (err) {
+      console.error(err);
+      showToast({
+        type: 'error',
+        title: 'Failed to send',
+        message: 'Could not send verification email. Please try again.',
+      });
+    } finally {
+      setResendingVerification(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-xl px-6 py-20 sm:px-10">
       <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-10 shadow-soft">
@@ -97,7 +130,7 @@ function Login() {
               required
               className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
             />
-            <div className="mt-3 flex justify-end">
+            <div className="mt-3 flex justify-end gap-4">
               <button
                 type="button"
                 onClick={handlePasswordReset}
@@ -105,6 +138,14 @@ function Login() {
                 className="text-sm text-violet-300 transition hover:text-white disabled:cursor-not-allowed disabled:text-violet-500"
               >
                 {resetting ? 'Sending reset link...' : 'Forgot password?'}
+              </button>
+              <button
+                type="button"
+                onClick={handleResendVerification}
+                disabled={resendingVerification}
+                className="text-sm text-violet-300 transition hover:text-white disabled:cursor-not-allowed disabled:text-violet-500"
+              >
+                {resendingVerification ? 'Sending...' : 'Resend verification'}
               </button>
             </div>
           </div>

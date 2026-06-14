@@ -25,7 +25,7 @@ import {
   useWorkshops,
 } from '../hooks/useData';
 import { useToast } from '../hooks/useToast';
-import { createRazorpayOptions, openRazorpayCheckout } from '../services/paymentService';
+import { initiateSecurePayment } from '../services/paymentService';
 import { recordEnrollmentRequestPayment } from '../services/dataService';
 import { formatCurrency, formatDate } from '../utils/helpers';
 
@@ -108,91 +108,85 @@ function StudentDashboard() {
 
     try {
       setProcessingPaymentId(request.id);
-      const response = await openRazorpayCheckout(
-        createRazorpayOptions({
-          amount: amountToPay,
-          email: student.email,
-          name: student.name,
-          orderId: request.id,
-          notes: {
-            requestId: request.id,
-            course: request.itemTitle,
-            itemType: request.itemType,
-          },
-          onSuccess: async (paymentResponse) => {
-            await recordEnrollmentRequestPayment(request.id, amountToPay, {
-              dueDate: request.dueDate,
-              reminderDays: request.reminderDays,
-              remindersEnabled: request.remindersEnabled,
-            });
+      await initiateSecurePayment({
+        amount: amountToPay,
+        email: student.email,
+        name: student.name,
+        orderId: request.id,
+        notes: {
+          requestId: request.id,
+          course: request.itemTitle,
+          itemType: request.itemType,
+        },
+        onSuccess: async (paymentResponse) => {
+          await recordEnrollmentRequestPayment(request.id, amountToPay, {
+            dueDate: request.dueDate,
+            reminderDays: request.reminderDays,
+            remindersEnabled: request.remindersEnabled,
+          });
 
-            const nextPaid = Math.min(Number(request.paidAmount || 0) + amountToPay, Number(request.amount || 0));
-            const nextOutstanding = Math.max(Number(request.amount || 0) - nextPaid, 0);
-            const nextPaymentStatus = nextPaid >= Number(request.amount || 0) ? 'Paid' : nextPaid > 0 ? 'Partial' : 'Unpaid';
-            const nextFeeStatus = nextPaid >= Number(request.amount || 0) ? 'Paid' : nextPaid > 0 ? 'Partial' : 'Pending';
+          const nextPaid = Math.min(Number(request.paidAmount || 0) + amountToPay, Number(request.amount || 0));
+          const nextOutstanding = Math.max(Number(request.amount || 0) - nextPaid, 0);
+          const nextPaymentStatus = nextPaid >= Number(request.amount || 0) ? 'Paid' : nextPaid > 0 ? 'Partial' : 'Unpaid';
+          const nextFeeStatus = nextPaid >= Number(request.amount || 0) ? 'Paid' : nextPaid > 0 ? 'Partial' : 'Pending';
 
-            setEnrollmentRequests((current) =>
-              current.map((item) =>
-                item.id === request.id
+          setEnrollmentRequests((current) =>
+            current.map((item) =>
+              item.id === request.id
+                ? {
+                    ...item,
+                    paidAmount: nextPaid,
+                    outstandingAmount: nextOutstanding,
+                    paymentStatus: nextPaymentStatus,
+                    enrolled: nextPaid > 0 ? true : item.enrolled,
+                    lastPaymentAt: new Date().toISOString(),
+                    paymentId: paymentResponse.razorpay_payment_id,
+                  }
+                : item
+            )
+          );
+
+          setFees((current) => {
+            const existing = current.find((item) => item.requestId === request.id);
+
+            if (existing) {
+              return current.map((item) =>
+                item.requestId === request.id
                   ? {
                       ...item,
-                      paidAmount: nextPaid,
-                      outstandingAmount: nextOutstanding,
-                      paymentStatus: nextPaymentStatus,
-                      enrolled: nextPaid > 0 ? true : item.enrolled,
-                      lastPaymentAt: new Date().toISOString(),
-                      paymentId: paymentResponse.razorpay_payment_id,
+                      paid: nextPaid,
+                      status: nextFeeStatus,
                     }
                   : item
-              )
-            );
+              );
+            }
 
-            setFees((current) => {
-              const existing = current.find((item) => item.requestId === request.id);
+            return [
+              {
+                id: `local-fee-${request.id}`,
+                requestId: request.id,
+                studentEmail: request.studentEmail,
+                studentUid: request.studentUid,
+                plan: request.itemTitle,
+                amount: Number(request.amount || 0),
+                paid: nextPaid,
+                dueDate: request.dueDate || new Date().toISOString(),
+                status: nextFeeStatus,
+              },
+              ...current,
+            ];
+          });
 
-              if (existing) {
-                return current.map((item) =>
-                  item.requestId === request.id
-                    ? {
-                        ...item,
-                        paid: nextPaid,
-                        status: nextFeeStatus,
-                      }
-                    : item
-                );
-              }
-
-              return [
-                {
-                  id: `local-fee-${request.id}`,
-                  requestId: request.id,
-                  studentEmail: request.studentEmail,
-                  studentUid: request.studentUid,
-                  plan: request.itemTitle,
-                  amount: Number(request.amount || 0),
-                  paid: nextPaid,
-                  dueDate: request.dueDate || new Date().toISOString(),
-                  status: nextFeeStatus,
-                },
-                ...current,
-              ];
-            });
-
-            setPaymentAmounts((current) => ({ ...current, [request.id]: '' }));
-          },
-          onDismiss: () => {
-            showToast({
-              type: 'info',
-              title: 'Payment cancelled',
-              message: 'You can try again anytime from the fees page.',
-            });
-          },
-        })
-      );
-
-      if (!response) {
-        return;
-      }
+          setPaymentAmounts((current) => ({ ...current, [request.id]: '' }));
+        },
+        onDismiss: () => {
+          showToast({
+            type: 'info',
+            title: 'Payment cancelled',
+            message: 'You can try again anytime from the fees page.',
+          });
+        },
+      });
 
       showToast({
         type: 'success',

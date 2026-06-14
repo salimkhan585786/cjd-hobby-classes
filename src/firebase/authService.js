@@ -4,7 +4,9 @@ import {
   signOut,
   onAuthStateChanged,
   sendPasswordResetEmail,
+  confirmPasswordReset as firebaseConfirmPasswordReset,
   updateProfile,
+  sendEmailVerification,
 } from 'firebase/auth';
 import { auth } from './firebaseConfig';
 import { getDocument, setDocument } from './firestoreService';
@@ -18,11 +20,14 @@ export const registerWithEmail = async ({ email, password, name, role = 'student
     await updateProfile(credential.user, { displayName: name });
   }
 
+  await sendEmailVerification(credential.user);
+
   const baseProfile = {
     uid: credential.user.uid,
     name: name || '',
     email,
     role,
+    emailVerified: false,
     createdAt: new Date().toISOString(),
   };
 
@@ -51,7 +56,14 @@ export const registerWithEmail = async ({ email, password, name, role = 'student
   return credential;
 };
 
+export const resendEmailVerification = async () => {
+  const user = auth.currentUser;
+  if (!user) throw new Error('No user signed in');
+  await sendEmailVerification(user);
+};
+
 export const logout = () => signOut(auth);
 export const observeAuth = (callback) => onAuthStateChanged(auth, callback);
 export const getUserProfile = (uid) => getDocument('users', uid);
 export const requestPasswordReset = (email) => sendPasswordResetEmail(auth, email);
+export const confirmPasswordReset = (oobCode, newPassword) => firebaseConfirmPasswordReset(auth, oobCode, newPassword);

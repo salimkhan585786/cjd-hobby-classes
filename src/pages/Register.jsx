@@ -27,16 +27,16 @@ function Register() {
       await registerWithEmail({ name, email, password, role: 'student' });
       showToast({
         type: 'success',
-        title: 'Account created',
-        message: 'Your student profile is ready to use.',
+        title: 'Account created!',
+        message: 'A verification email has been sent. Please check your inbox to verify your email before signing in.',
       });
-      navigate('/student', { replace: true });
+      navigate('/login', { replace: true });
     } catch (err) {
       setError('Registration failed. Please try again.');
       showToast({
         type: 'error',
         title: 'Registration failed',
-        message: 'Please review your details and try again.',
+        message: err.message || 'Please review your details and try again.',
       });
     } finally {
       setSubmitting(false);
@@ -95,6 +95,9 @@ function Register() {
           </div>
           <div className="rounded-[2rem] bg-slate-900/80 p-4 text-sm text-slate-400">
             Admin access is role-based and should be assigned in Firestore. Public registration creates student accounts only.
+          </div>
+          <div className="rounded-[2rem] bg-violet-500/10 p-4 text-sm text-violet-200">
+            A verification email will be sent to your email address. You must verify your email before you can sign in.
           </div>
           {error ? <p className="text-sm text-red-400">{error}</p> : null}
           <button

@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useOrders, useStudentOrders } from '../hooks/useData';
 import { useToast } from '../hooks/useToast';
 import { addOrder, updateOrder, uploadGalleryImage } from '../services/dataService';
-import { createRazorpayOptions, openRazorpayCheckout } from '../services/paymentService';
+import { initiateSecurePayment } from '../services/paymentService';
 import { formatCurrency, formatDate } from '../utils/helpers';
 
 const basePriceByStyle = {
@@ -128,48 +128,57 @@ function OrderRequestForm() {
   }, [user]);
 
   const openCheckoutForOrder = async (orderId, orderDetails) => {
-    const options = createRazorpayOptions({
-      amount: orderDetails.price,
-      email: orderDetails.studentEmail,
-      name: orderDetails.studentName,
-      phone: orderDetails.phone,
-      orderId,
-      notes: {
-        style: orderDetails.style,
-        size: orderDetails.size,
-      },
-      onSuccess: async (response) => {
-        const paidPatch = {
-          status: 'in-progress',
-          paymentStatus: 'paid',
-          deliveryStatus: 'artist assigned',
-          paymentId: response.razorpay_payment_id,
-          orderReference: response.razorpay_order_id || '',
-          paymentSignature: response.razorpay_signature,
-          paidAt: new Date().toISOString(),
-        };
+    try {
+      setStatus('Opening secure payment checkout...');
+      await initiateSecurePayment({
+        amount: orderDetails.price,
+        email: orderDetails.studentEmail,
+        name: orderDetails.studentName,
+        phone: orderDetails.phone,
+        orderId,
+        notes: {
+          style: orderDetails.style,
+          size: orderDetails.size,
+        },
+        onSuccess: async (response) => {
+          const paidPatch = {
+            status: 'in-progress',
+            paymentStatus: 'paid',
+            deliveryStatus: 'artist assigned',
+            paymentId: response.razorpay_payment_id,
+            orderReference: response.razorpay_order_id || '',
+            paymentSignature: response.razorpay_signature,
+            paidAt: new Date().toISOString(),
+          };
 
-        setStatus('Payment successful! Confirming your order...');
-        await updateOrder(orderId, paidPatch);
-        setOrders((current) => current.map((item) => (item.id === orderId ? { ...item, ...paidPatch } : item)));
-        setStatus('Your art order is confirmed. We will contact you soon.');
-        showToast({
-          type: 'success',
-          title: 'Order confirmed',
-          message: 'Your payment was captured and the order is now in progress.',
-        });
-      },
-      onDismiss: () => {
-        setStatus('Payment canceled. Your order is saved as a pending request.');
-        showToast({
-          type: 'info',
-          title: 'Order saved as pending',
-          message: 'You can retry payment later from your order tracking list.',
-        });
-      },
-    });
-
-    await openRazorpayCheckout(options);
+          setStatus('Payment successful! Confirming your order...');
+          await updateOrder(orderId, paidPatch);
+          setOrders((current) => current.map((item) => (item.id === orderId ? { ...item, ...paidPatch } : item)));
+          setStatus('Your art order is confirmed. We will contact you soon.');
+          showToast({
+            type: 'success',
+            title: 'Order confirmed',
+            message: 'Your payment was captured and the order is now in progress.',
+          });
+        },
+        onDismiss: () => {
+          setStatus('Payment canceled. Your order is saved as a pending request.');
+          showToast({
+            type: 'info',
+            title: 'Order saved as pending',
+            message: 'You can retry payment later from your order tracking list.',
+          });
+        },
+      });
+    } catch (error) {
+      console.error('Payment error:', error);
+      setStatus(`Payment failed: ${error.message || 'Please try again later.'}`);
+      showToast({
+        type: 'error',
+        title: 'Payment failed',
+        message: error.message || 'The payment could not be completed.',
+      });
+    }
   };
 
   const handleSubmit = async (event) => {

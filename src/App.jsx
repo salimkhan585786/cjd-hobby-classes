@@ -8,7 +8,6 @@ import PublicLayout from './layouts/PublicLayout';
 import About from './pages/About';
 import AdminCatalog from './pages/AdminCatalog';
 import AdminDashboard from './pages/AdminDashboard';
-import AdminFinance from './pages/AdminFinance';
 import AdminInquiries from './pages/AdminInquiries';
 import AdminStudents from './pages/AdminStudents';
 import ArtOrder from './pages/ArtOrder';
@@ -21,8 +20,10 @@ import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import Progress from './pages/Progress';
 import Register from './pages/Register';
+import ResetPassword from './pages/ResetPassword';
 import StudentDashboard from './pages/StudentDashboard';
 import StudentNotifications from './pages/StudentNotifications';
+import VerifyEmail from './pages/VerifyEmail';
 import Workshops from './pages/Workshops';
 
 function App() {
@@ -51,6 +52,8 @@ function App() {
                 <Route path="order" element={<ArtOrder />} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
+                <Route path="reset-password" element={<ResetPassword />} />
+                <Route path="verify-email" element={<VerifyEmail />} />
               </Route>
 
               <Route
@@ -79,7 +82,6 @@ function App() {
                 <Route path="catalog" element={<AdminCatalog />} />
                 <Route path="students" element={<AdminStudents />} />
                 <Route path="inquiries" element={<AdminInquiries />} />
-                <Route path="finance" element={<AdminFinance />} />
                 <Route path="orders" element={<ArtOrder />} />
                 <Route path="progress" element={<Progress />} />
               </Route>

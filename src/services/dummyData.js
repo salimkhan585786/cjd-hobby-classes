@@ -14,7 +14,7 @@ export const courses = [
     price: 8000,
     level: 'Elementary',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-intermediate',
@@ -25,7 +25,7 @@ export const courses = [
     price: 9000,
     level: 'Intermediate',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-regular-drawing-8-turns',
@@ -36,7 +36,7 @@ export const courses = [
     price: 800,
     level: 'Beginner',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-black-white-pencil-shading',
@@ -47,7 +47,7 @@ export const courses = [
     price: 4000,
     level: 'Beginner',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1579762715118-a6f1d789a1e4?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-colour-pencil-shading',
@@ -58,7 +58,7 @@ export const courses = [
     price: 5000,
     level: 'Intermediate',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-handwriting-english',
@@ -69,7 +69,7 @@ export const courses = [
     price: 4000,
     level: 'All levels',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-handwriting-teacher-training',
@@ -80,7 +80,7 @@ export const courses = [
     price: 6000,
     level: 'Advanced',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-handwriting-hindi-marathi',
@@ -91,7 +91,7 @@ export const courses = [
     price: 3000,
     level: 'All levels',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-drawing-teacher-training',
@@ -102,7 +102,7 @@ export const courses = [
     price: 25000,
     level: 'Advanced',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1456086272160-b28b0645b729?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-calligraphy-pens-basics',
@@ -113,7 +113,7 @@ export const courses = [
     price: 1500,
     level: 'Beginner',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-calligraphy-brushes-advance',
@@ -124,7 +124,7 @@ export const courses = [
     price: 3000,
     level: 'Advanced',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-calligraphy-teacher-training',
@@ -135,7 +135,7 @@ export const courses = [
     price: 6000,
     level: 'Advanced',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-madhubani-basic',
@@ -146,7 +146,7 @@ export const courses = [
     price: 1500,
     level: 'Beginner',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-canvas-painting',
@@ -158,7 +158,7 @@ export const courses = [
     priceLabel: 'Depends on canvas size',
     level: 'All levels',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-fabric-painting-basic',
@@ -169,7 +169,7 @@ export const courses = [
     price: 2500,
     level: 'Beginner',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-glass-painting',
@@ -181,7 +181,7 @@ export const courses = [
     priceLabel: 'Depends on size',
     level: 'All levels',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1509281373149-e957c6296406?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-lippan-art',
@@ -193,7 +193,7 @@ export const courses = [
     priceLabel: 'Depends on size',
     level: 'All levels',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-coffee-painting',
@@ -204,7 +204,7 @@ export const courses = [
     price: 1200,
     level: 'Beginner',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1494888374810-c88f8d29f26f?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'course-mural-painting',
@@ -216,7 +216,7 @@ export const courses = [
     priceLabel: 'Depends on size',
     level: 'Advanced',
     format: 'Offline',
-    image: '',
+    image: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&w=800&q=80',
   },
 ];
 

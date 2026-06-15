@@ -3,17 +3,20 @@ import { Palette } from 'lucide-react';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import MediaPreview from '../components/MediaPreview';
 import { useToast } from '../hooks/useToast';
-import { useCourses, useGallery, useWorkshops } from '../hooks/useData';
+import { useCourses, useGallery, useGalleryCollage, useWorkshops } from '../hooks/useData';
 import {
   addCourse,
+  addGalleryCollageItem,
   addGalleryItem,
   addWorkshop,
   deleteCourse,
+  deleteGalleryCollageItem,
   deleteGalleryItem,
   deleteWorkshop,
   updateCourse,
   updateGalleryItem,
   uploadCourseMedia,
+  uploadGalleryCollageImage,
   uploadGalleryImage,
   uploadWorkshopMedia,
 } from '../services/dataService';
@@ -44,6 +47,7 @@ function AdminCatalog() {
   const { courses, loading: coursesLoading, setCourses } = useCourses();
   const { workshops, loading: workshopsLoading, setWorkshops } = useWorkshops();
   const { gallery, loading: galleryLoading, setGallery } = useGallery();
+  const { galleryCollage, loading: collageLoading, setGalleryCollage } = useGalleryCollage();
   const { showToast } = useToast();
 
   const [editingCourseId, setEditingCourseId] = useState(null);
@@ -80,6 +84,8 @@ function AdminCatalog() {
   const [courseFile, setCourseFile] = useState(null);
   const [workshopFile, setWorkshopFile] = useState(null);
   const [galleryFile, setGalleryFile] = useState(null);
+  const [collageFile, setCollageFile] = useState(null);
+  const [collageUrl, setCollageUrl] = useState('');
   const coursePreviewUrl = useMemo(() => (courseFile ? URL.createObjectURL(courseFile) : ''), [courseFile]);
   const workshopPreviewUrl = useMemo(() => (workshopFile ? URL.createObjectURL(workshopFile) : ''), [workshopFile]);
   const galleryPreviewUrl = useMemo(() => (galleryFile ? URL.createObjectURL(galleryFile) : ''), [galleryFile]);
@@ -303,6 +309,54 @@ function AdminCatalog() {
     if (!isLocalId(galleryId)) {
       try {
         await deleteGalleryItem(galleryId);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleUploadCollage = async (event) => {
+    event.preventDefault();
+    if (!collageFile && !collageUrl.trim()) {
+      showToast({ type: 'error', title: 'No media provided', message: 'Upload a file or paste a media URL.' });
+      return;
+    }
+    try {
+      let mediaUrl = collageUrl.trim();
+
+      if (collageFile) {
+        const extension = collageFile.name?.split('.').pop() || 'jpg';
+        const path = `galleryCollage/${Date.now()}_collage.${extension}`;
+        mediaUrl = await uploadGalleryCollageImage(collageFile, path);
+      }
+
+      if (!mediaUrl) {
+        showToast({ type: 'error', title: 'No URL', message: 'A valid image URL is required.' });
+        return;
+      }
+
+      const payload = { src: mediaUrl, alt: collageFile?.name?.replace(/\.[^/.]+$/, '') || 'Collage image', createdAt: Date.now() };
+      const id = await addGalleryCollageItem(payload);
+      setGalleryCollage((current) => [{ id, ...payload }, ...current]);
+      setCollageFile(null);
+      setCollageUrl('');
+      showToast({ type: 'success', title: 'Image uploaded', message: 'Collage image has been added.' });
+    } catch (error) {
+      console.error('Collage upload error:', error);
+      const message = String(error?.message || error?.code || '').toLowerCase();
+      if (message.includes('permission') || message.includes('denied') || message.includes('unauthenticated') || message.includes('missing or insufficient permissions')) {
+        showToast({ type: 'error', title: 'Firestore permission denied', message: 'Check that your admin email matches the Firestore rules and that the rules are deployed.' });
+      } else {
+        showToast({ type: 'error', title: 'Upload failed', message: error?.message || 'Something went wrong. Check the console for details.' });
+      }
+    }
+  };
+
+  const handleDeleteCollage = async (itemId) => {
+    setGalleryCollage((current) => current.filter((item) => item.id !== itemId));
+    if (!isLocalId(itemId)) {
+      try {
+        await deleteGalleryCollageItem(itemId);
       } catch (error) {
         console.error(error);
       }
@@ -634,6 +688,70 @@ function AdminCatalog() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
+        <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
+          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Collage image uploader</p>
+          <p className="mt-2 text-sm text-slate-400">Upload images for the exhibition-ready collage on the home page.</p>
+          <form onSubmit={handleUploadCollage} className="mt-6 grid gap-4">
+            <div>
+              <label htmlFor="collage-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image, video, or Instagram link)</span></label>
+              <input
+                id="collage-url"
+                value={collageUrl}
+                onChange={(event) => setCollageUrl(event.target.value)}
+                placeholder="https://..."
+                className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <div>
+              <label htmlFor="collage-file" className="block text-sm text-slate-300">Upload media file</label>
+              <input
+                id="collage-file"
+                type="file"
+                accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
+                onChange={(event) => setCollageFile(event.target.files?.[0] || null)}
+                className="mt-2 w-full rounded-3xl border border-dashed border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
+              />
+            </div>
+            <p className="text-sm text-slate-400">Paste an image URL or upload a file (png, jpg, jpeg, webp, gif).</p>
+            {(collageFile || collageUrl.trim()) && (
+              <div className="overflow-hidden rounded-[1.5rem] border border-white/10">
+                <img
+                  src={collageFile ? URL.createObjectURL(collageFile) : collageUrl.trim()}
+                  alt="Preview"
+                  className="h-48 w-full object-cover"
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+              </div>
+            )}
+            <button type="submit" disabled={!collageFile && !collageUrl.trim()} className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400 disabled:opacity-40 disabled:cursor-not-allowed">
+              Upload to collage
+            </button>
+          </form>
+        </div>
+
+        <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
+          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Collage images ({galleryCollage.length})</p>
+          <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+            {galleryCollage.map((item) => (
+              <div key={item.id} className="group relative overflow-hidden rounded-2xl border border-white/10">
+                <img src={item.src} alt={item.alt} className="h-32 w-full object-cover sm:h-40" />
+                <button
+                  type="button"
+                  onClick={() => handleDeleteCollage(item.id)}
+                  className="absolute inset-0 flex items-center justify-center bg-black/60 text-sm text-rose-300 opacity-0 transition group-hover:opacity-100"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+            {galleryCollage.length === 0 && (
+              <p className="col-span-full py-8 text-center text-sm text-slate-500">No collage images uploaded yet.</p>
+            )}
           </div>
         </div>
       </section>

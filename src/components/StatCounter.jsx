@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { useEffect, useMemo, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const getNumericValue = (value) => {
   const raw = String(value || '');
@@ -17,10 +17,14 @@ const getNumericValue = (value) => {
 function StatCounter({ item }) {
   const [count, setCount] = useState(0);
   const config = useMemo(() => getNumericValue(item.value), [item.value]);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
 
   useEffect(() => {
+    if (!isInView) return;
+
     let start = 0;
-    const duration = 1000;
+    const duration = 1500;
     const stepTime = 16;
     const steps = duration / stepTime;
     const increment = config.target / steps;
@@ -36,14 +40,21 @@ function StatCounter({ item }) {
     }, stepTime);
 
     return () => clearInterval(timer);
-  }, [config.target]);
+  }, [config.target, isInView]);
 
   const formatted = config.short
     ? `${(count / 1000).toFixed(count >= 1000 ? 1 : 0)}K${config.suffix}`
     : `${count}${config.suffix}`;
 
   return (
-    <motion.div whileHover={{ y: -6 }} className="glass-card rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 shadow-soft">
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -6 }}
+      className="glass-card rounded-[2rem] border border-white/10 bg-slate-900/80 p-6 shadow-soft"
+    >
       <p className="text-4xl font-semibold text-white">{formatted}</p>
       <p className="mt-2 text-sm uppercase tracking-[0.24em] text-slate-400">{item.label}</p>
     </motion.div>

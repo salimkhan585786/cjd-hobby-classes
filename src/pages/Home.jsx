@@ -8,6 +8,7 @@ import LoadingSkeleton from '../components/LoadingSkeleton';
 import MediaPreview from '../components/MediaPreview';
 import StatCounter from '../components/StatCounter';
 import WorkshopCard from '../components/WorkshopCard';
+import GalleryCollage from '../components/GalleryCollage';
 import { useCourses, useFaqs, useGallery, useTestimonials, useWorkshops } from '../hooks/useData';
 import { heroStats } from '../services/dummyData';
 import {
@@ -121,42 +122,8 @@ function Home() {
         ))}
       </StaggerContainer>
 
-      {/* ── GALLERY: Zoom Parallax ── */}
-      <ParallaxSection speed={0.15}>
-        <FadeInView>
-          <section className="space-y-8">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="text-sm uppercase tracking-[0.28em] text-violet-300">Featured artwork</p>
-                <h2 className="mt-3 text-4xl font-semibold text-white">Student work that feels exhibition-ready.</h2>
-              </div>
-              <Link to="/gallery" className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">
-                View Gallery <ArrowRight size={18} />
-              </Link>
-            </div>
-            <StaggerContainer className="grid gap-6 md:grid-cols-3" staggerDelay={0.15}>
-              {galleryLoading
-                ? Array.from({ length: 3 }).map((_, i) => <StaggerItem key={i}><LoadingSkeleton className="h-[360px]" /></StaggerItem>)
-                : gallery.slice(0, 3).map((item) => (
-                    <StaggerItem key={item.id}>
-                      <ZoomParallax scaleRange={[0.94, 1.03]}>
-                        <TiltCard tiltAmount={5}>
-                          <div className="glass-card overflow-hidden rounded-[2rem] border border-white/10 bg-slate-900/80 shadow-soft transition-shadow duration-300 hover:shadow-glow">
-                            <MediaPreview src={item.image} alt={item.title} title={item.title} className="h-72 w-full" />
-                            <div className="space-y-2 p-5">
-                              <p className="text-sm uppercase tracking-[0.24em] text-violet-300">{item.category}</p>
-                              <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                              <p className="text-sm text-slate-400">by {item.artist} • {item.medium}</p>
-                            </div>
-                          </div>
-                        </TiltCard>
-                      </ZoomParallax>
-                    </StaggerItem>
-                  ))}
-            </StaggerContainer>
-          </section>
-        </FadeInView>
-      </ParallaxSection>
+      {/* ── GALLERY: Collage with Parallax ── */}
+      <GalleryCollage />
 
       {/* ── STUDENT SUCCESS: Rotational Parallax ── */}
       <RotateParallax rotateRange={[-3, 3]} axis="y">

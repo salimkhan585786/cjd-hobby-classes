@@ -11,6 +11,7 @@ import {
   getFees,
   getFeesByStudent,
   getGallery,
+  getGalleryCollage,
   getInquiries,
   getOrders,
   getOrdersByStudent,
@@ -135,6 +136,11 @@ export const useWorkshops = () => {
 export const useGallery = () => {
   const { data, loading, setData } = useCollectionData(getGallery, dummyGallery);
   return { gallery: data, loading, setGallery: setData };
+};
+
+export const useGalleryCollage = () => {
+  const { data, loading, setData } = useCollectionData(getGalleryCollage, EMPTY_LIST, { useFallbackOnEmpty: false });
+  return { galleryCollage: data, loading, setGalleryCollage: setData };
 };
 
 export const useTestimonials = () => {

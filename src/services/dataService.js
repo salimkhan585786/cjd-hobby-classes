@@ -222,6 +222,11 @@ export const updateGalleryItem = (id, data) => updateDocument('gallery', id, dat
 export const deleteGalleryItem = (id) => deleteDocument('gallery', id);
 export const uploadGalleryImage = (file, path) => uploadFile(path, file);
 
+export const getGalleryCollage = () => getCollection('galleryCollage');
+export const addGalleryCollageItem = (data) => addDocument('galleryCollage', data);
+export const deleteGalleryCollageItem = (id) => deleteDocument('galleryCollage', id);
+export const uploadGalleryCollageImage = (file, path) => uploadFile(path, file);
+
 export const getInquiries = () => getCollection('inquiries');
 export const addInquiry = (data) => addDocument('inquiries', data);
 export const updateInquiry = (id, data) => updateDocument('inquiries', id, data);

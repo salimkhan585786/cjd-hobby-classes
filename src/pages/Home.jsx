@@ -123,7 +123,7 @@ function Home() {
       </StaggerContainer>
 
       {/* ── GALLERY: Collage with Parallax ── */}
-      <GalleryCollage />
+      <GalleryCollage limit={15} />
 
       {/* ── STUDENT SUCCESS: Rotational Parallax ── */}
       <RotateParallax rotateRange={[-3, 3]} axis="y">

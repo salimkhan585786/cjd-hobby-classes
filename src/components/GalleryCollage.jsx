@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ZoomIn, ZoomOut, RotateCcw, X } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, X, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useGalleryCollage } from '../hooks/useData';
 
 const ZOOM_MIN = 0.5;
@@ -77,7 +78,7 @@ function CollageCard({ item, index, onOpen }) {
   );
 }
 
-function GalleryCollage() {
+function GalleryCollage({ limit }) {
   const { galleryCollage, loading } = useGalleryCollage();
   const [visibleCount, setVisibleCount] = useState(BATCH_SIZE);
   const [selected, setSelected] = useState(null);
@@ -88,11 +89,13 @@ function GalleryCollage() {
   const posStart = useRef({ x: 0, y: 0 });
   const sentinelRef = useRef(null);
 
-  const visibleItems = galleryCollage.slice(0, visibleCount);
-  const hasMore = visibleCount < galleryCollage.length;
+  const isLimited = typeof limit === 'number';
+  const sourceItems = isLimited ? galleryCollage.slice(0, limit) : galleryCollage;
+  const visibleItems = isLimited ? sourceItems : sourceItems.slice(0, visibleCount);
+  const hasMore = !isLimited && visibleCount < sourceItems.length;
 
   useEffect(() => {
-    if (!hasMore || !sentinelRef.current) return undefined;
+    if (isLimited || !hasMore || !sentinelRef.current) return undefined;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -103,11 +106,11 @@ function GalleryCollage() {
     );
     observer.observe(sentinelRef.current);
     return () => observer.disconnect();
-  }, [hasMore, galleryCollage.length]);
+  }, [isLimited, hasMore, galleryCollage.length]);
 
   useEffect(() => {
-    setVisibleCount(BATCH_SIZE);
-  }, [galleryCollage.length]);
+    if (!isLimited) setVisibleCount(BATCH_SIZE);
+  }, [isLimited, galleryCollage.length]);
 
   const resetZoom = useCallback(() => {
     setZoom(1);
@@ -193,6 +196,14 @@ function GalleryCollage() {
               <p className="text-sm uppercase tracking-[0.28em] text-amber-700">Gallery</p>
               <h2 className="mt-3 text-4xl font-semibold text-stone-900">Student work that feels exhibition-ready.</h2>
             </div>
+            {isLimited && (
+              <Link
+                to="/gallery"
+                className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50"
+              >
+                View Gallery <ArrowRight size={16} />
+              </Link>
+            )}
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 auto-rows-auto">

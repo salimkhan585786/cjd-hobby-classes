@@ -1,4 +1,4 @@
-import { Bell, LogOut } from 'lucide-react';
+import { Bell, LogOut, ExternalLink } from 'lucide-react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import DashboardSidebar from '../components/DashboardSidebar';
 import { useAuth } from '../hooks/useAuth';
@@ -33,6 +33,12 @@ function DashboardLayout({ role }) {
                 </h1>
               </div>
               <div className="flex items-center gap-3">
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-4 py-3 text-sm text-slate-100 transition hover:bg-white/10"
+                >
+                  <ExternalLink size={16} /> Back to Website
+                </Link>
                 <button
                   type="button"
                   onClick={handleLogout}

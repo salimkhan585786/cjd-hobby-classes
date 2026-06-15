@@ -450,14 +450,14 @@ function AdminCatalog() {
               </div>
             </div>
             <div>
-              <label htmlFor="course-image-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image, video, or Instagram link)</span></label>
+              <label htmlFor="course-image-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image or video URL)</span></label>
               <input id="course-image-url" value={courseForm.image} onChange={(event) => setCourseForm((current) => ({ ...current, image: event.target.value }))} placeholder="https://..." className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
             <div>
               <label htmlFor="course-file" className="block text-sm text-slate-300">Upload media file</label>
               <input id="course-file" type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onChange={(event) => setCourseFile(event.target.files?.[0] || null)} className="mt-2 w-full rounded-3xl border border-dashed border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
-            <p className="text-sm text-slate-400">Upload `png`, `jpg`, `jpeg`, `webp`, or `gif`, or paste an image URL, video URL, or Instagram post/reel link.</p>
+            <p className="text-sm text-slate-400">Upload `png`, `jpg`, `jpeg`, `webp`, or `gif`, or paste an image or video URL.</p>
             <MediaPreview
               src={coursePreviewUrl || courseForm.image}
               alt={courseForm.title || 'Course preview'}
@@ -525,14 +525,14 @@ function AdminCatalog() {
               </div>
             </div>
             <div>
-              <label htmlFor="workshop-image-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image, video, or Instagram link)</span></label>
+              <label htmlFor="workshop-image-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image or video URL)</span></label>
               <input id="workshop-image-url" value={workshopForm.image} onChange={(event) => setWorkshopForm((current) => ({ ...current, image: event.target.value }))} placeholder="https://..." className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
             <div>
               <label htmlFor="workshop-file" className="block text-sm text-slate-300">Upload media file</label>
               <input id="workshop-file" type="file" accept="image/png,image/jpeg,image/jpg,image/webp,image/gif" onChange={(event) => setWorkshopFile(event.target.files?.[0] || null)} className="mt-2 w-full rounded-3xl border border-dashed border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
-            <p className="text-sm text-slate-400">Upload `png`, `jpg`, `jpeg`, `webp`, or `gif`, or paste an image URL, video URL, or Instagram post/reel link.</p>
+            <p className="text-sm text-slate-400">Upload `png`, `jpg`, `jpeg`, `webp`, or `gif`, or paste an image or video URL.</p>
             <MediaPreview
               src={workshopPreviewUrl || workshopForm.image}
               alt={workshopForm.title || 'Workshop preview'}
@@ -608,7 +608,7 @@ function AdminCatalog() {
                 </select>
               </div>
               <div>
-                <label htmlFor="gallery-image-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image, video, or Instagram link)</span></label>
+                <label htmlFor="gallery-image-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image or video URL)</span></label>
                 <input id="gallery-image-url" value={galleryForm.image} onChange={(event) => setGalleryForm((current) => ({ ...current, image: event.target.value }))} placeholder="https://..." className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
               </div>
             </div>
@@ -698,7 +698,7 @@ function AdminCatalog() {
           <p className="mt-2 text-sm text-slate-400">Upload images for the exhibition-ready collage on the home page.</p>
           <form onSubmit={handleUploadCollage} className="mt-6 grid gap-4">
             <div>
-              <label htmlFor="collage-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image, video, or Instagram link)</span></label>
+              <label htmlFor="collage-url" className="block text-sm text-slate-300">Media URL <span className="text-slate-500">(image or video URL)</span></label>
               <input
                 id="collage-url"
                 value={collageUrl}

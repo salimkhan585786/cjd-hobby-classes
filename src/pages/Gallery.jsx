@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ZoomIn, ZoomOut, RotateCcw, X } from 'lucide-react';
+import { ZoomIn, ZoomOut, RotateCcw, X, Loader2 } from 'lucide-react';
 import EmptyState from '../components/EmptyState';
 import GalleryCard from '../components/GalleryCard';
 import LoadingSkeleton from '../components/LoadingSkeleton';
@@ -11,6 +11,7 @@ import GalleryCollage from '../components/GalleryCollage';
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 3;
 const ZOOM_STEP = 0.25;
+const GALLERY_BATCH = 9;
 
 function Gallery() {
   const { gallery, loading } = useGallery();
@@ -23,6 +24,34 @@ function Gallery() {
   const imageContainerRef = useRef(null);
   const categories = useMemo(() => ['All', ...new Set(gallery.map((item) => item.category))], [gallery]);
   const [filter, setFilter] = useState('All');
+  const [visibleCount, setVisibleCount] = useState(GALLERY_BATCH);
+  const loadMoreRef = useRef(null);
+
+  const filtered = useMemo(
+    () => (filter === 'All' ? gallery : gallery.filter((item) => item.category === filter)),
+    [filter, gallery]
+  );
+
+  const visibleFiltered = useMemo(() => filtered.slice(0, visibleCount), [filtered, visibleCount]);
+  const hasMore = visibleCount < filtered.length;
+
+  useEffect(() => {
+    setVisibleCount(GALLERY_BATCH);
+  }, [filter]);
+
+  useEffect(() => {
+    if (!hasMore || !loadMoreRef.current) return undefined;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisibleCount((prev) => Math.min(prev + GALLERY_BATCH, filtered.length));
+        }
+      },
+      { rootMargin: '400px' }
+    );
+    observer.observe(loadMoreRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, filtered.length]);
 
   const resetZoom = useCallback(() => {
     setZoom(1);
@@ -94,11 +123,6 @@ function Gallery() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selected, handleClose, zoomIn, zoomOut, resetZoom]);
 
-  const filtered = useMemo(
-    () => (filter === 'All' ? gallery : gallery.filter((item) => item.category === filter)),
-    [filter, gallery]
-  );
-
   return (
     <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-14">
       {/* ── HEADER ── */}
@@ -125,24 +149,31 @@ function Gallery() {
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => <LoadingSkeleton key={i} className="h-80" />)}
           </div>
-        ) : filtered.length === 0 ? (
+        ) : visibleFiltered.length === 0 ? (
           <EmptyState title="No artwork yet" description="This category will fill up as soon as the next batch uploads showcase pieces." />
         ) : (
-          <div className="masonry-3col space-y-6 sm:masonry-2col lg:masonry-3col">
-            {[0, 1, 2].map((col) => (
-              <div key={col} className="break-inside-avoid space-y-6">
-                {filtered.filter((_, i) => i % 3 === col).map((item, idx) => (
-                  <StaggerItem key={item.id} delay={col * 0.1}>
-                    <ZoomParallax scaleRange={[0.96, 1.02]}>
-                      <TiltCard tiltAmount={5}>
-                        <GalleryCard item={item} onOpen={handleOpen} />
-                      </TiltCard>
-                    </ZoomParallax>
-                  </StaggerItem>
-                ))}
+          <>
+            <div className="masonry-3col space-y-6 sm:masonry-2col lg:masonry-3col">
+              {[0, 1, 2].map((col) => (
+                <div key={col} className="break-inside-avoid space-y-6">
+                  {visibleFiltered.filter((_, i) => i % 3 === col).map((item, idx) => (
+                    <StaggerItem key={item.id} delay={col * 0.1}>
+                      <ZoomParallax scaleRange={[0.96, 1.02]}>
+                        <TiltCard tiltAmount={5}>
+                          <GalleryCard item={item} onOpen={handleOpen} />
+                        </TiltCard>
+                      </ZoomParallax>
+                    </StaggerItem>
+                  ))}
+                </div>
+              ))}
+            </div>
+            {hasMore && (
+              <div ref={loadMoreRef} className="flex justify-center py-10">
+                <Loader2 size={28} className="animate-spin text-violet-400" />
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </ParallaxSection>
 

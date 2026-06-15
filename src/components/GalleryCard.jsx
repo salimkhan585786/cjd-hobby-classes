@@ -19,7 +19,7 @@ function GalleryCard({ item, onOpen, variant = 'violet' }) {
       className={`${cardClass} group overflow-hidden rounded-[1.8rem] shadow-soft transition-all duration-300`}
     >
       <button type="button" onClick={() => onOpen(item)} className="block w-full text-left">
-        <div className="relative h-80 overflow-hidden">
+        <div className="relative h-64 sm:h-72 md:h-80 overflow-hidden">
           <MediaPreview
             src={item.image}
             alt={item.title}
@@ -29,11 +29,11 @@ function GalleryCard({ item, onOpen, variant = 'violet' }) {
             showLink={false}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 p-5">
-            <p className="text-sm uppercase tracking-[0.24em] text-violet-200 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)]">{item.category}</p>
-            <h3 className="mt-2 text-xl font-semibold text-white [text-shadow:0_4px_18px_rgba(0,0,0,1)]">{item.title}</h3>
-            <p className="text-sm text-slate-100 [text-shadow:0_3px_12px_rgba(0,0,0,0.95)]">by {item.artist}</p>
-            <p className="mt-2 text-xs text-slate-200 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)]">{item.medium}</p>
+          <div className="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
+            <p className="text-xs uppercase tracking-[0.24em] text-violet-200 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)] sm:text-sm">{item.category}</p>
+            <h3 className="mt-1 text-lg font-semibold text-white [text-shadow:0_4px_18px_rgba(0,0,0,1)] sm:text-xl">{item.title}</h3>
+            <p className="text-xs text-slate-100 [text-shadow:0_3px_12px_rgba(0,0,0,0.95)] sm:text-sm">by {item.artist}</p>
+            <p className="mt-1 text-[10px] text-slate-200 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)] sm:mt-2 sm:text-xs">{item.medium}</p>
           </div>
         </div>
       </button>

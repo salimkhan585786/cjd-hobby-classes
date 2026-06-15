@@ -124,18 +124,18 @@ function Gallery() {
   }, [selected, handleClose, zoomIn, zoomOut, resetZoom]);
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-14">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-14">
       {/* ── HEADER ── */}
       <FadeInView>
-        <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-8 sm:mb-12 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Student gallery</p>
-            <h1 className="mt-3 text-5xl font-semibold text-white">A colorful gallery of student achievements.</h1>
+            <p className="text-xs uppercase tracking-[0.24em] text-violet-300 sm:text-sm">Student gallery</p>
+            <h1 className="mt-2 text-3xl font-semibold text-white sm:text-4xl md:text-5xl">A colorful gallery of student achievements.</h1>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {categories.map((category) => (
               <motion.button key={category} type="button" onClick={() => setFilter(category)} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}
-                className={`rounded-full px-4 py-3 text-sm font-medium transition ${filter === category ? 'bg-violet-500 text-white' : 'bg-slate-900/80 text-slate-300 hover:bg-white/5'}`}>
+                className={`rounded-full px-3 py-2 text-xs font-medium transition sm:px-4 sm:py-3 sm:text-sm ${filter === category ? 'bg-violet-500 text-white' : 'bg-slate-900/80 text-slate-300 hover:bg-white/5'}`}>
                 {category}
               </motion.button>
             ))}
@@ -153,10 +153,10 @@ function Gallery() {
           <EmptyState title="No artwork yet" description="This category will fill up as soon as the next batch uploads showcase pieces." />
         ) : (
           <>
-            <div className="masonry-3col space-y-6 sm:masonry-2col lg:masonry-3col">
-              {[0, 1, 2].map((col) => (
-                <div key={col} className="break-inside-avoid space-y-6">
-                  {visibleFiltered.filter((_, i) => i % 3 === col).map((item, idx) => (
+            <div className="masonry-3col space-y-4 sm:space-y-6 grid-cols-2 sm:masonry-2col lg:masonry-3col">
+              {[0, 1].map((col) => (
+                <div key={col} className="break-inside-avoid space-y-4 sm:space-y-6">
+                  {visibleFiltered.filter((_, i) => i % 2 === col).map((item, idx) => (
                     <StaggerItem key={item.id} delay={col * 0.1}>
                       <ZoomParallax scaleRange={[0.96, 1.02]}>
                         <TiltCard tiltAmount={5}>
@@ -169,8 +169,8 @@ function Gallery() {
               ))}
             </div>
             {hasMore && (
-              <div ref={loadMoreRef} className="flex justify-center py-10">
-                <Loader2 size={28} className="animate-spin text-violet-400" />
+              <div ref={loadMoreRef} className="flex justify-center py-6 sm:py-10">
+                <Loader2 size={24} sm:size={28} className="animate-spin text-violet-400" />
               </div>
             )}
           </>

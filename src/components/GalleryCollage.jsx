@@ -10,18 +10,18 @@ const ZOOM_STEP = 0.25;
 const BATCH_SIZE = 8;
 
 const VISUAL_VARIANTS = [
-  { colSpan: 'col-span-1', rowSpan: 'row-span-2', height: 'h-[420px]', rotate: '-rotate-2', speed: 0.15, tape: true },
-  { colSpan: 'col-span-2', rowSpan: 'row-span-1', height: 'h-[260px]', rotate: 'rotate-1', speed: 0.25, tape: false },
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', height: 'h-[280px]', rotate: 'rotate-3', speed: 0.1, tape: true },
-  { colSpan: 'col-span-1', rowSpan: 'row-span-2', height: 'h-[400px]', rotate: '-rotate-1', speed: 0.35, tape: false },
-  { colSpan: 'col-span-2', rowSpan: 'row-span-1', height: 'h-[280px]', rotate: 'rotate-2', speed: 0.2, tape: true },
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', height: 'h-[300px]', rotate: '-rotate-3', speed: 0.3, tape: false },
-  { colSpan: 'col-span-2', rowSpan: 'row-span-1', height: 'h-[260px]', rotate: 'rotate-1', speed: 0.18, tape: true },
-  { colSpan: 'col-span-1', rowSpan: 'row-span-2', height: 'h-[420px]', rotate: '-rotate-2', speed: 0.4, tape: false },
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', height: 'h-[280px]', rotate: 'rotate-2', speed: 0.12, tape: true },
-  { colSpan: 'col-span-2', rowSpan: 'row-span-1', height: 'h-[280px]', rotate: '-rotate-1', speed: 0.28, tape: false },
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1', height: 'h-[300px]', rotate: 'rotate-3', speed: 0.22, tape: true },
-  { colSpan: 'col-span-1', rowSpan: 'row-span-2', height: 'h-[400px]', rotate: '-rotate-2', speed: 0.32, tape: false },
+  { colSpan: 'col-span-1', rowSpan: 'row-span-2', height: 'h-[180px] md:h-[420px]', rotate: 'md:-rotate-2', speed: 0.15, tape: true },
+  { colSpan: 'col-span-2', rowSpan: 'row-span-1', height: 'h-[140px] md:h-[260px]', rotate: 'md:rotate-1', speed: 0.25, tape: false },
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', height: 'h-[150px] md:h-[280px]', rotate: 'md:rotate-3', speed: 0.1, tape: true },
+  { colSpan: 'col-span-1', rowSpan: 'row-span-2', height: 'h-[180px] md:h-[400px]', rotate: 'md:-rotate-1', speed: 0.35, tape: false },
+  { colSpan: 'col-span-2', rowSpan: 'row-span-1', height: 'h-[150px] md:h-[280px]', rotate: 'md:rotate-2', speed: 0.2, tape: true },
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', height: 'h-[150px] md:h-[300px]', rotate: 'md:-rotate-3', speed: 0.3, tape: false },
+  { colSpan: 'col-span-2', rowSpan: 'row-span-1', height: 'h-[140px] md:h-[260px]', rotate: 'md:rotate-1', speed: 0.18, tape: true },
+  { colSpan: 'col-span-1', rowSpan: 'row-span-2', height: 'h-[180px] md:h-[420px]', rotate: 'md:-rotate-2', speed: 0.4, tape: false },
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', height: 'h-[150px] md:h-[280px]', rotate: 'md:rotate-2', speed: 0.12, tape: true },
+  { colSpan: 'col-span-2', rowSpan: 'row-span-1', height: 'h-[150px] md:h-[280px]', rotate: 'md:-rotate-1', speed: 0.28, tape: false },
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1', height: 'h-[150px] md:h-[300px]', rotate: 'md:rotate-3', speed: 0.22, tape: true },
+  { colSpan: 'col-span-1', rowSpan: 'row-span-2', height: 'h-[180px] md:h-[400px]', rotate: 'md:-rotate-2', speed: 0.32, tape: false },
 ];
 
 function CollageCard({ item, index, onOpen }) {
@@ -189,24 +189,24 @@ function GalleryCollage({ limit }) {
 
   return (
     <>
-      <section className="rounded-[3rem] bg-stone-100 py-16 px-6 sm:px-10 lg:px-14">
-        <div className="mx-auto max-w-7xl space-y-10">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <section className="rounded-[3rem] bg-stone-100 py-6 sm:py-10 md:py-16 px-4 sm:px-6 lg:px-10 xl:px-14">
+        <div className="mx-auto max-w-7xl space-y-6 sm:space-y-10">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <p className="text-sm uppercase tracking-[0.28em] text-amber-700">Gallery</p>
-              <h2 className="mt-3 text-4xl font-semibold text-stone-900">Student work that feels exhibition-ready.</h2>
+              <p className="text-xs uppercase tracking-[0.28em] text-amber-700 sm:text-sm">Gallery</p>
+              <h2 className="mt-2 text-2xl font-semibold text-stone-900 sm:text-3xl md:text-4xl">Student work that feels exhibition-ready.</h2>
             </div>
             {isLimited && (
               <Link
                 to="/gallery"
-                className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-stone-800 transition hover:bg-stone-50"
+                className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-4 py-2.5 text-xs font-semibold text-stone-800 transition hover:bg-stone-50 sm:px-5 sm:py-3 sm:text-sm"
               >
-                View Gallery <ArrowRight size={16} />
+                View Gallery <ArrowRight size={14} sm:size={16} />
               </Link>
             )}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 auto-rows-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 md:gap-5 auto-rows-auto">
             {visibleItems.map((item, index) => (
               <CollageCard key={item.id} item={item} index={index} onOpen={handleOpen} />
             ))}

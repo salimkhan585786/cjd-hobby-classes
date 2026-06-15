@@ -45,13 +45,13 @@ function Register() {
   };
 
   return (
-    <div className="mx-auto max-w-xl px-6 py-20 sm:px-10">
-      <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-10 shadow-soft">
+    <div className="mx-auto max-w-xl px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
+      <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-6 sm:p-8 lg:p-10 shadow-soft">
         <div className="flex items-center justify-center mb-6">
           <img src={logo} alt="CJD Hobby Classes" className="h-16 w-auto rounded-full" />
         </div>
         <p className="text-sm uppercase tracking-[0.24em] text-violet-300 text-center">Register</p>
-        <h1 className="mt-4 text-4xl font-semibold text-white text-center">Start your art academy membership.</h1>
+        <h1 className="mt-4 text-2xl font-semibold text-white text-center sm:text-3xl lg:text-4xl">Start your art academy membership.</h1>
         <p className="mt-4 text-slate-400">
           Create a student account to enroll in classes, book workshops, order portraits, and track progress.
         </p>

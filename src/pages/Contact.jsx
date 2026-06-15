@@ -77,11 +77,11 @@ function Contact() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-14">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-14">
       <div className="grid gap-10 lg:grid-cols-[0.9fr_0.7fr]">
         <FadeInView direction="left" className="space-y-6">
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Contact</p>
-          <h1 className="text-5xl font-semibold text-white">Questions, inquiries, or booking requests?</h1>
+          <h1 className="text-3xl font-semibold text-white sm:text-4xl lg:text-5xl">Questions, inquiries, or booking requests?</h1>
           <p className="max-w-2xl text-slate-400">
             Send us a message, request a free consultation, or ask about a custom art order. Our team responds quickly to every creative inquiry.
           </p>
@@ -108,7 +108,7 @@ function Contact() {
         </FadeInView>
 
         <FadeInView direction="right">
-          <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-10 shadow-soft">
+          <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-6 sm:p-8 lg:p-10 shadow-soft">
             <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Send inquiry</p>
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
               <div className="grid gap-5 md:grid-cols-2">
@@ -190,7 +190,7 @@ function Contact() {
       <ParallaxSection speed={0.1}>
         <StaggerContainer className="mt-16 grid gap-10 lg:grid-cols-3" staggerDelay={0.12}>
           <StaggerItem>
-            <motion.div whileHover={{ y: -6, transition: { duration: 0.25 } }} className="glass-card rounded-[3rem] border border-white/10 bg-slate-900/80 p-10 shadow-soft">
+            <motion.div whileHover={{ y: -6, transition: { duration: 0.25 } }} className="glass-card rounded-[3rem] border border-white/10 bg-slate-900/80 p-6 sm:p-8 lg:p-10 shadow-soft">
               <p className="text-sm uppercase tracking-[0.24em] text-violet-300">WhatsApp</p>
               <div className="mt-6 flex items-center gap-3 text-white">
                 <MessageCircle size={22} />
@@ -211,7 +211,7 @@ function Contact() {
           </StaggerItem>
 
           <StaggerItem>
-            <motion.div whileHover={{ y: -6, transition: { duration: 0.25 } }} className="glass-card rounded-[3rem] border border-white/10 bg-slate-900/80 p-10 shadow-soft">
+            <motion.div whileHover={{ y: -6, transition: { duration: 0.25 } }} className="glass-card rounded-[3rem] border border-white/10 bg-slate-900/80 p-6 sm:p-8 lg:p-10 shadow-soft">
               <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Studio location</p>
               <div className="mt-6 space-y-4 text-slate-300">
                 <div className="flex items-center gap-3 text-violet-300">
@@ -232,7 +232,7 @@ function Contact() {
           </StaggerItem>
 
           <StaggerItem>
-            <motion.div whileHover={{ y: -6, transition: { duration: 0.25 } }} className="glass-card rounded-[3rem] border border-white/10 bg-slate-900/80 p-10 shadow-soft">
+            <motion.div whileHover={{ y: -6, transition: { duration: 0.25 } }} className="glass-card rounded-[3rem] border border-white/10 bg-slate-900/80 p-6 sm:p-8 lg:p-10 shadow-soft">
               <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Social links</p>
               <div className="mt-6 grid gap-4 text-slate-300">
                 <a href="https://instagram.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">

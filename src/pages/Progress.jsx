@@ -27,11 +27,11 @@ function StudentProgressView() {
 
   return (
     <div className="space-y-10">
-      <div className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-10 shadow-soft">
+      <div className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-6 sm:p-8 lg:p-10 shadow-soft">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Progress</p>
-            <h1 className="mt-4 text-4xl font-semibold text-white">Student learning progress and milestones.</h1>
+            <h1 className="mt-4 text-2xl font-semibold text-white sm:text-3xl lg:text-4xl">Student learning progress and milestones.</h1>
           </div>
           <p className="max-w-xl text-slate-400">
             Track course completion, teacher feedback, certificates, and portfolio milestones through one polished progress view.
@@ -47,7 +47,7 @@ function StudentProgressView() {
         ].map((item) => (
           <div key={item.label} className="glass-card rounded-[2rem] border border-white/10 bg-slate-950/90 p-6 shadow-soft">
             <p className="text-sm uppercase tracking-[0.18em] text-violet-300">{item.label}</p>
-            <p className="mt-4 text-3xl font-semibold text-white">{item.value}</p>
+            <p className="mt-4 text-xl font-semibold text-white sm:text-2xl lg:text-3xl">{item.value}</p>
           </div>
         ))}
       </div>
@@ -60,7 +60,7 @@ function StudentProgressView() {
       ) : (
         <div className="grid gap-6 xl:grid-cols-2">
           <div className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-8 shadow-soft">
-            <h2 className="text-3xl font-semibold text-white">Skill growth</h2>
+            <h2 className="text-xl font-semibold text-white sm:text-2xl lg:text-3xl">Skill growth</h2>
             <div className="mt-8 grid gap-4">
               {progress.map((item) => (
                 <div key={item.id} className="rounded-3xl bg-slate-900/80 p-5">
@@ -77,13 +77,13 @@ function StudentProgressView() {
             </div>
           </div>
           <div className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-8 shadow-soft">
-            <h2 className="text-3xl font-semibold text-white">Achievement timeline</h2>
+            <h2 className="text-xl font-semibold text-white sm:text-2xl lg:text-3xl">Achievement timeline</h2>
             <div className="mt-8 space-y-6">
               {progress.map((item) => (
                 <div key={item.id} className="rounded-3xl bg-slate-900/80 p-5">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-lg font-semibold text-white">{item.milestone}</p>
+                      <p className="text-base font-semibold text-white sm:text-lg">{item.milestone}</p>
                       <p className="text-sm text-slate-400">{item.feedback}</p>
                     </div>
                     <StatusPill value={item.completion >= 80 ? 'completed' : 'in-progress'} />
@@ -107,11 +107,11 @@ function AdminProgressView() {
 
   return (
     <div className="space-y-10">
-      <div className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-10 shadow-soft">
+      <div className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-6 sm:p-8 lg:p-10 shadow-soft">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Student showcase progress</p>
-            <h1 className="mt-4 text-4xl font-semibold text-white">Track how each learner is moving across the academy.</h1>
+            <h1 className="mt-4 text-2xl font-semibold text-white sm:text-3xl lg:text-4xl">Track how each learner is moving across the academy.</h1>
           </div>
           <p className="max-w-xl text-slate-400">
             Use this view to monitor attendance, course completion, fee status, and readiness for the next showcase cycle.

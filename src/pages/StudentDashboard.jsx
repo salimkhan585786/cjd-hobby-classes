@@ -267,7 +267,7 @@ function StudentDashboard() {
               <div className="flex items-center gap-3 text-violet-300">
                 <Icon size={22} />
               </div>
-              <p className="mt-5 text-3xl font-semibold text-white">{card.value}</p>
+              <p className="mt-5 text-2xl font-semibold text-white sm:text-3xl">{card.value}</p>
               <p className="mt-2 text-slate-400">{card.title}</p>
             </div>
           );
@@ -279,7 +279,7 @@ function StudentDashboard() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Classes page</p>
-              <h2 className="mt-4 text-3xl font-semibold text-white">Your classes and enrollment requests</h2>
+              <h2 className="mt-4 text-xl font-semibold text-white sm:text-2xl lg:text-3xl">Your classes and enrollment requests</h2>
             </div>
             <span className="rounded-full bg-violet-500/15 px-4 py-3 text-sm text-violet-200">{student.level || 'Beginner'}</span>
           </div>
@@ -303,7 +303,7 @@ function StudentDashboard() {
                     <div key={course.id} className="rounded-3xl bg-slate-900/80 p-5">
                       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                         <div>
-                          <p className="text-lg font-semibold text-white">{course.title}</p>
+                          <p className="text-base font-semibold text-white sm:text-lg">{course.title}</p>
                           <p className="mt-1 text-sm text-slate-400">
                             {course.duration} • {course.format}
                           </p>
@@ -326,7 +326,7 @@ function StudentDashboard() {
                     <div key={request.id} className="rounded-3xl bg-slate-900/80 p-5">
                       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
-                          <p className="text-lg font-semibold text-white">{request.itemTitle}</p>
+                          <p className="text-base font-semibold text-white sm:text-lg">{request.itemTitle}</p>
                           <p className="mt-1 text-sm text-slate-400">
                             Requested on {formatDate(request.createdAt)}
                           </p>
@@ -353,23 +353,23 @@ function StudentDashboard() {
 
         <section className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-8 shadow-soft">
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Fee snapshot</p>
-          <h2 className="mt-4 text-3xl font-semibold text-white">Payments and receipts</h2>
+          <h2 className="mt-4 text-xl font-semibold text-white sm:text-2xl lg:text-3xl">Payments and receipts</h2>
           <div className="mt-8 space-y-4">
             <div className="rounded-3xl bg-slate-900/80 p-5">
               <p className="text-sm uppercase tracking-[0.16em] text-slate-400">Total plan amount</p>
-              <p className="mt-2 text-2xl font-semibold text-white">{formatCurrency(totalFeeAmount)}</p>
+              <p className="mt-2 text-xl font-semibold text-white sm:text-2xl">{formatCurrency(totalFeeAmount)}</p>
             </div>
             <div className="rounded-3xl bg-slate-900/80 p-5">
               <p className="text-sm uppercase tracking-[0.16em] text-slate-400">Paid so far</p>
-              <p className="mt-2 text-2xl font-semibold text-white">{formatCurrency(totalFeePaid)}</p>
+              <p className="mt-2 text-xl font-semibold text-white sm:text-2xl">{formatCurrency(totalFeePaid)}</p>
             </div>
             <div className="rounded-3xl bg-slate-900/80 p-5">
               <p className="text-sm uppercase tracking-[0.16em] text-slate-400">Balance due</p>
-              <p className="mt-2 text-2xl font-semibold text-white">{formatCurrency(dueAmount)}</p>
+              <p className="mt-2 text-xl font-semibold text-white sm:text-2xl">{formatCurrency(dueAmount)}</p>
             </div>
             <div className="rounded-3xl bg-slate-900/80 p-5">
               <p className="text-sm uppercase tracking-[0.16em] text-slate-400">Pending approvals</p>
-              <p className="mt-2 text-2xl font-semibold text-white">{pendingRequests.length}</p>
+              <p className="mt-2 text-xl font-semibold text-white sm:text-2xl">{pendingRequests.length}</p>
             </div>
           </div>
         </section>
@@ -384,7 +384,7 @@ function StudentDashboard() {
             ) : (
               progress.map((item) => (
                 <div key={item.id} className="rounded-3xl bg-slate-900/80 p-5">
-                  <p className="text-lg font-semibold text-white">{item.category}</p>
+                  <p className="text-base font-semibold text-white sm:text-lg">{item.category}</p>
                   <p className="mt-3 text-slate-300">{item.feedback || 'NO DATA'}</p>
                   <p className="mt-3 text-sm text-slate-400">Next step: {item.nextStep || 'NO DATA'}</p>
                 </div>
@@ -403,7 +403,7 @@ function StudentDashboard() {
                 <div key={item.id} className="rounded-3xl bg-slate-900/80 p-5">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-white">{item.milestone || 'NO DATA'}</h3>
+                      <h3 className="text-base font-semibold text-white sm:text-lg">{item.milestone || 'NO DATA'}</h3>
                       <p className="text-sm text-slate-400">{item.category || 'NO DATA'}</p>
                     </div>
                     <span className="rounded-full bg-violet-500/10 px-3 py-2 text-sm text-violet-200">{Number(item.completion || 0)}%</span>
@@ -424,7 +424,7 @@ function StudentDashboard() {
             <ReceiptText size={20} />
             <p className="text-sm uppercase tracking-[0.24em]">Fees page</p>
           </div>
-          <h2 className="mt-4 text-3xl font-semibold text-white">Approved payments, pending dues, and reminders</h2>
+          <h2 className="mt-4 text-xl font-semibold text-white sm:text-2xl lg:text-3xl">Approved payments, pending dues, and reminders</h2>
           <div className="mt-6 space-y-4">
             {approvedRequests.length === 0 ? (
               <EmptyState
@@ -440,7 +440,7 @@ function StudentDashboard() {
                   <div key={request.id} className="rounded-3xl bg-slate-900/80 p-5">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                       <div>
-                        <p className="text-lg font-semibold text-white">{request.itemTitle}</p>
+                        <p className="text-base font-semibold text-white sm:text-lg">{request.itemTitle}</p>
                         <p className="mt-1 text-sm text-slate-400">
                           Total {formatCurrency(request.amount)} • Paid {formatCurrency(request.paidAmount)} • Outstanding {formatCurrency(outstanding)}
                         </p>

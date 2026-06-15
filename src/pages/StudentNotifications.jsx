@@ -97,7 +97,7 @@ function StudentNotifications() {
           <BellRing size={20} />
           <p className="text-sm uppercase tracking-[0.24em]">Notifications</p>
         </div>
-        <h2 className="mt-4 text-4xl font-semibold text-white">Admin updates, payment reminders, and confirmations.</h2>
+        <h2 className="mt-4 text-2xl font-semibold text-white sm:text-3xl lg:text-4xl">Admin updates, payment reminders, and confirmations.</h2>
         <p className="mt-4 max-w-2xl text-slate-400">
           These notifications stay available here, so important announcements and payment updates do not disappear from the student panel.
         </p>

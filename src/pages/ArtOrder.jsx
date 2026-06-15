@@ -68,7 +68,7 @@ function OrderManager() {
           <div className="grid gap-5 lg:grid-cols-[1fr_auto]">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <h2 className="text-2xl font-semibold text-white">{order.studentName || order.studentEmail}</h2>
+                <h2 className="text-xl font-semibold text-white sm:text-2xl">{order.studentName || order.studentEmail}</h2>
                 <StatusPill value={order.status} />
                 <StatusPill value={order.paymentStatus} />
               </div>
@@ -262,9 +262,9 @@ function OrderRequestForm() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-[0.9fr_0.7fr]">
-      <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-10 shadow-soft">
+      <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-6 sm:p-8 lg:p-10 shadow-soft">
         <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Art order</p>
-        <h1 className="mt-4 text-5xl font-semibold text-white">Order your custom artwork with clarity.</h1>
+        <h1 className="mt-4 text-3xl font-semibold text-white sm:text-4xl lg:text-5xl">Order your custom artwork with clarity.</h1>
         <p className="mt-4 text-slate-400">
           Choose a style, upload a reference, and receive a polished estimate for your commissioned piece.
         </p>
@@ -347,7 +347,7 @@ function OrderRequestForm() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Pricing estimator</p>
-                <p className="mt-2 text-3xl font-semibold text-white">{formatCurrency(price)}</p>
+                <p className="mt-2 text-xl font-semibold text-white sm:text-2xl lg:text-3xl">{formatCurrency(price)}</p>
               </div>
               <div className="rounded-3xl bg-violet-500/10 px-4 py-3 text-violet-200">{size}</div>
             </div>
@@ -437,7 +437,7 @@ function ArtOrder() {
   const { role } = useAuth();
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-16 sm:px-10 lg:px-14">
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-14">
       {role === 'admin' ? <OrderManager /> : <OrderRequestForm />}
     </div>
   );

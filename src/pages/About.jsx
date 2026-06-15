@@ -4,15 +4,15 @@ import { FadeInView, ParallaxSection, StaggerContainer, StaggerItem, FloatingEle
 
 function About() {
   return (
-    <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-14">
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-14">
       <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
         <FadeInView direction="left">
-          <div className="glass-card relative overflow-hidden rounded-[3rem] border border-white/10 bg-slate-950/90 p-10 shadow-soft">
+          <div className="glass-card relative overflow-hidden rounded-[3rem] border border-white/10 bg-slate-950/90 p-6 sm:p-8 lg:p-10 shadow-soft">
             <FloatingElement className="absolute -right-12 top-8 h-40 w-40 rounded-full bg-violet-500/10 blur-3xl" duration={6} />
             <FloatingElement className="absolute -left-8 bottom-8 h-32 w-32 rounded-full bg-pink-500/10 blur-2xl" duration={8} amplitude={12} />
             <p className="relative text-sm uppercase tracking-[0.24em] text-violet-300">About CJD HOBBY CLASSES</p>
-            <h1 className="relative mt-4 text-5xl font-semibold text-white">A creative academy built for ambitious artists.</h1>
-            <p className="relative mt-6 text-lg leading-8 text-slate-300">
+            <h1 className="relative mt-4 text-3xl font-semibold text-white sm:text-4xl lg:text-5xl">A creative academy built for ambitious artists.</h1>
+            <p className="relative mt-6 text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
               CJD HOBBY CLASSES by Hemali D. Mehta is a refined art school designed to help students of all ages master drawing, painting, calligraphy, handwriting, and creative thinking through structured courses, rich feedback, and a supportive learning community.
             </p>
             <StaggerContainer className="relative mt-10 grid gap-6 sm:grid-cols-2" staggerDelay={0.12}>
@@ -45,7 +45,7 @@ function About() {
           <FadeInView direction="right">
             <div className="glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-8 shadow-soft">
               <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Our mission</p>
-              <h2 className="mt-4 text-3xl font-semibold text-white">To make art learning accessible, premium, and deeply motivating.</h2>
+              <h2 className="mt-4 text-xl font-semibold text-white sm:text-2xl lg:text-3xl">To make art learning accessible, premium, and deeply motivating.</h2>
               <p className="mt-4 text-slate-400">We blend expressive studio energy with modern digital workflows to build a complete creative experience for students and their families.</p>
             </div>
           </FadeInView>

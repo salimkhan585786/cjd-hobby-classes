@@ -34,7 +34,7 @@ function Navbar() {
           <img src={logo} alt="CJD Hobby Classes" className="h-11 w-auto rounded-full" />
           <div>
             <p className="text-xs uppercase tracking-[0.28em] text-violet-300">CJD HOBBY CLASSES</p>
-            <p className="text-base text-slate-100">Art Academy</p>
+            <p className="text-base text-slate-100 sm:text-lg">Art Academy</p>
           </div>
         </Link>
 

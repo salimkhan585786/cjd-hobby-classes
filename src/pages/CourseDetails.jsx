@@ -104,7 +104,7 @@ function CourseDetails() {
 
   if (coursesLoading || galleryLoading) {
     return (
-      <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-14">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-14">
         <LoadingSkeleton className="h-[620px]" />
       </div>
     );
@@ -112,7 +112,7 @@ function CourseDetails() {
 
   if (!course) {
     return (
-      <div className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-14">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-14">
         <EmptyState
           title="Course not found"
           description="This course may have been removed or the link may be out of date."
@@ -122,7 +122,7 @@ function CourseDetails() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-10 px-6 py-16 sm:px-10 lg:px-14">
+    <div className="mx-auto max-w-7xl space-y-10 px-4 py-10 sm:px-6 sm:py-12 lg:px-10 lg:py-14">
       <section className="grid gap-8 rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-8 shadow-soft lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
           <Link to="/courses" className="inline-flex items-center gap-2 text-sm text-violet-300 transition hover:text-violet-200">
@@ -134,12 +134,12 @@ function CourseDetails() {
             <span>{course.format}</span>
           </div>
           <div>
-            <h1 className="text-4xl font-semibold text-white sm:text-5xl">{course.title}</h1>
-            <p className="mt-4 max-w-3xl text-lg text-slate-300">{course.description}</p>
+            <h1 className="text-2xl font-semibold text-white sm:text-3xl lg:text-4xl">{course.title}</h1>
+            <p className="mt-4 max-w-3xl text-base text-slate-300 sm:text-lg">{course.description}</p>
           </div>
           <div className="rounded-[2rem] bg-slate-900/80 p-6">
             <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Course fee</p>
-            <p className="mt-3 text-3xl font-semibold text-white">{course.priceLabel || formatCurrency(course.price)}</p>
+            <p className="mt-3 text-xl font-semibold text-white sm:text-2xl lg:text-3xl">{course.priceLabel || formatCurrency(course.price)}</p>
             <p className="mt-3 text-slate-400">
               Each class includes in-studio guidance, review support, and a gallery feed of student outcomes tied to this course.
             </p>
@@ -176,7 +176,7 @@ function CourseDetails() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Course gallery</p>
-            <h2 className="mt-3 text-3xl font-semibold text-white">Student work from {course.title}</h2>
+            <h2 className="mt-3 text-xl font-semibold text-white sm:text-2xl lg:text-3xl">Student work from {course.title}</h2>
           </div>
           <p className="max-w-xl text-slate-400">
             Every gallery item tagged to this course appears here automatically, so the page stays in sync with admin uploads.
@@ -248,7 +248,7 @@ function CourseDetails() {
             <div className="flex max-h-[90vh] flex-col overflow-y-auto border-t border-white/10 bg-slate-950/98 lg:border-l lg:border-t-0">
               <div className="border-b border-white/10 p-6 pr-24">
                 <p className="text-sm uppercase tracking-[0.24em] text-violet-300">{selectedArtwork.category}</p>
-                <h2 className="mt-3 text-2xl font-semibold text-white">{selectedArtwork.title}</h2>
+                <h2 className="mt-3 text-xl font-semibold text-white sm:text-2xl">{selectedArtwork.title}</h2>
                 <p className="mt-3 text-sm text-slate-400">
                   by {selectedArtwork.artist || selectedArtwork.mentor || 'Unknown artist'}
                 </p>

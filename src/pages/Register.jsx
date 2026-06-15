@@ -4,11 +4,24 @@ import { registerWithEmail } from '../firebase/authService';
 import { useToast } from '../hooks/useToast';
 import logo from '../assets/logo1.png';
 
+const SECURITY_QUESTIONS = [
+  'What is your pet\'s name?',
+  'What city were you born in?',
+  'What is your mother\'s name?',
+  'What is your favorite food?',
+  'What was the name of your first school?',
+  'What is your favorite color?',
+];
+
 function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [securityQuestion, setSecurityQuestion] = useState('');
+  const [securityAnswer, setSecurityAnswer] = useState('');
+  const [loginPin, setLoginPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
@@ -22,14 +35,37 @@ function Register() {
       return;
     }
 
+    if (loginPin && loginPin.length !== 4) {
+      setError('PIN must be exactly 4 digits.');
+      return;
+    }
+
+    if (loginPin && loginPin !== confirmPin) {
+      setError('PINs do not match.');
+      return;
+    }
+
+    if (securityQuestion && !securityAnswer) {
+      setError('Please provide an answer for your security question.');
+      return;
+    }
+
     try {
       setError('');
       setSubmitting(true);
-      await registerWithEmail({ name, email, password, role: 'student' });
+      await registerWithEmail({
+        name,
+        email,
+        password,
+        role: 'student',
+        securityQuestion,
+        securityAnswer,
+        loginPin,
+      });
       showToast({
         type: 'success',
         title: 'Account created!',
-        message: 'A verification email has been sent. Please check your inbox to verify your email before signing in.',
+        message: 'Your account has been created. You can now sign in.',
       });
       navigate('/login', { replace: true });
     } catch (err) {
@@ -97,11 +133,73 @@ function Register() {
               />
             </div>
           </div>
+
+          {/* Login PIN */}
+          <div className="rounded-[2rem] border border-violet-500/20 bg-violet-500/5 p-5 space-y-4">
+            <p className="text-sm font-semibold text-violet-200">Login PIN (optional but recommended)</p>
+            <p className="text-xs text-slate-400">Set a 4-digit PIN so you can log in even if you forget your password.</p>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="block text-sm text-slate-300">4-digit PIN</label>
+                <input
+                  type="password"
+                  maxLength={4}
+                  pattern="[0-9]{4}"
+                  inputMode="numeric"
+                  value={loginPin}
+                  onChange={(event) => setLoginPin(event.target.value.replace(/\D/g, ''))}
+                  placeholder="e.g. 1234"
+                  className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-slate-300">Confirm PIN</label>
+                <input
+                  type="password"
+                  maxLength={4}
+                  pattern="[0-9]{4}"
+                  inputMode="numeric"
+                  value={confirmPin}
+                  onChange={(event) => setConfirmPin(event.target.value.replace(/\D/g, ''))}
+                  placeholder="e.g. 1234"
+                  className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Security Question */}
+          <div className="rounded-[2rem] border border-white/10 bg-slate-900/80 p-5 space-y-4">
+            <p className="text-sm font-semibold text-slate-200">Security Question (optional but recommended)</p>
+            <p className="text-xs text-slate-400">Used to recover your account if you forget both password and PIN.</p>
+            <div>
+              <label className="block text-sm text-slate-300">Question</label>
+              <select
+                value={securityQuestion}
+                onChange={(event) => setSecurityQuestion(event.target.value)}
+                className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-950/80 px-5 py-4 text-slate-100"
+              >
+                <option value="">Select a question</option>
+                {SECURITY_QUESTIONS.map((q) => (
+                  <option key={q} value={q}>{q}</option>
+                ))}
+              </select>
+            </div>
+            {securityQuestion && (
+              <div>
+                <label className="block text-sm text-slate-300">Your answer</label>
+                <input
+                  value={securityAnswer}
+                  onChange={(event) => setSecurityAnswer(event.target.value)}
+                  required
+                  className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-950/80 px-5 py-4 text-slate-100"
+                />
+              </div>
+            )}
+          </div>
+
           <div className="rounded-[2rem] bg-slate-900/80 p-4 text-sm text-slate-400">
             Admin access is role-based and should be assigned in Firestore. Public registration creates student accounts only.
-          </div>
-          <div className="rounded-[2rem] bg-violet-500/10 p-4 text-sm text-violet-200">
-            A verification email will be sent to your email address. You must verify your email before you can sign in.
           </div>
           {error ? <p className="text-sm text-red-400">{error}</p> : null}
           <button

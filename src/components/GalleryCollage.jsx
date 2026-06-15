@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ZoomIn, ZoomOut, RotateCcw, X, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useGalleryCollage } from '../hooks/useData';
+import GalleryBackground from './GalleryBackground';
 
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 3;
@@ -189,17 +190,18 @@ function GalleryCollage({ limit }) {
 
   return (
     <>
-      <section className="rounded-[3rem] bg-stone-100 py-6 sm:py-10 md:py-16 px-4 sm:px-6 lg:px-10 xl:px-14">
-        <div className="mx-auto max-w-7xl space-y-6 sm:space-y-10">
+      <section className="relative rounded-[3rem] bg-slate-950 overflow-hidden py-6 sm:py-10 md:py-16 px-4 sm:px-6 lg:px-10 xl:px-14">
+        <GalleryBackground />
+        <div className="relative mx-auto max-w-7xl space-y-6 sm:space-y-10">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.28em] text-amber-700 sm:text-sm">Gallery</p>
-              <h2 className="mt-2 text-2xl font-semibold text-stone-900 sm:text-3xl md:text-4xl">Student work that feels exhibition-ready.</h2>
+              <p className="text-xs uppercase tracking-[0.28em] text-violet-300 sm:text-sm">Gallery</p>
+              <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl md:text-4xl">Student work that feels exhibition-ready.</h2>
             </div>
             {isLimited && (
               <Link
                 to="/gallery"
-                className="inline-flex items-center gap-2 rounded-full border border-stone-300 bg-white px-4 py-2.5 text-xs font-semibold text-stone-800 transition hover:bg-stone-50 sm:px-5 sm:py-3 sm:text-sm"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-semibold text-slate-200 transition hover:bg-white/10 sm:px-5 sm:py-3 sm:text-sm"
               >
                 View Gallery <ArrowRight size={14} sm:size={16} />
               </Link>

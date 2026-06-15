@@ -119,9 +119,9 @@ function Courses() {
 
       <ParallaxSection speed={0.08}>
         {loading ? (
-          <div className="grid gap-4 grid-cols-2 md:gap-6 md:grid-cols-2 xl:gap-8 xl:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
-              <LoadingSkeleton key={index} className="h-[380px] md:h-[430px]" />
+              <LoadingSkeleton key={index} className="h-[430px]" />
             ))}
           </div>
         ) : filteredCourses.length === 0 ? (
@@ -130,7 +130,7 @@ function Courses() {
             description="Try a different level filter or search term to explore the full class catalog."
           />
         ) : (
-          <StaggerContainer className="grid gap-4 grid-cols-2 md:gap-6 md:grid-cols-2 xl:gap-8 xl:grid-cols-3" staggerDelay={0.1}>
+          <StaggerContainer className="grid gap-8 md:grid-cols-2 xl:grid-cols-3" staggerDelay={0.1}>
             {filteredCourses.map((course) => {
               const enrolled = student?.enrolledCourses?.includes(course.title);
               const activeRequest = enrollmentRequests.find(

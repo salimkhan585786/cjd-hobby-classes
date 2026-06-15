@@ -17,6 +17,167 @@
   animation: fade-in 0.35s ease-out;
 }
 
+@keyframes shadow-bar-sway {
+  0%, 100% {
+    transform: translateX(0) scaleY(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(12px) scaleY(1.04);
+    opacity: 1;
+  }
+}
+
+.shadow-bar-sway {
+  animation: shadow-bar-sway 6s ease-in-out infinite;
+}
+
+@keyframes shadow-bar-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.shadow-bar-pulse {
+  animation: shadow-bar-pulse 8s ease-in-out infinite;
+}
+
+@keyframes silk-drift-1 {
+  0%, 100% {
+    transform: translateX(0) translateY(0) scaleY(1);
+  }
+  33% {
+    transform: translateX(30px) translateY(-15px) scaleY(1.08);
+  }
+  66% {
+    transform: translateX(-20px) translateY(10px) scaleY(0.95);
+  }
+}
+
+@keyframes silk-drift-2 {
+  0%, 100% {
+    transform: translateX(0) translateY(0) scaleY(1);
+  }
+  33% {
+    transform: translateX(-25px) translateY(12px) scaleY(0.92);
+  }
+  66% {
+    transform: translateX(20px) translateY(-8px) scaleY(1.06);
+  }
+}
+
+@keyframes silk-drift-3 {
+  0%, 100% {
+    transform: translateX(0) translateY(0) scaleY(1);
+  }
+  33% {
+    transform: translateX(15px) translateY(-20px) scaleY(1.1);
+  }
+  66% {
+    transform: translateX(-30px) translateY(5px) scaleY(0.9);
+  }
+}
+
+.silk-wave-1 {
+  animation: silk-drift-1 12s ease-in-out infinite;
+}
+
+.silk-wave-2 {
+  animation: silk-drift-2 15s ease-in-out infinite;
+}
+
+.silk-wave-3 {
+  animation: silk-drift-3 18s ease-in-out infinite;
+}
+
+@keyframes silk-ambient-shift {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.silk-ambient {
+  animation: silk-ambient-shift 10s ease-in-out infinite;
+}
+
+/* ── Gallery Background — Scale 2x, Speed 1, centered ── */
+@keyframes gallery-wave-1 {
+  0%, 100% {
+    transform: translateX(0) translateY(0) scale(2);
+  }
+  33% {
+    transform: translateX(-20px) translateY(-10px) scale(2);
+  }
+  66% {
+    transform: translateX(15px) translateY(8px) scale(2);
+  }
+}
+
+@keyframes gallery-wave-2 {
+  0%, 100% {
+    transform: translateX(0) translateY(0) scale(2);
+  }
+  33% {
+    transform: translateX(18px) translateY(12px) scale(2);
+  }
+  66% {
+    transform: translateX(-15px) translateY(-6px) scale(2);
+  }
+}
+
+@keyframes gallery-wave-3 {
+  0%, 100% {
+    transform: translateX(0) translateY(0) scale(2);
+  }
+  33% {
+    transform: translateX(-12px) translateY(15px) scale(2);
+  }
+  66% {
+    transform: translateX(20px) translateY(-10px) scale(2);
+  }
+}
+
+.gallery-bg-wave-1 {
+  animation: gallery-wave-1 12s ease-in-out infinite;
+}
+
+.gallery-bg-wave-2 {
+  animation: gallery-wave-2 15s ease-in-out infinite;
+}
+
+.gallery-bg-wave-3 {
+  animation: gallery-wave-3 18s ease-in-out infinite;
+}
+
+@keyframes gallery-glow-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(2);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(2.05);
+  }
+}
+
+.gallery-bg-glow {
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 50%,
+    rgba(139, 92, 246, 0.10) 0%,
+    rgba(124, 58, 237, 0.06) 40%,
+    transparent 70%
+  );
+  animation: gallery-glow-pulse 10s ease-in-out infinite;
+}
+
 :root {
   color-scheme: dark;
   font-family: Inter, system-ui, sans-serif;

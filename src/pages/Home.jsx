@@ -9,6 +9,8 @@ import MediaPreview from '../components/MediaPreview';
 import StatCounter from '../components/StatCounter';
 import WorkshopCard from '../components/WorkshopCard';
 import GalleryCollage from '../components/GalleryCollage';
+import SilkWaves from '../components/SilkWaves';
+import StaggeredText from '../components/StaggeredText';
 import { useCourses, useFaqs, useGallery, useTestimonials, useWorkshops } from '../hooks/useData';
 import { heroStats } from '../services/dummyData';
 import {
@@ -53,6 +55,9 @@ function Home() {
                 style={{ y: heroY, opacity: heroOpacity, scale: heroScale }}
                 className="relative overflow-hidden p-6 sm:p-10 lg:p-14 min-h-[55vh] sm:min-h-[70vh]"
               >
+              {/* Silk Waves animated background */}
+              <SilkWaves />
+
               {/* Floating decorative blobs — react to mouse */}
               <FloatingElement className="absolute -right-20 top-10 h-56 w-56 rounded-full bg-violet-500/10 blur-3xl" duration={6} />
               <FloatingElement className="absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-pink-500/10 blur-3xl" duration={8} amplitude={15} />
@@ -64,9 +69,16 @@ function Home() {
                   <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="inline-flex items-center gap-2 rounded-full bg-violet-500/15 px-3 py-1.5 text-xs uppercase tracking-[0.28em] text-violet-200 sm:text-sm sm:px-4 sm:py-2">
                     New season enrollment
                   </motion.span>
-                  <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl">
-                    Modern art classes for students who want skill, confidence, and a beautiful portfolio.
-                  </motion.h1>
+                  <StaggeredText
+                    as="h1"
+                    text="Modern art classes for students who want skill, confidence, and a beautiful portfolio."
+                    className="text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl"
+                    segmentBy="words"
+                    delay={80}
+                    duration={0.6}
+                    blur={true}
+                    staggerDirection="center"
+                  />
                   <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
                     CJD HOBBY CLASSES Art Academy blends premium design, thoughtful mentorship, and real progress tracking for drawing, painting, workshops, and custom portrait commissions.
                   </motion.p>
@@ -155,9 +167,9 @@ function Home() {
               </div>
               <Link to="/courses" className="rounded-full border border-white/10 px-4 py-2.5 text-xs text-slate-200 transition hover:bg-white/5 sm:px-5 sm:py-3 sm:text-sm">Explore all courses</Link>
             </div>
-            <div className="grid gap-4 grid-cols-2 sm:gap-6 md:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {coursesLoading
-                ? Array.from({ length: 3 }).map((_, i) => <LoadingSkeleton key={i} className="h-[380px] sm:h-[420px]" />)
+                ? Array.from({ length: 3 }).map((_, i) => <LoadingSkeleton key={i} className="h-[420px]" />)
                 : courses.slice(0, 3).map((course, idx) => <CourseCard key={course.id} course={course} variant={['violet', 'fuchsia', 'cyan'][idx % 3]} />)}
             </div>
           </section>
@@ -175,9 +187,9 @@ function Home() {
               </div>
               <Link to="/workshops" className="rounded-full bg-violet-500 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-violet-400 sm:px-5 sm:py-3 sm:text-sm">See all workshops</Link>
             </div>
-            <div className="grid gap-4 grid-cols-2 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {workshopsLoading
-                ? Array.from({ length: 3 }).map((_, i) => <LoadingSkeleton key={i} className="h-64 sm:h-72" />)
+                ? Array.from({ length: 3 }).map((_, i) => <LoadingSkeleton key={i} className="h-72" />)
                 : workshops.slice(0, 3).map((workshop, idx) => <WorkshopCard key={workshop.id} workshop={workshop} variant={['violet', 'fuchsia', 'pink'][idx % 3]} />)}
             </div>
           </section>

@@ -123,15 +123,15 @@ function Workshops() {
 
       <ParallaxSection speed={0.1}>
         {loading ? (
-          <div className="grid gap-4 grid-cols-2 md:gap-6 md:grid-cols-2 lg:gap-8 lg:grid-cols-3">
+          <div className="grid gap-8 lg:grid-cols-3">
             {Array.from({ length: 3 }).map((_, index) => (
-              <LoadingSkeleton key={index} className="h-64 md:h-72" />
+              <LoadingSkeleton key={index} className="h-72" />
             ))}
           </div>
         ) : workshops.length === 0 ? (
           <EmptyState title="No workshops scheduled yet" description="Check back soon or contact the academy to request a private group workshop." />
         ) : (
-          <StaggerContainer className="grid gap-4 grid-cols-2 md:gap-6 md:grid-cols-2 lg:gap-8 lg:grid-cols-3" staggerDelay={0.12}>
+          <StaggerContainer className="grid gap-8 lg:grid-cols-3" staggerDelay={0.12}>
             {workshops.map((workshop) => {
               const alreadyRegistered = student?.workshopRegistrations?.includes(workshop.title);
               const actionLabel = !user

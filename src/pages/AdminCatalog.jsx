@@ -15,6 +15,7 @@ import {
   deleteWorkshop,
   updateCourse,
   updateGalleryItem,
+  updateWorkshop,
   uploadCourseMedia,
   uploadGalleryCollageImage,
   uploadGalleryImage,
@@ -61,6 +62,8 @@ function AdminCatalog() {
     image: '',
     description: '',
   });
+  const [editingWorkshopId, setEditingWorkshopId] = useState(null);
+  const [workshopDateError, setWorkshopDateError] = useState('');
   const [workshopForm, setWorkshopForm] = useState({
     title: '',
     date: '',
@@ -145,6 +148,21 @@ function AdminCatalog() {
     setCourseFile(null);
   };
 
+  const resetWorkshopForm = () => {
+    setEditingWorkshopId(null);
+    setWorkshopDateError('');
+    setWorkshopForm({
+      title: '',
+      date: '',
+      seats: '',
+      price: '',
+      mode: 'Offline',
+      image: '',
+      description: '',
+    });
+    setWorkshopFile(null);
+  };
+
   const resetGalleryForm = () => {
     setEditingGalleryId(null);
     setGalleryForm({
@@ -200,8 +218,15 @@ function AdminCatalog() {
     }
   };
 
-  const handleAddWorkshop = async (event) => {
+  const handleSaveWorkshop = async (event) => {
     event.preventDefault();
+    setWorkshopDateError('');
+
+    if (!workshopForm.date) {
+      setWorkshopDateError('Please select a date and time.');
+      return;
+    }
+
     try {
       let mediaUrl = workshopForm.image;
 
@@ -219,18 +244,25 @@ function AdminCatalog() {
       };
       payload.mode = 'Offline';
 
+      if (editingWorkshopId) {
+        setWorkshops((current) =>
+          current.map((item) => (item.id === editingWorkshopId ? { ...item, ...payload } : item))
+        );
+        if (!isLocalId(editingWorkshopId)) {
+          try {
+            await updateWorkshop(editingWorkshopId, payload);
+          } catch (error) {
+            console.error(error);
+          }
+        }
+        showToast({ type: 'success', title: 'Workshop updated', message: `${payload.title} has been updated.` });
+        resetWorkshopForm();
+        return;
+      }
+
       const id = await addWorkshop(payload);
       setWorkshops((current) => [{ id, ...payload }, ...current]);
-      setWorkshopForm({
-        title: '',
-        date: '',
-        seats: '',
-        price: '',
-        mode: 'Offline',
-        image: '',
-        description: '',
-      });
-      setWorkshopFile(null);
+      resetWorkshopForm();
       showToast({ type: 'success', title: 'Workshop added', message: `${payload.title} is now available for offline registration.` });
     } catch (error) {
       console.error(error);
@@ -385,6 +417,20 @@ function AdminCatalog() {
     }
   };
 
+  const handleEditWorkshop = (workshop) => {
+    setEditingWorkshopId(workshop.id);
+    setWorkshopForm({
+      title: workshop.title || '',
+      date: workshop.date || '',
+      seats: String(workshop.seats || ''),
+      price: String(workshop.price || ''),
+      mode: 'Offline',
+      image: workshop.image || '',
+      description: workshop.description || '',
+    });
+    setWorkshopFile(null);
+  };
+
   const handleEditCourse = (course) => {
     setEditingCourseId(course.id);
     setCourseForm({
@@ -495,7 +541,7 @@ function AdminCatalog() {
       <section className="grid gap-6 xl:grid-cols-2">
         <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
           <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Workshop manager</p>
-          <form onSubmit={handleAddWorkshop} className="mt-6 grid gap-4">
+          <form onSubmit={handleSaveWorkshop} className="mt-6 grid gap-4">
             <div>
               <label htmlFor="workshop-title" className="block text-sm text-slate-300">Workshop title</label>
               <input id="workshop-title" value={workshopForm.title} onChange={(event) => setWorkshopForm((current) => ({ ...current, title: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
@@ -507,7 +553,8 @@ function AdminCatalog() {
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label htmlFor="workshop-date" className="block text-sm text-slate-300">Date and time</label>
-                <input id="workshop-date" type="datetime-local" value={workshopForm.date} onChange={(event) => setWorkshopForm((current) => ({ ...current, date: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+                <input id="workshop-date" type="datetime-local" value={workshopForm.date} onChange={(event) => { setWorkshopDateError(''); setWorkshopForm((current) => ({ ...current, date: event.target.value })); }} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+                {workshopDateError && <p className="mt-1 text-sm text-rose-400">{workshopDateError}</p>}
               </div>
               <div>
                 <label htmlFor="workshop-mode" className="block text-sm text-slate-300">Mode</label>
@@ -539,7 +586,10 @@ function AdminCatalog() {
               title={workshopForm.title || 'Workshop preview'}
               className="h-56 rounded-[1.5rem]"
             />
-            <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">Add workshop</button>
+            <div className="flex gap-3">
+              <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">{editingWorkshopId ? 'Update workshop' : 'Add workshop'}</button>
+              {editingWorkshopId ? <button type="button" onClick={resetWorkshopForm} className="rounded-full border border-white/10 px-5 py-3 text-sm text-slate-200 transition hover:bg-white/5">Cancel edit</button> : null}
+            </div>
           </form>
         </div>
 
@@ -553,7 +603,10 @@ function AdminCatalog() {
                     <p className="font-semibold text-white">{workshop.title}</p>
                     <p className="mt-1 text-sm text-slate-400">{formatDate(workshop.date)} • {workshop.seats} seats</p>
                   </div>
-                  <button type="button" onClick={() => handleDeleteWorkshop(workshop.id)} className="rounded-full bg-rose-500/20 px-4 py-2 text-sm text-rose-200 transition hover:bg-rose-500/30">Delete</button>
+                  <div className="flex gap-3">
+                    <button type="button" onClick={() => handleEditWorkshop(workshop)} className="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/5">Edit</button>
+                    <button type="button" onClick={() => handleDeleteWorkshop(workshop.id)} className="rounded-full bg-rose-500/20 px-4 py-2 text-sm text-rose-200 transition hover:bg-rose-500/30">Delete</button>
+                  </div>
                 </div>
               </div>
             ))}

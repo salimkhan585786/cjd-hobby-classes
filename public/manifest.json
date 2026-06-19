@@ -1,0 +1,26 @@
+{
+  "name": "CJD Hobby Classes - Art Academy",
+  "short_name": "CJD Hobby",
+  "description": "Modern art academy for drawing classes, workshops, student showcases, and art orders.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "art"],
+  "lang": "en"
+}

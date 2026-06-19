@@ -25,7 +25,7 @@ function Navbar() {
     navigate('/');
   };
 
-  const dashboardPath = role === 'admin' ? '/admin' : '/student';
+  const dashboardPath = '/admin/catalog';
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/85 backdrop-blur-xl">

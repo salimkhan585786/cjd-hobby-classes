@@ -22,7 +22,7 @@ function AdminRegister() {
 
   useEffect(() => {
     if (user) {
-      navigate(role === 'admin' ? '/admin' : '/', { replace: true });
+      navigate('/admin/catalog', { replace: true });
     }
   }, [user, role, navigate]);
 

@@ -222,11 +222,6 @@ function AdminCatalog() {
     event.preventDefault();
     setWorkshopDateError('');
 
-    if (!workshopForm.date) {
-      setWorkshopDateError('Please select a date and time.');
-      return;
-    }
-
     try {
       let mediaUrl = workshopForm.image;
 
@@ -274,15 +269,6 @@ function AdminCatalog() {
     event.preventDefault();
     try {
       const finalCategory = normalizedGalleryCategory;
-
-      if (!finalCategory) {
-        showToast({
-          type: 'error',
-          title: 'Category required',
-          message: 'Choose a course title or add a custom category name.',
-        });
-        return;
-      }
 
       let mediaUrl = galleryForm.image;
 
@@ -477,20 +463,20 @@ function AdminCatalog() {
           <form onSubmit={handleSaveCourse} className="mt-6 grid gap-4">
             <div>
               <label htmlFor="course-title" className="block text-sm text-slate-300">Course title</label>
-              <input id="course-title" value={courseForm.title} onChange={(event) => setCourseForm((current) => ({ ...current, title: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              <input id="course-title" value={courseForm.title} onChange={(event) => setCourseForm((current) => ({ ...current, title: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
             <div>
               <label htmlFor="course-description" className="block text-sm text-slate-300">Description</label>
-              <textarea id="course-description" value={courseForm.description} onChange={(event) => setCourseForm((current) => ({ ...current, description: event.target.value }))} rows="3" required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              <textarea id="course-description" value={courseForm.description} onChange={(event) => setCourseForm((current) => ({ ...current, description: event.target.value }))} rows="3" className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
             <div className="grid gap-4 md:grid-cols-3">
               <div>
                 <label htmlFor="course-duration" className="block text-sm text-slate-300">Duration</label>
-                <input id="course-duration" value={courseForm.duration} onChange={(event) => setCourseForm((current) => ({ ...current, duration: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+                <input id="course-duration" value={courseForm.duration} onChange={(event) => setCourseForm((current) => ({ ...current, duration: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
               </div>
               <div>
                 <label htmlFor="course-price" className="block text-sm text-slate-300">Price</label>
-                <input id="course-price" type="number" min="0" value={courseForm.price} onChange={(event) => setCourseForm((current) => ({ ...current, price: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+                <input id="course-price" type="number" min="0" value={courseForm.price} onChange={(event) => setCourseForm((current) => ({ ...current, price: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
               </div>
               <div>
                 <label htmlFor="course-price-label" className="block text-sm text-slate-300">Custom price label <span className="text-slate-500">(optional)</span></label>
@@ -558,16 +544,16 @@ function AdminCatalog() {
           <form onSubmit={handleSaveWorkshop} className="mt-6 grid gap-4">
             <div>
               <label htmlFor="workshop-title" className="block text-sm text-slate-300">Event title</label>
-              <input id="workshop-title" value={workshopForm.title} onChange={(event) => setWorkshopForm((current) => ({ ...current, title: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              <input id="workshop-title" value={workshopForm.title} onChange={(event) => setWorkshopForm((current) => ({ ...current, title: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
             <div>
               <label htmlFor="workshop-description" className="block text-sm text-slate-300">Description</label>
-              <textarea id="workshop-description" value={workshopForm.description} onChange={(event) => setWorkshopForm((current) => ({ ...current, description: event.target.value }))} rows="3" required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+              <textarea id="workshop-description" value={workshopForm.description} onChange={(event) => setWorkshopForm((current) => ({ ...current, description: event.target.value }))} rows="3" className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label htmlFor="workshop-date" className="block text-sm text-slate-300">Date and time</label>
-                <input id="workshop-date" type="datetime-local" value={workshopForm.date} onChange={(event) => { setWorkshopDateError(''); setWorkshopForm((current) => ({ ...current, date: event.target.value })); }} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+                <input id="workshop-date" type="datetime-local" value={workshopForm.date} onChange={(event) => { setWorkshopDateError(''); setWorkshopForm((current) => ({ ...current, date: event.target.value })); }} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
                 {workshopDateError && <p className="mt-1 text-sm text-rose-400">{workshopDateError}</p>}
               </div>
               <div>
@@ -578,11 +564,11 @@ function AdminCatalog() {
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label htmlFor="workshop-seats" className="block text-sm text-slate-300">Total seats</label>
-                <input id="workshop-seats" type="number" min="1" value={workshopForm.seats} onChange={(event) => setWorkshopForm((current) => ({ ...current, seats: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+                <input id="workshop-seats" type="number" min="1" value={workshopForm.seats} onChange={(event) => setWorkshopForm((current) => ({ ...current, seats: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
               </div>
               <div>
                 <label htmlFor="workshop-price" className="block text-sm text-slate-300">Price</label>
-                <input id="workshop-price" type="number" min="0" value={workshopForm.price} onChange={(event) => setWorkshopForm((current) => ({ ...current, price: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+                <input id="workshop-price" type="number" min="0" value={workshopForm.price} onChange={(event) => setWorkshopForm((current) => ({ ...current, price: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
               </div>
             </div>
             <div>
@@ -641,11 +627,11 @@ function AdminCatalog() {
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label htmlFor="gallery-title" className="block text-sm text-slate-300">Artwork title</label>
-                <input id="gallery-title" value={galleryForm.title} onChange={(event) => setGalleryForm((current) => ({ ...current, title: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+                <input id="gallery-title" value={galleryForm.title} onChange={(event) => setGalleryForm((current) => ({ ...current, title: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
               </div>
               <div>
                 <label htmlFor="gallery-artist" className="block text-sm text-slate-300">Student name</label>
-                <input id="gallery-artist" value={galleryForm.artist} onChange={(event) => setGalleryForm((current) => ({ ...current, artist: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
+                <input id="gallery-artist" value={galleryForm.artist} onChange={(event) => setGalleryForm((current) => ({ ...current, artist: event.target.value }))} className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
               </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2">
@@ -689,7 +675,6 @@ function AdminCatalog() {
                   id="gallery-custom-category"
                   value={galleryForm.customCategory}
                   onChange={(event) => setGalleryForm((current) => ({ ...current, customCategory: event.target.value }))}
-                  required
                   className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100"
                 />
               </div>
@@ -813,9 +798,10 @@ function AdminCatalog() {
                 <button
                   type="button"
                   onClick={() => handleDeleteCollage(item.id)}
-                  className="absolute inset-0 flex items-center justify-center bg-black/60 text-sm text-rose-300 opacity-0 transition group-hover:opacity-100"
+                  className="absolute top-2 right-2 rounded-full bg-rose-500/80 p-1.5 text-white opacity-0 transition group-hover:opacity-100 hover:bg-rose-500"
+                  title="Delete image"
                 >
-                  Delete
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
                 </button>
               </div>
             ))}

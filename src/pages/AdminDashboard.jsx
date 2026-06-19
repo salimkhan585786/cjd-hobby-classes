@@ -14,16 +14,18 @@ import { formatCurrency } from '../utils/helpers';
 const adminLinks = [
   {
     title: 'Catalog',
-    description: 'Courses, workshops, and gallery items are managed here.',
+    description: 'Courses, events, and gallery items are managed here.',
     to: '/admin/catalog',
     icon: BookOpen,
   },
+  /* Students link - commented out
   {
     title: 'Students',
     description: 'Manage student profiles, progress, and attendance.',
     to: '/admin/students',
     icon: Users2,
   },
+  */
   {
     title: 'Orders',
     description: 'Track art orders and payment progress.',
@@ -97,7 +99,9 @@ function AdminDashboard() {
 
       <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {[
+          /* Active students card - commented out
           { title: 'Active students', value: students.length, icon: Users2 },
+          */
           { title: 'Open inquiries', value: inquiries.filter((item) => item.status === 'new').length, icon: ClipboardList },
           { title: 'Revenue collected', value: formatCurrency(totalRevenue), icon: DollarSign },
           { title: 'Open orders', value: openOrders, icon: BarChart3 },

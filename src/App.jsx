@@ -23,8 +23,10 @@ import Register from './pages/Register';
 import ResetPassword from './pages/ResetPassword';
 import StudentDashboard from './pages/StudentDashboard';
 import StudentNotifications from './pages/StudentNotifications';
-import Workshops from './pages/Workshops';
+import Events from './pages/Events';
+import EventDetail from './pages/EventDetail';
 import AdminFinance from './pages/AdminFinance';
+import AdminRegister from './pages/AdminRegister';
 
 function App() {
   const location = useLocation();
@@ -47,14 +49,19 @@ function App() {
                 <Route path="courses" element={<Courses />} />
                 <Route path="courses/:courseSlug" element={<CourseDetails />} />
                 <Route path="gallery" element={<Gallery />} />
-                <Route path="workshops" element={<Workshops />} />
+                <Route path="events" element={<Events />} />
+                <Route path="events/:eventId" element={<EventDetail />} />
                 <Route path="contact" element={<Contact />} />
                 <Route path="order" element={<ArtOrder />} />
                 <Route path="login" element={<Login />} />
-                <Route path="register" element={<Register />} />
-                <Route path="reset-password" element={<ResetPassword />} />
+                <Route path="admin-register" element={<AdminRegister />} />
+              {/* Student registration - commented out
+              <Route path="register" element={<Register />} />
+              */}
+              <Route path="reset-password" element={<ResetPassword />} />
               </Route>
 
+              {/* Student routes - commented out
               <Route
                 path="/student"
                 element={
@@ -68,6 +75,7 @@ function App() {
                 <Route path="progress" element={<Progress />} />
                 <Route path="notifications" element={<StudentNotifications />} />
               </Route>
+              */}
 
               <Route
                 path="/admin"

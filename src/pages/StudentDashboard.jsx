@@ -489,7 +489,7 @@ function StudentDashboard() {
           <div className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-8 shadow-soft">
             <div className="flex items-center gap-3 text-violet-300">
               <CalendarClock size={20} />
-              <p className="text-sm uppercase tracking-[0.24em]">Workshop registrations</p>
+              <p className="text-sm uppercase tracking-[0.24em]">Event registrations</p>
             </div>
             <div className="mt-6 space-y-4">
               {(student.workshopRegistrations || []).length === 0 ? (

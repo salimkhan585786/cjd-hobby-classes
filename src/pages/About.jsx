@@ -71,6 +71,36 @@ function About() {
           </div>
         </div>
       </div>
+
+      {/* ── MAP SECTION ── */}
+      <FadeInView>
+        <div className="mt-10 glass-card rounded-[3rem] border border-white/10 bg-slate-950/90 p-6 sm:p-8 lg:p-10 shadow-soft">
+          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Our Location</p>
+          <h2 className="mt-4 text-2xl font-semibold text-white sm:text-3xl">Visit us at Borivali, Mumbai</h2>
+          <p className="mt-4 text-slate-400">Madhav kunj, B/102, Aacharya Shanti Sagar Chawk, Himmat Nagar, Borivali, Mumbai, Maharashtra 400092</p>
+          <div className="mt-6 overflow-hidden rounded-[2rem] border border-white/10">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3768.0!2d72.854713!3d19.233980!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTnCsDE0JzAyLjMiTiA3MsKwNTEnMTYuOSJF!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              width="100%"
+              height="400"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="CJD Hobby Classes Location"
+              className="w-full"
+            />
+          </div>
+          <a
+            href="https://maps.google.com/?q=19.233980,72.854713"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-flex rounded-full bg-violet-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-violet-400"
+          >
+            Open in Google Maps
+          </a>
+        </div>
+      </FadeInView>
     </div>
   );
 }

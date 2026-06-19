@@ -7,7 +7,7 @@ import FAQItem from '../components/FAQItem';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import MediaPreview from '../components/MediaPreview';
 import StatCounter from '../components/StatCounter';
-import WorkshopCard from '../components/WorkshopCard';
+import EventCard from '../components/EventCard';
 import GalleryCollage from '../components/GalleryCollage';
 import SilkWaves from '../components/SilkWaves';
 import StaggeredText from '../components/StaggeredText';
@@ -67,7 +67,7 @@ function Home() {
               <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
                 <div className="max-w-2xl space-y-6">
                   <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="inline-flex items-center gap-2 rounded-full bg-violet-500/15 px-3 py-1.5 text-xs uppercase tracking-[0.28em] text-violet-200 sm:text-sm sm:px-4 sm:py-2">
-                    New season enrollment
+                    New season enquiry
                   </motion.span>
                   <StaggeredText
                     as="h1"
@@ -80,14 +80,14 @@ function Home() {
                     staggerDirection="center"
                   />
                   <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="max-w-xl text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-                    CJD HOBBY CLASSES Art Academy blends premium design, thoughtful mentorship, and real progress tracking for drawing, painting, workshops, and custom portrait commissions.
+                    CJD HOBBY CLASSES Art Academy blends premium design, thoughtful mentorship, and real progress tracking for drawing, painting, events, and custom portrait commissions.
                   </motion.p>
                   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} className="flex flex-col gap-3 sm:flex-row">
                     <MagneticButton className="inline-flex items-center justify-center rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400 sm:px-6 sm:py-4 sm:text-base">
-                      <Link to="/register">Join Classes</Link>
+                      <Link to="/contact">Enquiry</Link>
                     </MagneticButton>
                     <MagneticButton className="inline-flex items-center justify-center rounded-full border border-white/10 bg-slate-900/80 px-5 py-3 text-sm text-slate-100 transition hover:bg-slate-900 sm:px-6 sm:py-4 sm:text-base">
-                      <Link to="/workshops">Book Workshop</Link>
+                      <Link to="/events">Book Event</Link>
                     </MagneticButton>
                     <MagneticButton className="inline-flex items-center justify-center rounded-full border border-violet-500 bg-violet-500/15 px-5 py-3 text-sm text-violet-100 transition hover:bg-violet-500/25 sm:px-6 sm:py-4 sm:text-base">
                       <Link to="/order">Order Portrait</Link>
@@ -176,21 +176,21 @@ function Home() {
         </FadeInView>
       </ParallaxSection>
 
-      {/* ── WORKSHOPS ── */}
+      {/* ── EVENTS ── */}
       <ParallaxSection speed={0.15}>
         <FadeInView>
           <section className="space-y-10">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-violet-300 sm:text-sm">Workshops</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-violet-300 sm:text-sm">Events</p>
                 <h2 className="text-2xl font-semibold text-white sm:text-3xl lg:text-4xl">Upcoming creative experiences.</h2>
               </div>
-              <Link to="/workshops" className="rounded-full bg-violet-500 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-violet-400 sm:px-5 sm:py-3 sm:text-sm">See all workshops</Link>
+              <Link to="/events" className="rounded-full bg-violet-500 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-violet-400 sm:px-5 sm:py-3 sm:text-sm">See all events</Link>
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {workshopsLoading
                 ? Array.from({ length: 3 }).map((_, i) => <LoadingSkeleton key={i} className="h-72" />)
-                : workshops.slice(0, 3).map((workshop, idx) => <WorkshopCard key={workshop.id} workshop={workshop} variant={['violet', 'fuchsia', 'pink'][idx % 3]} />)}
+                : workshops.slice(0, 3).map((workshop, idx) => <EventCard key={workshop.id} event={workshop} variant={['violet', 'fuchsia', 'pink'][idx % 3]} />)}
             </div>
           </section>
         </FadeInView>
@@ -236,7 +236,7 @@ function Home() {
                     </StaggerItem>
                   ))}
                 </StaggerContainer>
-                <p className="text-sm text-slate-400 sm:text-base">A premium visual feed of mentor critiques, workshop moments, and student showcase highlights.</p>
+                <p className="text-sm text-slate-400 sm:text-base">A premium visual feed of mentor critiques, event moments, and student showcase highlights.</p>
               </div>
             </div>
           </FadeInView>
@@ -299,7 +299,7 @@ function Home() {
                 </div>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <MagneticButton className="rounded-full bg-violet-500 px-5 py-3 text-center text-sm font-semibold text-white transition hover:bg-violet-400 sm:px-6 sm:py-4 sm:text-base">
-                    <Link to="/register">Create student account</Link>
+                    <Link to="/contact">Make an enquiry</Link>
                   </MagneticButton>
                   <MagneticButton className="rounded-full border border-white/10 px-5 py-3 text-center text-sm text-slate-100 transition hover:bg-white/5 sm:px-6 sm:py-4 sm:text-base">
                     <Link to="/contact">Ask a question</Link>

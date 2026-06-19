@@ -51,6 +51,7 @@ function Login() {
     }
   };
 
+  /* Student PIN login - commented out
   const handlePinLogin = async (event) => {
     event.preventDefault();
     if (!email) {
@@ -81,6 +82,7 @@ function Login() {
       setSubmitting(false);
     }
   };
+  */
 
   return (
     <div className="mx-auto max-w-xl px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
@@ -90,9 +92,9 @@ function Login() {
         </div>
         <p className="text-sm uppercase tracking-[0.24em] text-violet-300 text-center">Sign in</p>
         <h1 className="mt-4 text-2xl font-semibold text-white text-center sm:text-3xl lg:text-4xl">Welcome back to CJD HOBBY CLASSES.</h1>
-        <p className="mt-4 text-slate-400">Access your classes, art orders, attendance, and progress dashboard from one place.</p>
+        <p className="mt-4 text-slate-400">Access your admin dashboard from one place.</p>
 
-        {/* Login method tabs */}
+        {/* Student login tabs - commented out
         <div className="mt-8 flex rounded-full border border-white/10 bg-slate-900/80 p-1">
           <button
             type="button"
@@ -117,95 +119,91 @@ function Login() {
             Login with PIN
           </button>
         </div>
+        */}
 
-        {loginMethod === 'password' ? (
-          <form onSubmit={handlePasswordLogin} className="mt-8 space-y-6">
-            <div>
-              <label className="block text-sm text-slate-300">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                required
-                className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-slate-300">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                required
-                className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
-              />
-              <div className="mt-3 flex justify-end">
-                <Link
-                  to="/reset-password"
-                  className="text-sm text-violet-300 transition hover:text-white"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-            </div>
-            {error ? <p className="text-sm text-red-400">{error}</p> : null}
-            <button
-              disabled={submitting}
-              className="w-full rounded-full bg-violet-500 px-6 py-4 text-base font-semibold text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-violet-700"
-            >
-              {submitting ? 'Signing in...' : 'Login'}
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handlePinLogin} className="mt-8 space-y-6">
-            <div>
-              <label className="block text-sm text-slate-300">Email</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                required
-                className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
-              />
-            </div>
-            <div>
-              <label className="block text-sm text-slate-300">4-digit PIN</label>
-              <input
-                type="password"
-                maxLength={4}
-                pattern="[0-9]{4}"
-                inputMode="numeric"
-                value={pin}
-                onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))}
-                required
-                placeholder="Enter your 4-digit PIN"
-                className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
-              />
-              <div className="mt-3 flex justify-end">
-                <Link
-                  to="/reset-password"
-                  className="text-sm text-violet-300 transition hover:text-white"
-                >
-                  Forgot PIN?
-                </Link>
-              </div>
-            </div>
-            {error ? <p className="text-sm text-red-400">{error}</p> : null}
-            <button
-              disabled={submitting}
-              className="w-full rounded-full bg-violet-500 px-6 py-4 text-base font-semibold text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-violet-700"
-            >
-              {submitting ? 'Signing in...' : 'Login with PIN'}
-            </button>
-          </form>
-        )}
+        {/* Password login form - kept for admin */}
+        <form onSubmit={handlePasswordLogin} className="mt-8 space-y-6">
+          <div>
+            <label className="block text-sm text-slate-300">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+              className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-slate-300">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required
+              className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
+            />
+          </div>
+          {error ? <p className="text-sm text-red-400">{error}</p> : null}
+          <button
+            disabled={submitting}
+            className="w-full rounded-full bg-violet-500 px-6 py-4 text-base font-semibold text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-violet-700"
+          >
+            {submitting ? 'Signing in...' : 'Login'}
+          </button>
+        </form>
 
+        {/*
+        <form onSubmit={handlePinLogin} className="mt-8 space-y-6">
+          <div>
+            <label className="block text-sm text-slate-300">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+              className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-slate-300">4-digit PIN</label>
+            <input
+              type="password"
+              maxLength={4}
+              pattern="[0-9]{4}"
+              inputMode="numeric"
+              value={pin}
+              onChange={(event) => setPin(event.target.value.replace(/\D/g, ''))}
+              required
+              placeholder="Enter your 4-digit PIN"
+              className="mt-3 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-5 py-4 text-slate-100"
+            />
+            <div className="mt-3 flex justify-end">
+              <Link
+                to="/reset-password"
+                className="text-sm text-violet-300 transition hover:text-white"
+              >
+                Forgot PIN?
+              </Link>
+            </div>
+          </div>
+          {error ? <p className="text-sm text-red-400">{error}</p> : null}
+          <button
+            disabled={submitting}
+            className="w-full rounded-full bg-violet-500 px-6 py-4 text-base font-semibold text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-violet-700"
+          >
+            {submitting ? 'Signing in...' : 'Login with PIN'}
+          </button>
+        </form>
+        */}
+
+        {/* Student registration link - commented out
         <p className="mt-8 text-center text-sm text-slate-400">
           New here?{' '}
           <Link to="/register" className="text-violet-300 hover:text-white">
             Create a student account
           </Link>
         </p>
+        */}
       </div>
     </div>
   );

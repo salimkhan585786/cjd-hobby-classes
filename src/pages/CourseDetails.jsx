@@ -4,22 +4,14 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import MediaPreview from '../components/MediaPreview';
-import { useAuth } from '../hooks/useAuth';
-import { useCourses, useGallery, useStudentEnrollmentRequests, useStudentProfile } from '../hooks/useData';
-import { useToast } from '../hooks/useToast';
-import { createEnrollmentRequest } from '../services/dataService';
+import { useCourses, useGallery } from '../hooks/useData';
 import { formatCurrency, slugify } from '../utils/helpers';
 
 function CourseDetails() {
   const { courseSlug } = useParams();
   const navigate = useNavigate();
-  const { user, role } = useAuth();
-  const { student } = useStudentProfile();
-  const { enrollmentRequests } = useStudentEnrollmentRequests();
   const { courses, loading: coursesLoading } = useCourses();
   const { gallery, loading: galleryLoading } = useGallery();
-  const { showToast } = useToast();
-  const [processingCourse, setProcessingCourse] = useState('');
   const [selectedArtwork, setSelectedArtwork] = useState(null);
 
   const course = useMemo(
@@ -36,70 +28,8 @@ function CourseDetails() {
     return gallery.filter((item) => slugify(item.category) === courseKey);
   }, [course, gallery]);
 
-  const activeRequest = useMemo(
-    () =>
-      enrollmentRequests.find(
-        (item) =>
-          item.itemType === 'course' &&
-          item.itemTitle === course?.title &&
-          !['Rejected', 'Cancelled'].includes(item.requestStatus)
-      ),
-    [course?.title, enrollmentRequests]
-  );
-
-  const enrolled = course?.title ? student?.enrolledCourses?.includes(course.title) : false;
-
-  const actionLabel = !user
-    ? 'Join now'
-    : role !== 'student'
-      ? 'Admin view'
-      : enrolled
-        ? 'Enrolled'
-        : activeRequest
-          ? activeRequest.requestStatus === 'Approved'
-            ? 'Await payment'
-            : 'Requested'
-          : 'Request enroll';
-
-  const handleCourseAction = async () => {
-    if (!course) {
-      return;
-    }
-
-    if (!user) {
-      navigate('/register');
-      return;
-    }
-
-    if (role !== 'student') {
-      navigate('/admin');
-      return;
-    }
-
-    try {
-      setProcessingCourse(course.id);
-      await createEnrollmentRequest({
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName,
-        course,
-      });
-      showToast({
-        type: 'success',
-        title: 'Request submitted',
-        message: `${course.title} is waiting for admin approval before payment opens.`,
-      });
-      navigate('/student#classes');
-    } catch (error) {
-      console.error(error);
-      showToast({
-        type: 'error',
-        title: 'Enrollment failed',
-        message: 'The course could not be added right now.',
-      });
-    } finally {
-      setProcessingCourse('');
-    }
+  const handleCourseAction = () => {
+    navigate('/contact?topic=course');
   };
 
   if (coursesLoading || galleryLoading) {
@@ -148,10 +78,9 @@ function CourseDetails() {
             <button
               type="button"
               onClick={handleCourseAction}
-              disabled={Boolean(processingCourse) || enrolled || Boolean(activeRequest)}
-              className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-violet-700"
+              className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400"
             >
-              {actionLabel} <ArrowRight size={16} />
+              Enquiry <ArrowRight size={16} />
             </button>
             <Link
               to="/gallery"

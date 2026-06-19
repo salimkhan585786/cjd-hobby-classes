@@ -4,19 +4,27 @@ import { Link, useLocation } from 'react-router-dom';
 import { classNames } from '../utils/helpers';
 
 const itemsByRole = {
+  /* Student sidebar - commented out
   student: [
     { label: 'Overview', to: '/student', icon: LayoutDashboard },
     { label: 'Orders', to: '/student/orders', icon: ShoppingBag },
     { label: 'Progress', to: '/student/progress', icon: Sparkles },
     { label: 'Notifications', to: '/student/notifications', icon: BellRing },
   ],
+  */
   admin: [
+    /* Overview - commented out
     { label: 'Overview', to: '/admin', icon: LayoutDashboard },
+    */
     { label: 'Catalog', to: '/admin/catalog', icon: BookOpen },
+    /* Students link - commented out
     { label: 'Students', to: '/admin/students', icon: Users },
+    */
     { label: 'Orders', to: '/admin/orders', icon: ShoppingBag },
     { label: 'Inquiries', to: '/admin/inquiries', icon: ClipboardList },
+    /* Finance - commented out
     { label: 'Finance', to: '/admin/finance', icon: Wallet },
+    */
   ],
 };
 
@@ -99,7 +107,7 @@ function DashboardSidebar({ role = 'student' }) {
             <p className="mt-3 text-slate-200">
               {role === 'admin'
                 ? 'Manage courses, students, fees, inquiries, and art orders from one dashboard.'
-                : 'Track classes, progress, fee status, workshops, and custom art requests in one place.'}
+                : 'Track classes, progress, fee status, events, and custom art requests in one place.'}
             </p>
           </div>
 

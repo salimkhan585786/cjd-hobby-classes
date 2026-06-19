@@ -4,18 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import WorkshopCard from '../components/WorkshopCard';
-import { useAuth } from '../hooks/useAuth';
-import { useStudentProfile, useWorkshops } from '../hooks/useData';
-import { useToast } from '../hooks/useToast';
-import { registerStudentForWorkshop } from '../services/dataService';
+import { useWorkshops } from '../hooks/useData';
 import { calculateCountdown, formatDate } from '../utils/helpers';
 import { FadeInView, ParallaxSection, StaggerContainer, StaggerItem, FloatingElement, ZoomParallax, TiltCard } from '../components/Animation';
 
 function Workshops() {
   const { workshops, loading } = useWorkshops();
-  const { user, role } = useAuth();
-  const { student } = useStudentProfile();
-  const { showToast } = useToast();
   const navigate = useNavigate();
   const upcomingWorkshop = useMemo(
     () =>
@@ -27,7 +21,6 @@ function Workshops() {
   const [countdown, setCountdown] = useState(() =>
     upcomingWorkshop ? calculateCountdown(upcomingWorkshop.date) : calculateCountdown(Date.now())
   );
-  const [processingWorkshop, setProcessingWorkshop] = useState('');
 
   useEffect(() => {
     if (!upcomingWorkshop) return undefined;
@@ -41,41 +34,8 @@ function Workshops() {
     return () => clearInterval(timer);
   }, [upcomingWorkshop]);
 
-  const handleWorkshopAction = async (workshop) => {
-    if (!user) {
-      navigate('/register');
-      return;
-    }
-
-    if (role !== 'student') {
-      navigate('/admin');
-      return;
-    }
-
-    try {
-      setProcessingWorkshop(workshop.id);
-      await registerStudentForWorkshop({
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName,
-        workshop,
-      });
-      showToast({
-        type: 'success',
-        title: 'Workshop reserved',
-        message: `${workshop.title} has been added to your student dashboard.`,
-      });
-      navigate('/student');
-    } catch (error) {
-      console.error(error);
-      showToast({
-        type: 'error',
-        title: 'Registration failed',
-        message: error.message || 'This workshop could not be reserved.',
-      });
-    } finally {
-      setProcessingWorkshop('');
-    }
+  const handleWorkshopAction = (workshop) => {
+    navigate('/contact?topic=workshop');
   };
 
   return (
@@ -133,17 +93,6 @@ function Workshops() {
         ) : (
           <StaggerContainer className="grid gap-8 lg:grid-cols-3" staggerDelay={0.12}>
             {workshops.map((workshop) => {
-              const alreadyRegistered = student?.workshopRegistrations?.includes(workshop.title);
-              const actionLabel = !user
-                ? 'Join now'
-                : role !== 'student'
-                  ? 'Admin view'
-                  : alreadyRegistered
-                    ? 'Registered'
-                    : Number(workshop.seats || 0) <= 0
-                      ? 'Full'
-                      : 'Register';
-
               return (
                 <StaggerItem key={workshop.id}>
                   <ZoomParallax scaleRange={[0.96, 1.02]}>
@@ -151,8 +100,7 @@ function Workshops() {
                       <WorkshopCard
                         workshop={workshop}
                         onAction={handleWorkshopAction}
-                        actionLabel={actionLabel}
-                        actionDisabled={Boolean(processingWorkshop) || alreadyRegistered || Number(workshop.seats || 0) <= 0}
+                        actionLabel="Enquiry"
                       />
                     </TiltCard>
                   </ZoomParallax>

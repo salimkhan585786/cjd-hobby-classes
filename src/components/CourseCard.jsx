@@ -6,8 +6,8 @@ import { formatCurrency } from '../utils/helpers';
 
 function CourseCard({
   course,
-  actionLabel = 'Enroll',
-  actionTo = '/register',
+  actionLabel = 'Enquiry',
+  actionTo = '/contact',
   onAction,
   actionDisabled = false,
   variant = 'violet',
@@ -57,23 +57,12 @@ function CourseCard({
         </div>
         <div className="flex items-center justify-between pt-3 sm:pt-4">
           <span className="text-lg font-semibold text-white sm:text-xl">{course.priceLabel || formatCurrency(course.price)}</span>
-          {onAction ? (
-            <button
-              type="button"
-              onClick={() => onAction(course)}
-              disabled={actionDisabled}
-              className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-3 py-2.5 text-xs text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-violet-700 sm:px-4 sm:py-3 sm:text-sm"
-            >
-              {actionLabel} <ArrowRight size={14} sm:size={16} />
-            </button>
-          ) : (
-            <Link
-              to={actionTo}
-              className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-3 py-2.5 text-xs text-white transition hover:bg-violet-400 sm:px-4 sm:py-3 sm:text-sm"
-            >
-              {actionLabel} <ArrowRight size={14} sm:size={16} />
-            </Link>
-          )}
+          <Link
+            to="/contact?topic=course"
+            className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-3 py-2.5 text-xs text-white transition hover:bg-violet-400 sm:px-4 sm:py-3 sm:text-sm"
+          >
+            {actionLabel} <ArrowRight size={14} sm:size={16} />
+          </Link>
         </div>
       </div>
     </motion.article>

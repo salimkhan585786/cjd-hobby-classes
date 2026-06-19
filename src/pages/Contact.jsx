@@ -101,7 +101,7 @@ function Contact() {
                   <Mail size={18} />
                   <span>Email</span>
                 </div>
-                <p className="mt-4 text-white">hello@cjdhobbyclasses.art</p>
+                <p className="mt-4 text-white">cjdhobbyclasses18@gmail.com</p>
               </motion.div>
             </StaggerItem>
           </StaggerContainer>
@@ -152,7 +152,7 @@ function Contact() {
                     onChange={(event) => setTopic(event.target.value)}
                     className="w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100 transition-all focus:border-violet-500 focus:ring-2 focus:ring-violet-500"
                   >
-                    {['General inquiry', 'Course enrollment', 'Workshop booking', 'Custom portrait order', 'Kids batch'].map((option) => (
+                    {['General inquiry', 'Course enrollment', 'Event booking', 'Custom portrait order', 'Kids batch'].map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
@@ -216,11 +216,11 @@ function Contact() {
               <div className="mt-6 space-y-4 text-slate-300">
                 <div className="flex items-center gap-3 text-violet-300">
                   <MapPin size={18} />
-                  <span>Mumbai offline art academy with Hemali D. Mehta</span>
+                  <span>Madhav kunj, B/102, Aacharya Shanti Sagar Chawk, Himmat Nagar, Borivali, Mumbai, Maharashtra 400092</span>
                 </div>
                 <p className="text-sm leading-7">Use the map link to preview directions, neighborhood access, and studio timing details.</p>
                 <a
-                  href="https://maps.google.com/?q=Mumbai+Art+Studio"
+                  href="https://maps.google.com/?q=19.233980,72.854713"
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex rounded-full border border-white/10 px-5 py-3 text-sm text-slate-100 transition hover:bg-white/5"
@@ -235,11 +235,11 @@ function Contact() {
             <motion.div whileHover={{ y: -6, transition: { duration: 0.25 } }} className="glass-card rounded-[3rem] border border-white/10 bg-slate-900/80 p-6 sm:p-8 lg:p-10 shadow-soft">
               <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Social links</p>
               <div className="mt-6 grid gap-4 text-slate-300">
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
-                  <Instagram size={18} /> <span>@CJD_HOBBY_CLASSES.studio</span>
+                <a href="https://www.instagram.com/cjd_hobbyclasses/" target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
+                  <Instagram size={18} /> <span>@cjd_hobbyclasses</span>
                 </a>
-                <a href="mailto:hello@cjdhobbyclasses.art" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
-                  <Mail size={18} /> <span>hello@cjdhobbyclasses.art</span>
+                <a href="mailto:cjdhobbyclasses18@gmail.com" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
+                  <Mail size={18} /> <span>cjdhobbyclasses18@gmail.com</span>
                 </a>
                 <a href="tel:+919167289892" className="flex items-center gap-3 rounded-3xl bg-slate-950/70 p-4 transition hover:bg-white/5">
                   <Phone size={18} /> <span>+91 91672 89892</span>

@@ -9,7 +9,7 @@ const navItems = [
   { label: 'Home', to: '/' },
   { label: 'Courses', to: '/courses' },
   { label: 'Gallery', to: '/gallery' },
-  { label: 'Workshops', to: '/workshops' },
+  { label: 'Events', to: '/events' },
   { label: 'About', to: '/about' },
   { label: 'Contact', to: '/contact' },
 ];
@@ -78,20 +78,12 @@ function Navbar() {
               </button>
             </>
           ) : (
-            <>
-              <Link
-                to="/login"
-                className="rounded-full border border-white/10 px-4 py-2.5 text-sm text-slate-200 transition hover:bg-white/5"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="rounded-full bg-violet-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-400"
-              >
-                Join Classes
-              </Link>
-            </>
+            <Link
+              to="/login"
+              className="rounded-full border border-violet-500 bg-violet-500/15 px-4 py-2.5 text-sm font-semibold text-violet-200 transition hover:bg-violet-500/25"
+            >
+              Admin
+            </Link>
           )}
         </div>
 
@@ -149,22 +141,13 @@ function Navbar() {
                 </button>
               </>
             ) : (
-              <>
-                <Link
-                  to="/login"
-                  onClick={() => setOpen(false)}
-                  className="rounded-2xl border border-white/10 px-4 py-3 text-center text-slate-200"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setOpen(false)}
-                  className="rounded-2xl bg-violet-500 px-4 py-3 text-center text-white"
-                >
-                  Join Classes
-                </Link>
-              </>
+              <Link
+                to="/login"
+                onClick={() => setOpen(false)}
+                className="rounded-2xl border border-violet-500 bg-violet-500/15 px-4 py-3 text-center text-sm font-semibold text-violet-200"
+              >
+                Admin
+              </Link>
             )}
           </div>
         </motion.div>

@@ -3,23 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import CourseCard from '../components/CourseCard';
 import EmptyState from '../components/EmptyState';
 import LoadingSkeleton from '../components/LoadingSkeleton';
-import { useAuth } from '../hooks/useAuth';
-import { useStudentEnrollmentRequests, useStudentProfile } from '../hooks/useData';
-import { useToast } from '../hooks/useToast';
-import { createEnrollmentRequest } from '../services/dataService';
 import { useCourses } from '../hooks/useData';
 import { FadeInView, StaggerContainer, StaggerItem, ParallaxSection } from '../components/Animation';
 
 function Courses() {
   const { courses, loading } = useCourses();
-  const { user, role } = useAuth();
-  const { student } = useStudentProfile();
-  const { enrollmentRequests } = useStudentEnrollmentRequests();
-  const { showToast } = useToast();
   const navigate = useNavigate();
   const [level, setLevel] = useState('All');
   const [search, setSearch] = useState('');
-  const [processingCourse, setProcessingCourse] = useState('');
 
   const levels = useMemo(() => ['All', ...new Set(courses.map((course) => course.level))], [courses]);
 
@@ -37,41 +28,8 @@ function Courses() {
     [courses, level, search]
   );
 
-  const handleCourseAction = async (course) => {
-    if (!user) {
-      navigate('/register');
-      return;
-    }
-
-    if (role !== 'student') {
-      navigate('/admin');
-      return;
-    }
-
-    try {
-      setProcessingCourse(course.id);
-      await createEnrollmentRequest({
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName,
-        course,
-      });
-      showToast({
-        type: 'success',
-        title: 'Request submitted',
-        message: `${course.title} is waiting for admin approval before payment opens.`,
-      });
-      navigate('/student#classes');
-    } catch (error) {
-      console.error(error);
-      showToast({
-        type: 'error',
-        title: 'Enrollment failed',
-        message: 'The course could not be added right now.',
-      });
-    } finally {
-      setProcessingCourse('');
-    }
+  const handleCourseAction = (course) => {
+    navigate(`/contact?topic=course`);
   };
 
   return (
@@ -132,32 +90,12 @@ function Courses() {
         ) : (
           <StaggerContainer className="grid gap-8 md:grid-cols-2 xl:grid-cols-3" staggerDelay={0.1}>
             {filteredCourses.map((course) => {
-              const enrolled = student?.enrolledCourses?.includes(course.title);
-              const activeRequest = enrollmentRequests.find(
-                (item) =>
-                  item.itemType === 'course' &&
-                  item.itemTitle === course.title &&
-                  !['Rejected', 'Cancelled'].includes(item.requestStatus)
-              );
-              const actionLabel = !user
-                ? 'Join now'
-                : role !== 'student'
-                  ? 'Admin view'
-                  : enrolled
-                    ? 'Enrolled'
-                    : activeRequest
-                      ? activeRequest.requestStatus === 'Approved'
-                        ? 'Await payment'
-                        : 'Requested'
-                      : 'Request enroll';
-
               return (
                 <StaggerItem key={course.id}>
                   <CourseCard
                     course={course}
                     onAction={handleCourseAction}
-                    actionLabel={actionLabel}
-                    actionDisabled={Boolean(processingCourse) || enrolled || Boolean(activeRequest)}
+                    actionLabel="Enquiry"
                   />
                 </StaggerItem>
               );

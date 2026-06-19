@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Palette } from 'lucide-react';
+import { Palette, Share2 } from 'lucide-react';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import MediaPreview from '../components/MediaPreview';
 import { useToast } from '../hooks/useToast';
@@ -255,7 +255,7 @@ function AdminCatalog() {
             console.error(error);
           }
         }
-        showToast({ type: 'success', title: 'Workshop updated', message: `${payload.title} has been updated.` });
+        showToast({ type: 'success', title: 'Event updated', message: `${payload.title} has been updated.` });
         resetWorkshopForm();
         return;
       }
@@ -263,10 +263,10 @@ function AdminCatalog() {
       const id = await addWorkshop(payload);
       setWorkshops((current) => [{ id, ...payload }, ...current]);
       resetWorkshopForm();
-      showToast({ type: 'success', title: 'Workshop added', message: `${payload.title} is now available for offline registration.` });
+      showToast({ type: 'success', title: 'Event added', message: `${payload.title} is now available for registration.` });
     } catch (error) {
       console.error(error);
-      showToast({ type: 'error', title: 'Workshop upload failed', message: getUploadErrorMessage(error) });
+      showToast({ type: 'error', title: 'Event upload failed', message: getUploadErrorMessage(error) });
     }
   };
 
@@ -406,6 +406,20 @@ function AdminCatalog() {
     }
   };
 
+  const handleShareWorkshop = async (workshop) => {
+    const url = `${window.location.origin}/events/${workshop.id}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: workshop.title, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        showToast({ type: 'success', title: 'Link copied', message: 'Event link has been copied to clipboard.' });
+      }
+    } catch {
+      // user cancelled
+    }
+  };
+
   const handleDeleteWorkshop = async (workshopId) => {
     setWorkshops((current) => current.filter((item) => item.id !== workshopId));
     if (!isLocalId(workshopId)) {
@@ -454,7 +468,7 @@ function AdminCatalog() {
     <div className="space-y-10">
       <section className="glass-card rounded-[2.5rem] border border-white/10 bg-slate-950/90 p-8 shadow-soft">
         <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Catalog</p>
-        <h2 className="mt-4 text-4xl font-semibold text-white">Courses, workshops, and gallery in one place.</h2>
+        <h2 className="mt-4 text-4xl font-semibold text-white">Courses, events, and gallery in one place.</h2>
       </section>
 
       <section className="grid gap-6 xl:grid-cols-2">
@@ -540,10 +554,10 @@ function AdminCatalog() {
 
       <section className="grid gap-6 xl:grid-cols-2">
         <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
-          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Workshop manager</p>
+          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Event manager</p>
           <form onSubmit={handleSaveWorkshop} className="mt-6 grid gap-4">
             <div>
-              <label htmlFor="workshop-title" className="block text-sm text-slate-300">Workshop title</label>
+              <label htmlFor="workshop-title" className="block text-sm text-slate-300">Event title</label>
               <input id="workshop-title" value={workshopForm.title} onChange={(event) => setWorkshopForm((current) => ({ ...current, title: event.target.value }))} required className="mt-2 w-full rounded-3xl border border-white/10 bg-slate-900/80 px-4 py-4 text-slate-100" />
             </div>
             <div>
@@ -582,19 +596,19 @@ function AdminCatalog() {
             <p className="text-sm text-slate-400">Upload `png`, `jpg`, `jpeg`, `webp`, or `gif`, or paste an image or video URL.</p>
             <MediaPreview
               src={workshopPreviewUrl || workshopForm.image}
-              alt={workshopForm.title || 'Workshop preview'}
-              title={workshopForm.title || 'Workshop preview'}
+              alt={workshopForm.title || 'Event preview'}
+              title={workshopForm.title || 'Event preview'}
               className="h-56 rounded-[1.5rem]"
             />
             <div className="flex gap-3">
-              <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">{editingWorkshopId ? 'Update workshop' : 'Add workshop'}</button>
+              <button type="submit" className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400">{editingWorkshopId ? 'Update event' : 'Add event'}</button>
               {editingWorkshopId ? <button type="button" onClick={resetWorkshopForm} className="rounded-full border border-white/10 px-5 py-3 text-sm text-slate-200 transition hover:bg-white/5">Cancel edit</button> : null}
             </div>
           </form>
         </div>
 
         <div className="glass-card rounded-[2.5rem] border border-white/10 p-8 shadow-soft">
-          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Workshop lineup</p>
+          <p className="text-sm uppercase tracking-[0.24em] text-violet-300">Event lineup</p>
           <div className="mt-6 space-y-4">
             {workshops.map((workshop) => (
               <div key={workshop.id} className="rounded-3xl bg-slate-900/80 p-5">
@@ -604,6 +618,9 @@ function AdminCatalog() {
                     <p className="mt-1 text-sm text-slate-400">{formatDate(workshop.date)} • {workshop.seats} seats</p>
                   </div>
                   <div className="flex gap-3">
+                    <button type="button" onClick={() => handleShareWorkshop(workshop)} className="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/5" title="Share event link">
+                      <Share2 size={14} />
+                    </button>
                     <button type="button" onClick={() => handleEditWorkshop(workshop)} className="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/5">Edit</button>
                     <button type="button" onClick={() => handleDeleteWorkshop(workshop.id)} className="rounded-full bg-rose-500/20 px-4 py-2 text-sm text-rose-200 transition hover:bg-rose-500/30">Delete</button>
                   </div>

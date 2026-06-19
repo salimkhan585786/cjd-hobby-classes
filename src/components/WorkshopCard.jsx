@@ -7,7 +7,7 @@ import { formatCurrency, formatDate } from '../utils/helpers';
 function WorkshopCard({
   workshop,
   actionTo = '/contact?topic=workshop',
-  actionLabel = 'Register',
+  actionLabel = 'Enquiry',
   onAction,
   actionDisabled = false,
   variant = 'violet',
@@ -56,20 +56,9 @@ function WorkshopCard({
         <div className="flex items-center gap-2 text-xs text-slate-300 sm:text-sm">
           <Users size={14} sm:size={16} /> {workshop.seats} seats left
         </div>
-        {onAction ? (
-          <button
-            type="button"
-            onClick={() => onAction(workshop)}
-            disabled={actionDisabled}
-            className="rounded-full bg-violet-500 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-violet-400 disabled:cursor-not-allowed disabled:bg-violet-700 sm:px-5 sm:py-3 sm:text-sm"
-          >
-            {actionLabel}
-          </button>
-        ) : (
-          <Link to={actionTo} className="rounded-full bg-violet-500 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-violet-400 sm:px-5 sm:py-3 sm:text-sm">
-            {actionLabel}
-          </Link>
-        )}
+        <Link to="/contact?topic=workshop" className="rounded-full bg-violet-500 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-violet-400 sm:px-5 sm:py-3 sm:text-sm">
+          {actionLabel}
+        </Link>
       </div>
     </motion.article>
   );
